@@ -2,25 +2,25 @@
 
 This repository serves as a centralized hub for storing and sharing custom solutions developed over time to enhance and extend the functionality of Infoworks.
 
-Overview
+## Overview
 This repository is a collection of scripts, tools, configurations, and other resources created by our Customer Engineering Team. These solutions are designed to address specific customer use cases, provide automation, improve workflows, and provide additional functionalities beyond the standard features offered by Infoworks.
 
-Contents
+## Contents
 The repository is organized into directories, each dedicated to a specific custom solution. Inside each directory, you will find the necessary files, documentation, and any other resources related to that solution.
 
-Getting Started
+## Getting Started
 For each solution, you will find detailed instructions on how to implement, configure, and use the custom solution. Please refer to the respective solution directory for comprehensive documentation.
 
-Contributions
+## Contributions
 We encourage contributions from the Infoworks Customers to enhance existing solutions developed by Customer Engineering Team or propose new ones. If you have a custom solution that you believe would benefit the team, please follow the contribution guidelines outlined in CONTRIBUTING.md.
 
-Issue Reporting
+## Issue Reporting
 If you encounter any issues with the provided solutions or have suggestions for improvements, please open an issue on the GitHub repository. We appreciate your feedback and collaboration in making these solutions even more effective.
 
-Licensing
+## Licensing
 All solutions in this repository are provided under the LICENSE file. Please review the license before using or contributing to any of the solutions.
 
-Contact
+## Contact
 For further assistance or inquiries, feel free to contact the Customer Engineering Team at [customer-engineering@infoworks.io].
 
 Thank you for contributing to and utilizing the Custom Solutions Repository. Together, we can leverage the power of custom solutions to optimize and extend the capabilities of Infoworks!
