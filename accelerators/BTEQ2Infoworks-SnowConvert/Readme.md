@@ -1,0 +1,1 @@
+Refer to the document https://docs.google.com/document/d/1B1BxBNrotg-QnHKY7okKRXtgBJygk-4_HZS6-rFn0Q8/edit?usp=sharing for more details on the project
