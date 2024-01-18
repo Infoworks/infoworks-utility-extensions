@@ -1,0 +1,51 @@
+{
+  "protocol": "https",
+  "host": "",
+  "port": "443",
+  "refresh_token": "",
+  "domain_name": "SnowSQL_IWX_Domain",
+  "default_environment_details": {
+    "denv-dit-dev-dw-dpg1-sf-sdr_procs" : {"snowflake_profile": "Default","snowflake_warehouse": "DV0_DW_AEDW_SDR_PROCS_ETL_WH"},
+    "denv-dit-dev-dw-dpg1-sf-sdr_cust_rltnshp" : {"snowflake_profile": "Default","snowflake_warehouse": "DV0_DW_AEDW_SDR_CUST_RLTNSHP_ETL_WH"}
+  },
+  "database_name": "SUPPORT_DB",
+  "logs_folder": "/tmp",
+  "dry_run": false,
+  "skip_migration": true,
+  "snowct_binary_path": "./snowct",
+  "input_directory": "./input_directory",
+  "output_directory": "./output_directory",
+  "all_bteq_base_directory": "",
+  "pipeline_prefix": "pl-dit-dw-dpg1-31478-sdr-snowct",
+  "pipeline_group_prefix": "pg-dit-dw-dpg1-31478-sdr",
+  "workflow_prefix": "wf-dit-dw-dpg1-31478-sdr",
+  "create_or_overwrite_pipeline_version": "U",
+  "db_stage_mappings" : {
+    "DV0_AEDW_SBCT_ACCESS_VIEWS": "DV0_AEDW_SBCT_ACCESS_VIEWS_STAGE",
+    "DV0_AEDW_ACCESS_VIEWS": "DV0_AEDW_ACCESS_VIEWS_STAGE",
+    "DV0_AEDW_SDR_PROCS_DB": "DV0_AEDW_SDR_PROCS_DB_STAGE",
+    "DV0_AEDW_LD_ACCESS_VIEWS": "DV0_AEDW_LD_ACCESS_VIEWS_STAGE",
+    "DV0_AEDW_MIS_VIEWS": "DV0_AEDW_MIS_VIEWS_STAGE",
+    "DV0_AEDW_STRATMKTG_ACCESS_VIEWS": "DV0_AEDW_STRATMKTG_ACCESS_VIEWS_STAGE",
+    "DV0_AEDW_SDR_UPDATE_VIEWS": "DV0_AEDW_SDR_UPDATE_VIEWS_STAGE",
+    "DV0_AEDW_PRDS_VIEWS": "DV0_AEDW_PRDS_VIEWS_STAGE",
+    "DV0_AEDW_SDR_CUST_RLTNSHP_VIEWS": "DV0_AEDW_SDR_CUST_RLTNSHP_VIEWS_STAGE",
+    "DV0_AEDW_SDR_PROCS_VIEWS": "DV0_AEDW_SDR_PROCS_VIEWS_STAGE",
+    "DV0_AEDW_ENTERPRISE_RETAIL_VIEWS": "DV0_AEDW_ENTERPRISE_RETAIL_VIEWS_STAGE",
+    "DV0_AEDW_CUST_VIEWS": "DV0_AEDW_CUST_VIEWS_STAGE",
+    "DV0_AEDW_CRM_SGMNTN_VIEWS": "DV0_AEDW_CRM_SGMNTN_VIEWS_STAGE",
+    "DV0_AEDW_SDR_ACCESS_VIEWS": "DV0_AEDW_SDR_ACCESS_VIEWS_STAGE",
+    "DV0_AEDW_SDR_CUST_RLTNSHP_DB": "DV0_AEDW_SDR_CUST_RLTNSHP_DB_STAGE",
+    "DV0_AEDW_SDR_ACCESS_R2_VIEWS": "DV0_AEDW_SDR_ACCESS_R2_VIEWS_STAGE",
+    "DV0_AEDW_ACCESS_R2_VIEWS": "DV0_AEDW_ACCESS_R2_VIEWS_STAGE",
+    "DV0_AEDW_CRM_SGMNTN_ACCESS_VIEWS": "DV0_AEDW_CRM_SGMNTN_ACCESS_VIEWS_STAGE"
+  },
+  "parameter_values": {
+          "VIEW_DB": "SAMPLE_VIEW_DB",
+          "TEST_PARAM": "SDR_ACCESS_VIEWS",
+          "BUSDATE": "CURRENT_DATE",
+          "HIST_CUTOFF_HIER_DT": "CURRENT_DATE",
+          "SRCVIEWDB": "SAMPLE_SRCVIEWDB",
+          "SRCUPDVIEW": "SDR_UPDATE_VIEWS"
+  }
+}

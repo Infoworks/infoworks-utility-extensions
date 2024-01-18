@@ -1,0 +1,6 @@
+dependency_analysis/
+fixed_input_directory/
+input_directory/
+output_directory/
+testing_scripts
+*.csv
