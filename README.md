@@ -17,7 +17,7 @@ Solutions can be broadly classified into four types:
 
 | Category | Description |
 |---------|-------------|
-| Utilities | Defined as a solution that will help with administration of Infoworks, such as job metrics, managing users / roles, files management, scheduling, etc. |
+| Utilities | Defined as a solution that will help with the administration of Infoworks, such as job metrics, managing users/roles, files management, scheduling, etc. |
 | Custom Target | Custom code developed and used for Infoworks' custom connectors (in pipelines) |
 | Accelerators | Defined as a solution that will help accelerate the adoptions of Infoworks (e.g. file ingestion, database ingestion, creation of pipelines, usage of replicators, etc. |
 | Learning | Libraries to learn about Infoworks, Python SDKs |
@@ -25,7 +25,7 @@ Solutions can be broadly classified into four types:
 	
 
 ## Contributions
-We encourage contributions from the Infoworks Customers to enhance existing solutions developed by Customer Engineering Team or propose new ones. If you have a custom solution that you believe would benefit the team, please follow the contribution guidelines outlined in CONTRIBUTING.md.
+We encourage contributions from the Infoworks Customers to enhance existing solutions developed by the Customer Engineering Team or propose new ones. If you have a custom solution that you believe would benefit the team, please follow the contribution guidelines outlined in CONTRIBUTING.md.
 
 ## Issue Reporting
 If you encounter any issues with the provided solutions or have suggestions for improvements, please open an issue on the GitHub repository. We appreciate your feedback and collaboration in making these solutions even more effective.
