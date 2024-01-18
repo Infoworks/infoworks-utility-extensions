@@ -11,6 +11,19 @@ The repository is organized into directories, each dedicated to a specific custo
 ## Getting Started
 For each solution, you will find detailed instructions on how to implement, configure, and use the custom solution. Please refer to the respective solution directory for comprehensive documentation.
 
+## Categories of Solutions
+
+Solutions can be broadly classified into four types:
+
+| Category | Description |
+|---------|-------------|
+| Utilities | Defined as a solution that will help with administration of Infoworks, such as job metrics, managing users / roles, files management, scheduling, etc. |
+| Custom Target | Custom code developed and used for Infoworks' custom connectors (in pipelines) |
+| Accelerators | Defined as a solution that will help accelerate the adoptions of Infoworks (e.g. file ingestion, database ingestion, creation of pipelines, usage of replicators, etc. |
+| Learning | Libraries to learn about Infoworks, Python SDKs |
+	
+	
+
 ## Contributions
 We encourage contributions from the Infoworks Customers to enhance existing solutions developed by Customer Engineering Team or propose new ones. If you have a custom solution that you believe would benefit the team, please follow the contribution guidelines outlined in CONTRIBUTING.md.
 
