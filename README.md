@@ -26,6 +26,7 @@ Solutions can be broadly classified into four types:
 
 ## Contributions
 We encourage contributions from the Infoworks Customers to enhance existing solutions developed by the Customer Engineering Team or propose new ones. If you have a custom solution that you believe would benefit the team, please follow the contribution guidelines outlined in CONTRIBUTING.md.
+[Contributing Instructions](./CONTRIBUTING.md)
 
 ## Issue Reporting
 If you encounter any issues with the provided solutions or have suggestions for improvements, please open an issue on the GitHub repository. We appreciate your feedback and collaboration in making these solutions even more effective.
