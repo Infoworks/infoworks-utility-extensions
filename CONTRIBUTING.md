@@ -90,7 +90,13 @@ pre-commit install
 If you are an Infoworks Employee below are the guidelines for contribution:
 - Navigate to the your enhancement/bug request registered in JIRA: For Example :https://infoworks.atlassian.net/browse/TSS-000
 - Click on Create Branch option on the Details section
+
+<img src="./img/create_branch_1.png" width=50% height=50% align=left/>
+
 - Select the Repository name and the Branch from which you would like to branch the code
+
+<img src="./img/create_branch_2.png" width=50% height=50%/>
+
 - Click on Create branch. This will automatically create the github branch for you.
 - Subsequently, you can proceed with your regular development tasks on the new feature branch, and all commits and pull requests will be logged and associated with specific Jira issues.
 
