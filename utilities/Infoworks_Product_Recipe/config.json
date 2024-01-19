@@ -1,0 +1,6 @@
+{
+   "protocol": "https",
+   "host": "host_name",
+   "port": "443",
+   "refresh_token": ""
+}

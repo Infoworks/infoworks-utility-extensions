@@ -1,0 +1,2 @@
+infoworkssdk==3.0b0
+pyyaml
