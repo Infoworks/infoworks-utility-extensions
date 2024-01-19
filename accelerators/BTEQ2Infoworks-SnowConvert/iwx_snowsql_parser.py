@@ -156,12 +156,41 @@ def group_by_continuous_env(input_list):
     return result
 
 
+def extract_comments(filepath):
+    comments = []
+    try:
+        with open(filepath, 'r') as file:
+            current_comment = ""
+            inside_exec_block = False
+            for line in file:
+                stripped_line = line.strip()
+
+                if stripped_line.startswith("#"):
+                    # Add comment to current_comment string
+                    current_comment += stripped_line.lstrip("#").strip() + "\n"
+                elif stripped_line.startswith("exec"):
+                    comments.append(current_comment.strip())
+                    current_comment = ""
+                    inside_exec_block = True
+                elif inside_exec_block and stripped_line == '"""':
+                    # Check for the end of exec block
+                    inside_exec_block = False
+                elif current_comment != "" and not (stripped_line.startswith("exec") or stripped_line.strip() == ""):
+                    current_comment = ""
+    except Exception as e:
+        print(str(e))
+        traceback.print_exc()
+    comments = [comment if not set(comment) == {'-'} else "" for comment in comments]
+    return comments
+
+
 def parse_python_file(python_file):
     """
     The wrapper function is designed to parse the SnowConvert Python file.
     It extracts all the SQL statements found between the exec() function calls.
     Additionally, a valid include_pattern regex is applied to include SQL statements that match the pattern.
     """
+    comments = extract_comments(python_file)
     with open(python_file) as infile:
         data = infile.read()
         matches = re.findall(r'exec\(f?"""(.*?)"""\)', data, re.DOTALL)
@@ -174,7 +203,11 @@ def parse_python_file(python_file):
             item = "\n".join(item.split("\n")[1:]).strip()
         query_number = query_number + 1
         if bool(re.search(include_pattern, item, re.IGNORECASE)):
-            sql_statements.append(item)
+            try:
+                comment = comments[query_number-1]
+            except Exception as e:
+                comment = ""
+            sql_statements.append([comment, item.strip()])
         else:
             skipped_sql_queries.append({"FILE_NAME": python_file, "QUERY_NUMBER": query_number, "SQL_QUERY": item})
     return sql_statements
@@ -289,7 +322,7 @@ def get_dependency_analysis(env_id, pipeline_id, database_name, target_table_nam
         print(f"Unable to get the dependency analysis for {pipeline_id}: " + str(e))
 
 
-def create_infoworks_pipeline(logger, iwx_client, sql, env_id, domain_id, snowflake_profile, warehouse, filename,
+def create_infoworks_pipeline(logger, iwx_client, sql, comment, env_id, domain_id, snowflake_profile, warehouse, filename,
                               pipeline_prefix,
                               pipeline_parameters, parameter_values,
                               create_or_overwrite_pv,
@@ -381,6 +414,8 @@ def create_infoworks_pipeline(logger, iwx_client, sql, env_id, domain_id, snowfl
 
         # sql = sql.replace("{", "$").replace("}", "")
         sql = re.sub(r"\{([A-Za-z_0-9\s]+)\}", r"$\1", sql).replace("$$", "$")
+        #  I think this is the right place to add comments to the SQL statement after all the modifications are done to the SQL.
+        sql = sql if comment == "" else "/*\n" + comment + " */\n" + sql
         sample_string_bytes = sql.encode("ascii")
         base64_bytes = base64.b64encode(sample_string_bytes)
         base64_string = base64_bytes.decode("ascii")
@@ -607,6 +642,7 @@ def thread_callable(params):
     try:
         thread_name = threading.current_thread().name
         query_position = params['query_position']
+        comment = params['comment']
         sql = params['sql']
         dry_run = params['dry_run']
         logger = params['logger']
@@ -643,12 +679,13 @@ def thread_callable(params):
 
         for item in temp_table_stage_mapping:
             sql = sql.replace(item, temp_table_stage_mapping[item] + "." + item + " ")
+            # comment = comment.replace(item, temp_table_stage_mapping[item] + "." + item + " ")
             tgt_table_for_dependency_analysis = tgt_table_for_dependency_analysis.replace(item,
-                                                                                          temp_table_stage_mapping[
-                                                                                              item] + "." + item)
+                                                                                          temp_table_stage_mapping[item] + "." + item)
 
+        sql_to_print = sql if comment == "" else "\n/*\n" + comment + " */\n" + sql
         logger.debug(
-            f"{thread_name} -- File: {filename} Statement {query_number} Target Table Name: {tgt_table_name} and SQL: {sql}")
+            f'{thread_name} -- File: {filename} Statement {query_number} Target Table Name: {tgt_table_name} and SQL: {sql_to_print}')
         lock.acquire()
         sql_query_num_mappings[query_number] = sql
         lock.release()
@@ -658,6 +695,7 @@ def thread_callable(params):
                 logger,
                 iwx_client,
                 sql,
+                comment,
                 environment_id,
                 domain_id,
                 snowflake_profile,
@@ -789,7 +827,7 @@ def main():
             else:
                 logger.info(f"Got domain id {domain_id} for {domain_name}")
         else:
-            environment_id, domain_id, iwx_client = None, None, None
+            environment_id, domain_id, iwx_client= None, None, None
         basic_report_output = []
         pipeline_pipeline_grp_mappings = {}
         pg_status_mappings = {}
@@ -811,7 +849,8 @@ def main():
                 df_temp = df.query(
                     "`Parse Status` == 'Failed' | `Metadata Job Status` == 'Failed' | `SQL Import` == 'Failed'")
                 list_of_failed_bteqs = df_temp['File Name'].unique()
-                conversion_status_dict = migrate_folder(logger, snowct_binary_path, list_of_failed_bteqs, input_directory,
+                conversion_status_dict = migrate_folder(logger, snowct_binary_path, list_of_failed_bteqs,
+                                                        input_directory,
                                                         output_directory)
             for key in conversion_status_dict:
                 logger.info(
@@ -835,14 +874,14 @@ def main():
                         logger.info(f"Got {file_full_path} to scan")
                         logger.info(f"JCL for the {file_full_path} is {jcl_name}")
 
-                        parsed_items = list(map(lambda x: x.strip(), parse_python_file(file_full_path)))
+                        parsed_items = parse_python_file(file_full_path)
                         if len(parsed_items) == 0:
                             logger.exception(f"The file {filename} has no valid SQL statements. Parsing failed")
                             raise Exception("File parsing error")
 
                         # Find all the temporary tables present within the BTEQ and map it with their stage database
                         temp_table_stage_mapping = {}
-                        for sql_statement in parsed_items:
+                        for comment, sql_statement in parsed_items:
                             if bool(re.match(
                                     r"(?:CREATE|create)\s*(?:TEMPORARY|temporary)?\s*?(?:TABLE|table)\s*([\"#a-zA-Z0-9_$\{\}\.]+)\s*.*",
                                     sql_statement, re.IGNORECASE)):
@@ -888,10 +927,11 @@ def main():
                             snowflake_warehouse = environment_details_with_ids[environment_id].get(
                                 'snowflake_warehouse')
                             snowflake_profile = environment_details_with_ids[environment_id].get('snowflake_profile')
-                        for i, sql in enumerate(parsed_items):
+                        for i, comment_with_sql in enumerate(parsed_items):
                             if write_dataframe is not None and read_dataframe is not None:
-                                sql, env_name, snowflake_profile_new, snowflake_warehouse_new = get_modified_query(
-                                    logger, sql, parameter_values)
+                                modified_sql, env_name, snowflake_profile_new, snowflake_warehouse_new = get_modified_query(
+                                    logger, comment_with_sql[-1], parameter_values)
+                                comment_with_sql[-1] = modified_sql
                                 if snowflake_warehouse_new is not None:
                                     snowflake_warehouse = snowflake_warehouse_new
                                 snowflake_profile = snowflake_profile_new
@@ -908,7 +948,8 @@ def main():
                                 f"Putting this to job queue: {filename} -- SQL Number: {i}. Pipeline will be created in {environment_id} with profile {snowflake_profile} and warehouse {snowflake_warehouse}")
                             params = {
                                 'query_position': i,
-                                'sql': sql,
+                                'sql': comment_with_sql[-1],
+                                'comment': comment_with_sql[0],
                                 'sql_query_num_mappings': sql_query_num_mappings,
                                 'dry_run': dry_run,
                                 'iwx_client': iwx_client,
@@ -978,13 +1019,10 @@ def main():
                                                                                                             domain_id,
                                                                                                             group[0][6],
                                                                                                             group[0][7],
-                                                                                                            [(
-                                                                                                                 i,) + x_gp[
-                                                                                                                       1:]
+                                                                                                            [(i,) + x_gp[1:]
                                                                                                              for i, x_gp
                                                                                                              in
-                                                                                                             enumerate(
-                                                                                                                 group)])
+                                                                                                             enumerate(group)])
                                     if pipeline_group_id is not None:
                                         try:
                                             response = iwx_client.modify_advanced_config_for_pipeline_group(domain_id,
@@ -1102,7 +1140,7 @@ def main():
                 logger.info(f"Pipelines that will be created are: {', '.join(pipeline_to_be_created)}")
                 pipeline_group_name = f"{pipeline_group_prefix}-" + re.sub(r'[^\w-]+', '_',
                                                                            os.path.splitext(os.path.basename(item))[
-                                                                             0]).replace('_BTEQ', '')
+                                                                               0]).replace('_BTEQ', '')
                 pipeline_groups_pipeline_count[pipeline_group_name] = dry_run_report[item]['number_of_sqls']
                 logger.info(f"Pipeline group that will be created is: {pipeline_group_name}")
 
