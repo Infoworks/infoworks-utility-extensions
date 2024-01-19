@@ -10,10 +10,10 @@ Welcome to the Utilities directory, a comprehensive solution designed to streaml
 - **Description:** Infoworks CI/CD is a robust utility meticulously crafted to facilitate the smooth promotion of Infoworks artifacts, including sources, pipelines, pipeline groups, and workflows, across various environments, seamlessly progressing from lower to higher stages. Leveraging the power of version control systems such as GitHub, Bitbucket, Azure Repository, and others, Infoworks CI/CD ensures a flexible and collaborative environment. Furthermore, it integrates seamlessly with leading Continuous Delivery tools like Azure Pipelines, GitHub Actions, and more, providing users with a versatile and adaptable solution for efficient deployment processes.
 - **Link:** [Infoworks_CICD](./Infoworks_CICD/)
 
-### 2. Infoworks_Product_Recipe
+### 2. Infoworks_Metadata_Extractor
 
 - **Description:** This Product Recipe will enable clients to integrate the Infoworks metadata with systems that track metadata. The Product Recipe retrieves static and dynamic information of the Infoworks objects such as table metadata,job metrics,pipeline metadata etc via Infoworks APIs
-- **Link:** [Infoworks_Product_Recipe](./Product_Recipe/)
+- **Link:** [Infoworks_Metadata_Extractor](./Infoworks_Metadata_Extractor/)
 
 ### 3. Infoworks_External_Job_Scheduler
 

@@ -1,4 +1,4 @@
-# Product Recipe
+# Infoworks Metadata Extractor
 
 ## Introduction
 This Product Recipe will enable clients to integrate the Software with systems that track metadata. The Product Recipe
