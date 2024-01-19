@@ -21,9 +21,9 @@ Welcome to the Utilities directory, a comprehensive solution designed to streaml
 
 - **Link:** [Infoworks_External_Job_Scheduler](./Infoworks_External_Job_Scheduler/)
 
-### 4. Kafka_Job_Controller
+### 4. Infoworks_Streaming_Job_Controller
 
 - **Description:** This script helps to start and stop streaming jobs via Infoworks REST APIs. It also ensures to start the compute before starting the Infoworks Kafka Job.
 
-- **Link:** [Kafka_Job_Controller](./Kafka_Job_Controller/)
+- **Link:** [Infoworks_Streaming_Job_Controller](./Infoworks_Streaming_Job_Controller/)
 
