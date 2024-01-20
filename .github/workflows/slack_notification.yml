@@ -1,0 +1,40 @@
+name: Slack Notification Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+  push:
+    branches:
+      - main  # Adjust the branch name if needed
+  issues:
+    types:
+      - opened
+      - edited
+      - labeled
+
+jobs:
+  notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Notify on Pull Request
+        if: github.event_name == 'pull_request'
+        run: |
+          message="New Pull Request opened by: ${GITHUB_ACTOR}"
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" ${{ secrets.SLACK_WEB_HOOK }}
+
+      - name: Notify on Push
+        if: github.event_name == 'push'
+        run: |
+          message="Code pushed on branch: ${GITHUB_REF} by: ${GITHUB_ACTOR}"
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" ${{ secrets.SLACK_WEB_HOOK }}
+
+      - name: Notify on Critical Issue
+        if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'critical')
+        run: |
+          message="A critical issue has been opened or modified by: ${GITHUB_ACTOR}"
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" ${{ secrets.SLACK_WEB_HOOK }}
