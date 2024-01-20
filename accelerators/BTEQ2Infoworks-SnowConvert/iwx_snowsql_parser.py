@@ -687,7 +687,7 @@ def thread_callable(params):
         logger.debug(
             f'{thread_name} -- File: {filename} Statement {query_number} Target Table Name: {tgt_table_name} and SQL: {sql_to_print}')
         lock.acquire()
-        sql_query_num_mappings[query_number] = sql
+        sql_query_num_mappings[query_number] = sql_to_print
         lock.release()
 
         if not dry_run:
@@ -875,6 +875,7 @@ def main():
                         logger.info(f"JCL for the {file_full_path} is {jcl_name}")
 
                         parsed_items = parse_python_file(file_full_path)
+                        logger.info(f"Found {len(parsed_items)} valid SQL statements in file {filename}")
                         if len(parsed_items) == 0:
                             logger.exception(f"The file {filename} has no valid SQL statements. Parsing failed")
                             raise Exception("File parsing error")
