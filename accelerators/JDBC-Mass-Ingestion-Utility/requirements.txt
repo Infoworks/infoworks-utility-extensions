@@ -1,0 +1,7 @@
+teradatasql==17.10.0.2
+cx-Oracle==8.2.1
+pandas>=1.1.0
+requests
+colorama
+pycryptodomex
+infoworkssdk==3.0a3

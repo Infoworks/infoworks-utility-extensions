@@ -1,0 +1,60 @@
+{
+    "protocol": "",
+    "host": "",
+    "port": "",
+	"environment_name":"",
+	"environment_storage_name":"Default_Storage",
+	"environment_compute_name":"Default_Persistent_Compute_Template",
+	"append_water_marks_columns":["insert_timestamp","LOADDATE","REC ADD TS","STARTDATE","CREATE_DATE"],
+	"merge_water_marks_columns":["UPDATEDATE","UPDATE_DATE","CREATE_DATE","update_timestamp","REC_UPD_TS","REC CHG TS","it_update_date","OrderDate"],
+	"split_by_keys":"",
+	"ingestion_storage_format":"parquet",
+	"default_table_type":"infoworks_managed_table",
+	"export_configurations":{
+	    "target_data_connection_name": "POSTGRES_TRGT",
+	    "target_configuration": {
+	      "schema_name": "PostgreTestSchema",
+	      "is_existing_schema": false,
+	      "is_existing_table": false,
+	      "indexing_details": {
+		"index_type": "none",
+		"index_columns": []
+		},
+	      "partition_type": "none"
+	      }
+	  },
+	"source_connection_properties": {
+		"host": "",
+		"port": 1025,
+		"username": "",
+		"encrypted_password": "",
+		"default_source_db": "SALES_DW"
+	},
+	"filter_properties": {
+		"is_filter_enabled":true,
+		"schemas_filter": "",
+		"tables_filter":""
+	},
+	"sfDatabase": "TERADATA_AUTOMATED",
+	"sfSchema": "TERADATA_AUTOMATED",
+	"sfStageSchema":"PUBLIC",
+	"sfWarehouse": "DEMO_WH",
+     "table_groups":[{
+              "name":"tg1",
+              "max_connections_to_source":4,
+              "max_parallel_tables":4,
+              "environment_compute_name":"Default_Persistent_Compute_Template",
+              "table_names":[]
+
+},
+	 {
+              "name":"tg2",
+              "max_connections_to_source":4,
+              "max_parallel_tables":4,
+              "environment_compute_name":"Default_Persistent_Compute_Template",
+              "table_names":[]
+
+}],
+"run_workflow":false,
+"poll_workflow":false
+}

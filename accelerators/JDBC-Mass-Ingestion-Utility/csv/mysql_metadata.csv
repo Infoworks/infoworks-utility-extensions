@@ -1,0 +1,20 @@
+DATABASENAME,TABLENAME,TABLE_TYPE,PROBABLE_NATURAL_KEY_COLUMNS,SPLIT_BY_KEY_CANDIDATES,STORAGE_FORMAT,INGESTION_STRATEGY,WATERMARK_COLUMN,TPT_READER_INSTANCES,TPT_WRITER_INSTANCES,TPT_OR_JDBC,TARGET_SCHEMA_NAME,TARGET_TABLE_NAME,TABLE_GROUP_NAME,CONNECTION_QUOTA,PARTITION_COLUMN,DERIVED_PARTITION,DERIVED_FORMAT,TPT_WITHOUT_IWX_PROCESSING
+infoworks_db,batch_inserts,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,batch_inserts,,,,False,,False
+infoworks_db,batch_inserts_updates,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,batch_inserts_updates,,,,False,,False
+infoworks_db,batch_updates,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,batch_updates,,,,False,,False
+infoworks_db,date_inserts,TABLE,,REC ADD DT,parquet,FULL_REFRESH,,,,,infoworks_db,date_inserts,,,,False,,False
+infoworks_db,date_inserts_updates,TABLE,,"REC ADD DT,REC CHG DT",parquet,FULL_REFRESH,,,,,infoworks_db,date_inserts_updates,,,,False,,False
+infoworks_db,date_updates,TABLE,,REC CHG DT,parquet,FULL_REFRESH,,,,,infoworks_db,date_updates,,,,False,,False
+infoworks_db,full_ingestion,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,full_ingestion,,,,False,,False
+infoworks_db,infoworks_db,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,infoworks_db,,,,False,,False
+infoworks_db,NewTable,TABLE,id,created,parquet,FULL_REFRESH,,,,,infoworks_db,NewTable,,,,False,,False
+infoworks_db,scd1_inserts,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,scd1_inserts,,,,False,,False
+infoworks_db,scd1_inserts_updates,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,scd1_inserts_updates,,,,False,,False
+infoworks_db,scd1_updates,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,scd1_updates,,,,False,,False
+infoworks_db,scd2_inserts,TABLE,,REC_EFF_DT,parquet,FULL_REFRESH,,,,,infoworks_db,scd2_inserts,,,,False,,False
+infoworks_db,scd2_inserts_updates,TABLE,,"REC_EFF_DT,REC_EXPRN_DT",parquet,FULL_REFRESH,,,,,infoworks_db,scd2_inserts_updates,,,,False,,False
+infoworks_db,testtimestamp,TABLE,,"adddate,addtime",parquet,FULL_REFRESH,,,,,infoworks_db,testtimestamp,,,,False,,False
+infoworks_db,timestamp_inserts,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,timestamp_inserts,,,,False,,False
+infoworks_db,timestamp_inserts_updates,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,timestamp_inserts_updates,,,,False,,False
+infoworks_db,timestamp_updates,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,timestamp_updates,,,,False,,False
+infoworks_db,t_rec_hist,TABLE,,,parquet,FULL_REFRESH,,,,,infoworks_db,t_rec_hist,,,,False,,False

@@ -23,7 +23,7 @@ https://github.com/Infoworks/infoworks-utility-extensions
 ## Prerequisites
 
 Every Contributor must install the below python modules for the first time before performing any git actions.
-This will install the pre-commit utility which will avoid anyone accidentally committing secrets to the repository.
+This will install the pre-commit utility which will avoid anyone accidentally commits secrets to the repository.
 ```shell
 pip install detect-secrets
 pip install pre-commit
