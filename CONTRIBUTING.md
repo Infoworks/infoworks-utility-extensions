@@ -4,16 +4,15 @@ Thanks for your interest in contributing to the Infoworks Utility Extensions rep
 
 ## To get started contributing:
 
-1) Sign a Contributor License Agreement (see details below).
-2) Fork the repo, develop and test your code changes.
+1) Fork the repo, develop and test your code changes.
 
-3) Develop using the following guidelines to help expedite your review:
+2) Develop using the following guidelines to help expedite your review:
     - Ensure that your code adheres to the existing [style](https://google.github.io/styleguide).
     - Ensure that your code has an appropriate set of unit tests which all pass.
     - Ensure that your code has an accompanying README.md file with instructions on usage. See [awesome-readme](https://github.com/matiassingers/awesome-readme) for good examples of high-quality READMEs.
     - Ensure that you've added a link to your contribution in the top-level [README](./README.md) (alpha-order).
     - Ensure that your submission does not include a LICENSE file. There's no need to include an additional license since all repository submissions are covered by the top-level Apache 2.0 [license](./LICENSE).
-4) Submit a pull request.
+3) Submit a pull request.
 
 ## Overview
 This document outlines the branching strategy to be followed in the development of the infoworks-utility-extensions project hosted on GitHub. A well-defined branching strategy helps manage concurrent development, releases, and collaboration among team members.
