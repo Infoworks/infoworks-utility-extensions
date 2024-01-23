@@ -11,7 +11,7 @@ missing = required - installed
 
 if missing:
     python = sys.executable
-    subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
+    subprocess.check_call([python, '-m', 'pip', 'install', '--user', *missing], stdout=subprocess.DEVNULL)
 
 from Cryptodome.Cipher import AES
 import base64
