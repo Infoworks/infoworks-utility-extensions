@@ -12,6 +12,10 @@ missing = required - installed
 if missing:
     python = sys.executable
     subprocess.check_call([python, '-m', 'pip', 'install', '--user', *missing], stdout=subprocess.DEVNULL)
+    user_site = subprocess.run([python, "-m", "site", "--user-site"], capture_output=True, text=True)
+    module_path = user_site.stdout.strip()
+    # Add the module path to sys.path
+    sys.path.append(module_path)
 
 from Cryptodome.Cipher import AES
 import base64
