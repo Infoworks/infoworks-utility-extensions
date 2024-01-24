@@ -11,6 +11,13 @@ The repository is organized into directories, each dedicated to a specific custo
 ## Getting Started
 For each solution, you will find detailed instructions on how to implement, configure, and use the custom solution. Please refer to the respective solution directory for comprehensive documentation.
 
+
+The majority of the solutions are developed using either the Infoworks Python SDK or the Infoworks REST API.
+
+**Infoworks Python SDK** - https://infoworks.github.io/infoworks-python-sdk/infoworks.html
+
+**Infoworks RESTAPI documentation** - https://docs.infoworks.io/infoworks-rest-api-v3/ref
+
 ## Categories of Solutions
 
 Solutions can be broadly classified into four types:
