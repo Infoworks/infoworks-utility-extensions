@@ -1,0 +1,4 @@
+name,description,environment_names,accessible_sources,users
+test_domain_1,test_domain_1_description,"Snowflake_env,azure_environment_new","sqlserver_add_azure,snowflake_metadata_lookup",
+test_domain_2,test_domain_2_description,Snowflake_env,snowflake_metadata_lookup,
+test_domain_3,test_domain_3_description,Snowflake_env,snowflake_metadata_lookup,

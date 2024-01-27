@@ -27,3 +27,8 @@ Welcome to the Utilities directory, a comprehensive solution designed to streaml
 
 - **Link:** [Infoworks_Streaming_Job_Controller](./Infoworks_Streaming_Job_Controller/)
 
+### 5. Infoworks_Databricks-Libraries-Uninstall
+
+- **Description:** This tool assists in removing Infoworks-specific libraries/jars on Databricks, facilitating the cleanup of all libraries in the Databricks Cluster when necessary.
+- **Link:** [Infoworks_Databricks_Libraries_Uninstall](./Infoworks_Databricks_Libraries_Uninstall/)
+

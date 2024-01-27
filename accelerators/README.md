@@ -16,3 +16,10 @@ Welcome to the Accelerators directory, a comprehensive solution designed to spee
 - **Description:** This Product Recipe will enable clients to integrate the Infoworks metadata with systems that track metadata. The Product Recipe retrieves static and dynamic information of the Infoworks objects such as table metadata,job metrics,pipeline metadata etc via Infoworks APIs
 - **Link:** [BTEQ2Infoworks-SnowConvert](./BTEQ2Infoworks-SnowConvert/)
 
+### 3. Bulk-Admin-Entity-Creation-Utility
+
+- **Description:** This Utility helps in accelerating the creation of Infoworks Admin artifacts such as environment profiles,users,domains etc.
+The current challenge faced by customers involves the cumbersome task of generating numerous administrative elements such as environment profiles, secrets, domains, etc. 
+The desired solution is to offer a script that automates the creation of these administrative entities based on a CSV file.
+- **Link:** [Bulk-Admin-Entity-Creation-Utility](./Bulk-Admin-Entity-Creation-Utility/)
+
