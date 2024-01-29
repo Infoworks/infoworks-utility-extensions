@@ -32,3 +32,7 @@ Welcome to the Utilities directory, a comprehensive solution designed to streaml
 - **Description:** This tool assists in removing Infoworks-specific libraries/jars on Databricks, facilitating the cleanup of all libraries in the Databricks Cluster when necessary.
 - **Link:** [Infoworks_Databricks_Libraries_Uninstall](./Infoworks_Databricks_Libraries_Uninstall/)
 
+### 6. Prehook Scripts
+
+- **Description:** This directory contains the scripts that can be run before bringing in data to Infoworks. These scripts, called pre ingestion job hooks, help perform tasks like encrypting, decrypting, moving, or deleting files. They can also work with other tools. You can write these scripts in either bash or python 3.x. The scripts are executed on the data plane (compute cluster) where the job runs.
+- **Link:** [Prehook_Scripts](./Prehook_Scripts/)
