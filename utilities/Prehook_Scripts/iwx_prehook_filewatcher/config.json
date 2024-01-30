@@ -1,0 +1,24 @@
+{
+  "retry_count": 36,
+  "retry_interval": 30,
+  "protocol": "https",
+  "host": "",
+  "port": "443",
+  "refresh_token": "",
+  "source_mappings": {
+    "ATT_FileWatcher_Demo": {
+      "file_suffix": ".csv.gz",
+      "ready_file_suffix": ".done",
+      "environment_id": "",
+      "compute_name":"",
+      "storage_account_key": ""
+    },
+    "SUNRISE_PARQUET": {
+      "file_suffix": ".snappy.parquet",
+      "ready_file_suffix": "_SUCCESS",
+      "environment_id": "",
+      "compute_name":"",
+      "storage_account_key": ""
+    }
+  }
+}

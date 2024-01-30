@@ -20,9 +20,9 @@ retrieves static and dynamic information of the Infoworks objects via Infoworks 
 
 ## Usage
 
-### table_metadata_extractor_V3.py
+### table_metadata_extractor_V4.py
 ```
-python3 table_metadata_extractor_V3.py --config_file <Fully qualified path of the configuration file>
+python3 table_metadata_extractor_V4.py --config_file <Fully qualified path of the configuration file>
 ```
 #### Fields inside configuration file
 
@@ -89,7 +89,7 @@ The output files contains organized and processed gathered attributes,
 which are fields of data collected from Infoworks APIs.
 The attributes offer a comprehensive view of the objects created in Infoworks environment.
 
-### Attributes from table_metadata_extractor_V3.py
+### Attributes from table_metadata_extractor_V4.py
 | **Attribute**                | **Description**                                          |
 |:-----------------------------|:---------------------------------------------------------|
 | source_name                  | Name of the Infoworks Source                             |
@@ -173,7 +173,7 @@ The attributes offer a comprehensive view of the objects created in Infoworks en
 | derived_expr_if_any          | Print details on the derived column in pipeline target        |
 
 ## Output
-The **"table_metadata_extractor_V3.py"** script generates an
+The **"table_metadata_extractor_V4.py"** script generates an
 output csv file named **"TableMetadata.csv"** in the same directory with all the extracted information from the Infoworks APIs.
 It also logs the tables that are failed while extracting information from the Infoworks APIs in a csv file named **"Failed_Tables.csv"** with the exception message causing the failure.
 
@@ -183,9 +183,9 @@ for last x minutes.
 The **"pipeline_metadata_extractor.py"** script generates an
 output csv file named **"PipelineMetadata.csv"** in the same directory with all the extracted information from the Infoworks APIs.
 
-### table_metadata_extractor_V3.py
+### table_metadata_extractor_V4.py
 ```
-python3 table_metadata_extractor_V3.py --config_file config.json
+python3 table_metadata_extractor_V4.py --config_file config.json
 02-Feb-23 11:06:50 — [ INFO ] — Initiating Request to get Sources 
 02-Feb-23 11:06:50 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources?&limit=50
 02-Feb-23 11:06:51 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/?limit=50&offset=50
