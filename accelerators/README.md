@@ -23,3 +23,12 @@ The current challenge faced by customers involves the cumbersome task of generat
 The desired solution is to offer a script that automates the creation of these administrative entities based on a CSV file.
 - **Link:** [Bulk-Admin-Entity-Creation-Utility](./Bulk-Admin-Entity-Creation-Utility/)
 
+### 4. Infoworks-Bulk-Pipeline-Creation-Utility
+
+- **Description:** This Utility helps in accelerating the creation of Infoworks piplines based on predefined SQL queries and metadata file.
+- **Link:** [Infoworks-Bulk-Pipeline-Creation-Utility](./Infoworks-Bulk-Pipeline-Creation-Utility/)
+
+### 5. Infoworks-Mass-Replicator-Utility
+
+- **Description:** This Utility helps in accelerating the creation of Infoworks replicators based on a metadata CSV file.
+- **Link:** [Infoworks-Mass-Replicator-Utility](./Infoworks-Mass-Replicator-Utility/)
