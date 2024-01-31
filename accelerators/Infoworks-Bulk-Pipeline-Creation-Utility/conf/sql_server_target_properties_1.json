@@ -1,0 +1,18 @@
+{
+                                "data_connection_sub_type": "SQL_SERVER",
+                                "build_mode": "OVERWRITE",
+                                "is_existing_schema": false,
+                                "is_existing_table": true,
+                                "enable_schema_sync": true,
+                                "natural_key": [
+                                    "ORDERID",
+                                    "CUSTOMERID"
+                                ],
+                                "data_connection_id": "655f0f322fe355069da6a366",
+                                "data_connection_name": "SQL_SERVER_TARGET_CONNECTION",
+                                "data_connection_properties": {},
+                                "table_name": "test_table",
+                                "schema_name": "test_schema",
+                                "partition_type": "none",
+                                "index_type": "none"
+}

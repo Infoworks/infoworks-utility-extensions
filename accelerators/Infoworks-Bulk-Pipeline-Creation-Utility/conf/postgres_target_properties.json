@@ -1,0 +1,16 @@
+{
+                            "partition_type": "none",
+                            "index_type": "none",
+                            "data_connection_sub_type": "POSTGRES",
+                            "build_mode": "OVERWRITE",
+                            "is_existing_schema": false,
+                            "is_existing_table": false,
+                            "enable_schema_sync": false,
+                            "natural_key": [
+                                "ORDERID"
+                            ],
+                            "data_connection_id": "0265c5e4d6b8a654d60b71a5",
+                            "data_connection_properties": {},
+                            "table_name": "test_table",
+                            "schema_name": "test_Schema"
+                        }

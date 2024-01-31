@@ -1,0 +1,75 @@
+{
+  "replicator_instance": {
+    "host": < IP Address of Infoworks VM >,
+    "port": < 443 for https / 3000 for http >,
+    "protocol": < http/https >,
+    "refresh_token": < Refresh Token from Infoworks Account >
+  },
+  "source": {
+    "name": < Source Name in Infoworks Replicator >,
+    "type": "hive",
+    "properties": {
+        "hadoop_version": "2.x / 3.x ",
+        "hdfs_root": < Hadoop File System Compliant location >,
+        "hive_metastore_url": < Hive Metastore connection string to replicate the metadata >,
+        "network_throttling": < Throttling Limit in Mbps >,
+        "temp_directory": < Temp Directory >,
+        "output_directory": < Output Directory >
+    },
+    "advanced_configurations": [
+        {
+            "key": < KEY >,
+            "value": < VALUE >
+        }
+    ]
+  },
+  "destination": {
+      "name": < Destination Name in Infoworks Replicator >,
+      "type": "hive",
+      "properties": {
+          "hadoop_version": "2.x",
+          "hdfs_root": < Hadoop File System Compliant location >,
+          "hive_metastore_url": < Hive Metastore connection string to replicate the metadata >,
+          "network_throttling": < Throttling Limit in Mbps >,
+          "temp_directory": < Temp Directory >,
+          "output_directory": < Output Directory >
+      },
+      "advanced_configurations": [
+          {
+              "key": < KEY >,
+              "value": < VALUE >
+          }
+      ]
+  },
+  "replication": {
+    "definition": {
+        "name": < Replication Definition Name in Infoworks Replicator >,
+        "domain_id": < Domain Id of Infoworks Replicator Domain >,
+        "job_bandwidth_mb": < Network Throttling Limit in Mbps >,
+        "replication_type": < batch / overwrite >,
+        "copy_parallelism_factor": < Data Copy Parallelism Factor >,
+        "metastore_parallelism_factor": < Metastore Parallelism Factor >,
+        "advanced_configurations": [
+            {
+                "key": < KEY >,
+                "value": < VALUE >
+            }
+        ]
+    },
+    "schedule": {
+      "entity_type": "replicate_definition",
+        "properties": {
+            "schedule_status": "enabled",
+            "repeat_interval": < hour,minute,day,week,month >,
+            "starts_on": < Schedule Start Date >,
+            "time_hour": < Hour >,
+            "time_min": < Minute >,
+            "ends": "off",
+            "repeat_every": < Repeat Interval >
+        },
+      "scheduler_username": < Schedule User >
+      "scheduler_auth_token": < Auth Token >
+    },
+    "trigger_replication_data_job": < true/false >
+  }
+}

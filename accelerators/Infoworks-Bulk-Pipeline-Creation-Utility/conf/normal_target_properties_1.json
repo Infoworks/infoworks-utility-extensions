@@ -1,0 +1,17 @@
+{
+              "scd2_granularity": null,
+              "scd1_columns": null,
+              "target_schema_name": "test_schema_prd",
+              "target_table_name": "test_table_prd",
+              "target_base_path": "/iw/sources/abcd/test_table_prd/",
+              "partition_key": [],
+              "natural_key": [
+                "employee_id",
+                "first_name"
+              ],
+              "deleted_records_column": null,
+              "sync_type": "OVERWRITE",
+              "storage_format": "DELTA",
+              "scd_type": "SCD_1",
+              "sort_by_columns": []
+            }

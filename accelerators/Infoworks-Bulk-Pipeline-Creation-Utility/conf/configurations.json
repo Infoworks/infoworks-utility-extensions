@@ -1,0 +1,18 @@
+{
+  "protocol": "https",
+  "host": "",
+  "port": "443",
+  "refresh_token": "",
+  "environment_name": "",
+  "domain_name": "",
+  "storage_name": "",
+  "compute_template_name": "",
+  "batch_engine": "spark",
+  "target_schema_name": "public",
+  "pipeline_name_prefix": "SF_TO_NORMAL_TARGET",
+  "workflow_name_prefix": "SF_TO_NORMAL_TARGET",
+  "delete_older_pipeline_versions": true,
+  "load_data_incrementally": true,
+  "exclude_audit_columns": true,
+  "export_pipeline_name_prefix": "S3_TO_SF"
+}

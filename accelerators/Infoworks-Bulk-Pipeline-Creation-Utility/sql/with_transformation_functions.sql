@@ -1,0 +1,1 @@
+select {source_table_schema}.{source_table_name}.*,hash({encryption_column}) as {derive_column_name} from {source_table_schema}.{source_table_name}

@@ -1,0 +1,34 @@
+{
+	"extension_execution_type": "JAVA",
+	"extension_class": "com.infoworks.VerticaCustomTarget",
+	"mappings": [{
+			"key": "jdbc_url",
+			"value": "jdbc:vertica://:/?DISABLE_DATACHECKS=true"
+		},
+		{
+			"key": "user_name",
+			"value": ""
+		},
+		{
+			"key": "encrypted_password",
+			"value": ""
+		},
+		{
+			"key": "build_mode",
+			"value": "overwrite"
+		},
+		{
+			"key": "table_name",
+			"value": ""
+		},
+		{
+			"key": "schema_name",
+			"value": ""
+		},
+		{
+			"key": "user_managed_table",
+			"value": "false"
+		}
+	],
+	"extension_id": ""
+}

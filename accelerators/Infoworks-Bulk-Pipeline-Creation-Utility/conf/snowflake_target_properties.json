@@ -1,0 +1,21 @@
+{
+              "data_connection_sub_type": "SNOWFLAKE",
+              "build_mode": "OVERWRITE",
+              "is_existing_database": false,
+              "is_existing_schema": false,
+              "is_database_case_sensitive": false,
+              "is_schema_case_sensitive": false,
+              "is_table_case_sensitive": false,
+              "enable_schema_sync": false,
+              "query_tag": "",
+              "natural_key": [
+                "C_CUSTKEY",
+                "C_NAME"
+              ],
+              "data_connection_id": "67ec5a0a624626868ac08ea8",
+              "data_connection_name": "Snowflake-connection",
+              "data_connection_properties": {},
+              "table_name": "TEST_SNOWFLAKE_TARGET_TABLE",
+              "schema_name": "PUBLIC",
+              "database_name": "ABHI_DATABASE"
+            }
