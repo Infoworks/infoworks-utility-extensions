@@ -36,3 +36,13 @@ Welcome to the Utilities directory, a comprehensive solution designed to streaml
 
 - **Description:** This directory contains the scripts that can be run before bringing in data to Infoworks. These scripts, called pre ingestion job hooks, help perform tasks like encrypting, decrypting, moving, or deleting files. They can also work with other tools. You can write these scripts in either bash or python 3.x. The scripts are executed on the data plane (compute cluster) where the job runs.
 - **Link:** [Prehook_Scripts](./Prehook_Scripts/)
+    - **iwx_prehook_filewatcher**:
+      - **Description**:
+      - **Link**: [iwx_prehook_filewatcher](./Prehook_Scripts/iwx_prehook_filewatcher/)
+    - **iwx_prehook_gpg_decryption**:
+      - **Description**:
+      - **Link**: [iwx_prehook_gpg_decryption](./Prehook_Scripts/iwx_prehook_gpg_decryption/)
+    - **iwx_prehook_include_filename_regex_update**:
+      - **Description**: This Pre-hook script functions to update the table, incorporating file names based on a regex pattern, to reflect the current date. Following the regex replacement, it specifically identifies files that include today's date in their names, exemplified by files like 'file_abc_21-08-2024.txt'
+      - **Link**: [iwx_prehook_include_filename_regex_update](./Prehook_Scripts/iwx_prehook_include_filename_regex_update/)
+
