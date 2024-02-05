@@ -7,10 +7,11 @@ import traceback
 import warnings
 import datetime
 import configparser
-#sys.path.insert(0, '/Users/nitin.bs/PycharmProjects/infoworks-python-sdk')
+
 from infoworks.sdk.utils import IWUtils
 from infoworks.sdk.client import InfoworksClientSDK
 import infoworks.sdk.local_configurations
+
 warnings.filterwarnings('ignore', '.*Unverified HTTPS request.*', )
 warnings.filterwarnings("ignore")
 
@@ -84,9 +85,14 @@ def get_workflow_run_job_summary(domain_id, workflow_run_id):
                 # Result can contain multiple failed job ids
                 for job in workflow_run_jobs_result:
                     job_id = job.get('id')
+                    job_type = job.get('type')
                     job_summary = job.get('summary', [])
                     job_cluster_id = job.get('cluster_id')
 
+                    if job_type == "pipeline_group_build":
+                        pipeline_id = job.get('entity_id')
+                        if pipeline_id:
+                            get_pipeline_group_pipelines(domain_id, pipeline_id, job_id)
                     if job_summary:
                         job_final_summary = ''
 
@@ -146,12 +152,15 @@ def get_logfile_path(domain_id, job_id):
 
                     if environment_id is not None and cluster_id is not None:
                         workspace_url = get_databricks_workspace_url(environment_id)
-                        # logger.info("Workspace URL {}".format(workspace_url))
-                        workspace_id = workspace_url.split('-')[1].split('.')[0]
-                        DB_workspace_url = '{workspace_url}?o={workspace_id}#setting/clusters/{cluster_id}/driverLogs' \
-                            .format(workspace_id=workspace_id, workspace_url=workspace_url, cluster_id=cluster_id)
-                        logger.info(
-                            "Databricks Workspace URL for Job ID {} is : {}".format(job_id, DB_workspace_url))
+                        if workspace_url:
+                            logger.info("Workspace URL {}".format(workspace_url))
+                            workspace_id = workspace_url.split('-')[1].split('.')[0]
+                            DB_workspace_url = '{workspace_url}?o={workspace_id}#setting/clusters/' \
+                                               '{cluster_id}/driverLogs'.format(workspace_id=workspace_id,
+                                                                                workspace_url=workspace_url,
+                                                                                cluster_id=cluster_id)
+                            logger.info(
+                                "Databricks Workspace URL for Job ID {} is : {}".format(job_id, DB_workspace_url))
                     else:
                         logger.info("Environment/Cluster ID is None")
 
@@ -214,9 +223,13 @@ def get_databricks_workspace_url(environment_id):
     logger.debug("get_environment_details() - Response: {}".format(json.dumps(environment_response)))
     try:
         if environment_response['result']['status'] == 'success':
-            workspace_url = environment_response['result']['response']['result'][0].get('connection_details', {}).get(
+            workspace_url = environment_response['result']['response']['result'][0].get('connection_configuration',
+                                                                                        {}).get(
                 'workspace_url')
-            return workspace_url
+            if workspace_url:
+                return workspace_url
+            else:
+                logger.error("Workspace URL not found")
         else:
             raise IwxException("EnvironmentInfoFetchException", environment_response)
     except Exception as environment_response_error:
@@ -237,8 +250,7 @@ def initiate_workflow_process(domain_id, workflow_id):
 
         workflow_status_response = iwx_client.poll_workflow_run_till_completion(workflow_id=workflow_id,
                                                                                 workflow_run_id=workflow_run_id,
-                                                                                poll_interval=poll_time,
-                                                                                domain_id=domain_id)
+                                                                                poll_interval=poll_time)
 
         logger.debug("poll_workflow_run_till_completion() - Response: {}".format(json.dumps(workflow_status_response)))
 
@@ -440,9 +452,10 @@ def initiate_pipeline_process(job_object):
 
             elif job_object['pipeline_job_type'] == "pipeline_group":
                 pipeline_status_code = PIPELINE_GROUP_FAILURE
-
+                get_pipeline_group_pipelines(domain_id, job_object['pipeline_group_id'], job_id)
                 get_pipeline_group_log_summary(domain_id, job_object['pipeline_group_id'], job_id)
                 get_logfile_path(domain_id, job_id)
+
         return pipeline_status_code
     except Exception:
         raise Exception("Failed in initiate_pipeline_process")
@@ -462,23 +475,18 @@ def get_domain_id_from_name(domain_name):
         else:
             raise Exception(f"API Status Returned as Failed")
     except Exception:
-        raise Exception(f"Failed to Fetch Domain Id with Domain Name {domain_name} or User does not have access to Domain Name {domain_name}")
+        raise Exception(f"Failed to Fetch Domain Id with Domain Name {domain_name}")
 
 
 def get_pipeline_log_summary(domain_id, pipeline_id, job_id):
     logger.info("Fetching Summary for Pipeline Job ID {}\n".format(job_id))
-    pipeline_summary_url = f'{protocol}://{host}:{port}/v3/domains/{domain_id}/pipelines/{pipeline_id}/jobs/{job_id}/summary'
-
-    pipeline_summary_response = IWUtils.ejson_deserialize(iwx_client.call_api("GET", pipeline_summary_url,
-                                                                              IWUtils.get_default_header_for_v3(
-                                                                                  iwx_client.client_config[
-                                                                                      'bearer_token'])).content)
+    pipeline_summary_response = iwx_client.get_pipeline_job_summary(domain_id, pipeline_id, job_id)
     logger.debug("get_pipeline_job_summary() - Response: {}".format(json.dumps(pipeline_summary_response)))
 
     try:
-        if pipeline_summary_response['result']:
+        if pipeline_summary_response['result'].get('response', {}).get('result', []):
             job_final_summary = ''
-            for row in pipeline_summary_response['result']:
+            for row in pipeline_summary_response['result'].get('response', {}).get('result', []):
                 job_final_summary = job_final_summary + '{} - Job ID: {} - {} \n' \
                     .format(row.get('timestamp'), row.get('job_id'), row.get('message'))
 
@@ -492,19 +500,13 @@ def get_pipeline_log_summary(domain_id, pipeline_id, job_id):
 
 def get_pipeline_group_log_summary(domain_id, pipeline_group_id, job_id):
     logger.info("Fetching Summary for Pipeline Job ID {}\n".format(job_id))
-    pipeline_group_summary_url = f'{protocol}://{host}:{port}/v3/domains/{domain_id}/pipeline-groups/{pipeline_group_id}' \
-                                 f'/jobs/{job_id}/summary'
-
-    pipeline_group_summary_response = IWUtils.ejson_deserialize(iwx_client.call_api("GET", pipeline_group_summary_url,
-                                                                                    IWUtils.get_default_header_for_v3(
-                                                                                        iwx_client.client_config[
-                                                                                            'bearer_token'])).content)
+    pipeline_group_summary_response = iwx_client.get_pipeline_group_job_summary(domain_id, pipeline_group_id, job_id)
     logger.debug("get_pipeline_group_job_summary() - Response: {}".format(json.dumps(pipeline_group_summary_response)))
 
     try:
-        if pipeline_group_summary_response['result']:
+        if pipeline_group_summary_response['result'].get('response', {}).get('result', []):
             job_final_summary = ''
-            for row in pipeline_group_summary_response['result']:
+            for row in pipeline_group_summary_response['result'].get('response', {}).get('result', []):
                 job_final_summary = job_final_summary + '{} - Job ID: {} - {} \n' \
                     .format(row.get('timestamp'), row.get('job_id'), row.get('message'))
 
@@ -514,6 +516,21 @@ def get_pipeline_group_log_summary(domain_id, pipeline_group_id, job_id):
     except Exception as pipeline_group_summary_response_error:
         logger.exception("Failed to Fetch Pipeline Group Job Summary \nError Info: {error}"
                          .format(error=pipeline_group_summary_response_error))
+
+
+def get_pipeline_group_pipelines(domain_id, pipeline_group_id, job_id):
+    logger.info("Fetching Failed Pipelines in Pipeline Group Run")
+    params = {"status": {"$in": ["failed", "canceled", "aborted"]}}
+
+    pipeline_group_pipelines_response = iwx_client.list_pipeline_job_details_in_pipeline_group_job(
+        domain_id, pipeline_group_id, job_id, params=params)
+    logger.debug("get_pipeline_group_pipelines() - Response: {}".format(json.dumps(pipeline_group_pipelines_response)))
+    if pipeline_group_pipelines_response['result'].get('response', {}).get('result', []):
+        for pipeline in pipeline_group_pipelines_response['result'].get('response', {}).get('result', []):
+            logger.info(f"Pipeline Name: {pipeline.get('pipeline_name')} - Pipeline ID: {pipeline.get('id')} "
+                        f"- Pipeline Version ID: {pipeline.get('pipeline_version_id')}")
+    else:
+        logger.info("No Failed Pipelines Found")
 
 
 if __name__ == "__main__":
