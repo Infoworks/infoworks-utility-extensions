@@ -63,16 +63,35 @@ def get_source_connection_details(source_id):
             # Only Snowflake Connector contains Warehouse Key
             snowflake_connection_warehouse = connection_details_response['result']['response'] \
                 .get('result', {}).get('warehouse')
+            # For Snowflake Data Environment
+            snowflake_profile = connection_details_response['result']['response'].get('result', {}).get('snowflake_profile')
 
             return {'connection_url': connection_url,
                     'username': connection_username,
-                    'snowflake_warehouse': snowflake_connection_warehouse}
+                    'snowflake_warehouse': snowflake_connection_warehouse,
+                    'snowflake_profile': snowflake_profile}
         else:
             raise IwxException("SourceConnectionDetailsFetchException", connection_details_response)
     except Exception as source_connection_error:
         logging.error("Failed to retrieve source connection details \nError: {error}"
                       .format(error=source_connection_error))
         # sys.exit(-1)
+
+
+def get_data_environment_details(environment_id):
+    # Fetches Data Environment Details
+    try:
+        environment_details_response = iwx_client.get_environment_details(environment_id=environment_id)
+        logging.debug("environment_details_response() - Response: {}".format(json.dumps(environment_details_response)))
+
+        if environment_details_response['result']['status'] == 'success' and\
+                environment_details_response['result']['response'].get('result', []):
+            return environment_details_response['result']['response'].get('result', {})[0]
+        else:
+            raise IwxException("EnvironmentDetailsFetchException", environment_details_response)
+    except Exception as data_environment_error:
+        logging.error("Failed to retrieve data environment details \nError: {error}"
+                      .format(error=data_environment_error))
 
 
 def get_all_tables(source_id):
@@ -98,6 +117,7 @@ def get_datatype_name_from_id(datatype_id):
         datatype_mapping_dict = {
             '-5': 'BIGINT',
             '-2': 'BYTE',
+            '1': 'STRING',
             '3': 'DECIMAL',
             '4': 'INT',
             '7': 'FLOAT',
@@ -161,14 +181,14 @@ def extract_table_metadata(result):
                 source_columns_and_datatypes[str(column_info.get('original_name'))] = get_datatype_name_from_id(
                     str(column_info.get('sql_type')))
 
-        if result.get('export_configuration'):
-            target_type = result['export_configuration'].get('target_type','').upper()
+        if result.get('export_configuration') and result.get('export_configuration', {}).get('target_type', '').upper():
+            target_type = result['export_configuration'].get('target_type', '').upper()
             target_configs = result['export_configuration'].get('target_configuration')
             target_database_name = target_configs.get('database_name')
             target_schema_name = target_configs.get('dataset_name', target_configs.get('schema_name'))
             target_table_name = target_configs.get('table_name', target_configs.get('collection_name'))
         else:
-            target_type = 'HIVE (INGESTION TARGET)'
+            target_type = f'{data_environment_type.upper()} (INGESTION)'
             target_database_name = ''
             target_schema_name = result['configuration'].get('target_schema_name')
             target_table_name = result['configuration'].get('target_table_name')
@@ -229,25 +249,40 @@ if __name__ == "__main__":
         sources = get_all_sources()
         failed_data = []
         final_data = []
-
+        data_environments = {}
         for source in sources:
             source_name = source.get('name')
             source_type = source.get('type')
             source_sub_type = source.get('sub_type')
+            source_connection_details = get_source_connection_details(source.get('id'))
+            source_connection_url = source_connection_details.get('connection_url')
+            source_connection_username = source_connection_details.get('username')
+            snowflake_warehouse = source_connection_details.get('snowflake_warehouse')
+            snowflake_env_profile = source_connection_details.get('snowflake_profile')
 
-            if source['type'] == 'rdbms':
-                source_connection_details = get_source_connection_details(source.get('id'))
-                if source_connection_details is None:
-                    source_connection_details = {}
-
-                source_connection_url = source_connection_details.get('connection_url')
-                source_connection_username = source_connection_details.get('username')
-                snowflake_warehouse = source_connection_details.get('snowflake_warehouse')
+            data_env_id = source.get('environment_id')
+            if data_env_id in data_environments.keys():
+                environment_details = data_environments[data_env_id]
             else:
-                source_connection_url = None
-                source_connection_username = None
-                snowflake_warehouse = None
-
+                environment_details = get_data_environment_details(data_env_id)
+                data_environments[data_env_id] = environment_details
+            if environment_details is not None:
+                snowflake_profile_username = None
+                data_environment_name = environment_details.get('name')
+                if environment_details.get('data_warehouse_type'):
+                    data_environment_type = environment_details.get('data_warehouse_type')
+                else:
+                    data_environment_type = environment_details.get('platform')
+                if data_environment_type.upper() == "SNOWFLAKE":
+                    snowflake_profiles = environment_details.get('data_warehouse_configuration', {}).\
+                        get('snowflake_profiles', [])
+                    for profile in snowflake_profiles:
+                        if profile['name'] == snowflake_env_profile:
+                            snowflake_profile_username = profile.get('authentication_properties', {}).get('username')
+            else:
+                data_environment_name = None
+                data_environment_type = None
+                snowflake_profile_username = None
             # if source_name == "test_teradata":
             tables = get_all_tables(source.get('id'))
 
@@ -255,7 +290,9 @@ if __name__ == "__main__":
                 for table in tables:
                     table_info_row = {'source_name': '', 'source_type': '', 'source_sub_type': '',
                                       'source_connection_url': '', 'snowflake_warehouse': '',
-                                      'source_connection_username': '',
+                                      'source_connection_username': '', 'data_environment_name': '',
+                                      'data_environment_type': '', 'snowflake_profile': '',
+                                      'snowflake_profile_username': '',
                                       'target_database_name': '', 'target_schema_name': '', 'target_table_name': '',
                                       'description': '', 'target_columns_and_datatypes': '', 'tags': '',
                                       'source_file_name': '', 'source_schema_name': '',
@@ -266,7 +303,6 @@ if __name__ == "__main__":
                     logging.debug("Table Info: {}".format(json.dumps(table)))
                     status, extracted_metadata, error_msg = extract_table_metadata(table)
                     table_metadata = get_table_tags_and_description(source.get('id'), table['id'])
-                    logging.debug(table_metadata)
                     if table_metadata:
                         table_tags, table_description = table_metadata
                         table_tags = ','.join(table_tags)
@@ -284,6 +320,10 @@ if __name__ == "__main__":
                         table_info_row['source_table_name'] = extracted_metadata.get('source_table_name')
                         table_info_row['source_columns_and_datatypes'] = \
                             extracted_metadata.get('source_columns_and_datatypes')
+                        table_info_row['data_environment_name'] = data_environment_name
+                        table_info_row['data_environment_type'] = data_environment_type
+                        table_info_row['snowflake_profile'] = snowflake_env_profile
+                        table_info_row['snowflake_profile_username'] = snowflake_profile_username
                         table_info_row['target_database_name'] = extracted_metadata.get('target_database_name')
                         table_info_row['target_schema_name'] = extracted_metadata.get('target_schema_name')
                         table_info_row['target_table_name'] = extracted_metadata.get('target_table_name')
@@ -305,7 +345,9 @@ if __name__ == "__main__":
                                                      'source_connection_url', 'snowflake_warehouse',
                                                      'source_connection_username',
                                                      'source_schema_name', 'source_table_name',
-                                                     'source_columns_and_datatypes',
+                                                     'source_columns_and_datatypes', 'data_environment_name',
+                                                     'data_environment_type', 'snowflake_profile',
+                                                     'snowflake_profile_username',
                                                      'target_type', 'target_database_name', 'target_schema_name',
                                                      'target_table_name',
                                                      'description', 'target_columns_and_datatypes', 'tags',

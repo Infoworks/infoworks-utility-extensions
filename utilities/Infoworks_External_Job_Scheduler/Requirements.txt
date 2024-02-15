@@ -1,2 +1,2 @@
-infoworkssdk==3.0b0
+infoworkssdk==4.0a14
 pyyaml
