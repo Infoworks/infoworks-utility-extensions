@@ -22,7 +22,7 @@ Currently via Infoworks, individual tables need to be configured manually by goi
 - VM from which scripts are run should have access to infoworks server (on port 443 for https and port 3000 for http) to make the infoworks restapi calls.
 
 ## Flowdiagram
-![RDBMS Automated table configuration flow diagram](./images/RDBMS_Ingestion_automation.jpg?raw=true "RDBMS Automated table configuration flow diagram")
+![RDBMS Automated table configuration flow diagram](./images/automation_demo.png?raw=true "RDBMS Automated table configuration flow diagram")
 
 ## Installation:
 ```bash
@@ -42,17 +42,17 @@ DBC.TablesV,DBC.IndicesV,DBC.ColumnsV
 1) Login to your local VM or any machine with python3 installation.
 2) Download the package 
 ```shell
-wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_54_via_sdk.tar.gz
+wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_54.tar.gz
 ```
 
 Untar the package:
 ```shell
-tar -xvf automated_table_configuration_rdbms_54_via_sdk.tar.gz
+tar -xvf automated_table_configuration_rdbms_54.tar.gz
 ```
 
 3) Navigate to untarred folder
 ```shell
-cd ./automated_table_configuration_rdbms_54_via_sdk/
+cd ./automated_table_configuration_rdbms_54/
 ```
 
 4) Create and activate a virtual env
@@ -70,7 +70,7 @@ python -m pip install -r requirements.txt
 ### Teradata:
 ```shell
 
-python RDBMS_metadata_generator.py teradata --host <your_teradata_host_ip> -port <your_teradata_port> --user <your_user> --password <your_password> --schemas <space_seperated_list_of_your_selective_schemas>
+python teradata_metadata_analysis_with_watermark.py --host <your_teradata_host_ip> -port <your_teradata_port> --user <your_user> --password <your_password> --schemas <space_seperated_list_of_your_selective_schemas>
 ```
 
 Note: password should be encrypted using infoworks_security.sh
@@ -92,9 +92,65 @@ Result of above command should be encrypted password fFCuy3JaHWk5Qy7o4o4oewqtCh0
 Eg:
 ```shell
 
-python RDBMS_metadata_generator.py teradata --host 34.204.88.33 --port 1025 --user dbc --password fFCuy3JaHWk5Qy7k4o4oewqtCh0RdIVBzEqELaxJ0yKJAfHAK2K05JZ9/ZUHISGgQIvPKQ== --schemas automation_db
+python teradata_metadata_analysis_with_watermark.py --host 34.204.88.33 --port 1025 --user dbc --password fFCuy3JaHWk5Qy7ko4o4oewqtCh0RdIVBzEqELaxJ0yKJAfHAK2K05JZ9/ZUHISGgQIvPKQ== --schemas automation_db
 ```
 
+
+
+### Snowflake:
+```shell
+
+python snowflake_metadata_analysis_with_watermark.py --account_name <your_snowflake_account_name> --user <your_user> --password <your_password> --warehouse <your_snowflake_warehouse> --database <your_snowflake_database> --schemas <space_seperated_list_of_your_selective_schemas> --tables <space_seperated_list_of_your_selective_tables> --skip_views <True/False>
+```
+
+Note: password should be encrypted using infoworks_security.sh
+
+
+```shell
+For K8s installation of IWX:
+
+ The encryption script is available on the bastion host setup for AKS/when the user downloads the tar to install IWX, the script is available under the iw-k8s-installer dir:
+
+./infoworks_security/infoworks_security.sh --encrypt -p "<password>
+
+```
+
+
+
+Result of above command should be encrypted password fFCuy3JaHWk5Qy7o4o4oewqtCh0RdIVBzEqELaxJ0yKJAfHAK2K05JZ9/ZUHISGgQIvPKQ==
+
+Eg:
+```shell
+
+python snowflake_metadata_analysis_with_watermark.py --account_name iwx_account --user iwx_user --password nHsjRYuXZ+Am42KbslIH34DNUYsadjhbsjaNHudgG+KqQ== --warehouse DEMO_WH --database DATABASE_01 --schemas SOURCE_01_SCHEMA PUBLIC --skip_views True
+```
+
+### SQL Server:
+```shell
+
+python sqlserver_metadata_analysis_with_watermark.py --host <your_sqlserver_host_name> --user <your_user> --password <your_password> --database <your_sqlserver_database> --schemas <space_seperated_list_of_your_selective_schemas> --tables <space_seperated_list_of_your_selective_tables>
+```
+
+Note: password should be encrypted using infoworks_security.sh
+
+
+```shell
+For K8s installation of IWX:
+
+ The encryption script is available on the bastion host setup for AKS/when the user downloads the tar to install IWX, the script is available under the iw-k8s-installer dir:
+
+./infoworks_security/infoworks_security.sh --encrypt -p "<password>
+
+```
+
+
+
+Result of above command should be encrypted password fFCuy3JaHWk5Qy7o4o4oewqtCh0RdIVBzEqELaxJ0yKJAfHAK2K05JZ9/ZUHISGgQIvPKQ==
+
+Eg:
+```shell
+python sqlserver_metadata_analysis_with_watermark.py --host iwx_host --user iwx_user --password nHsjRYuXZ+Am42KbslIH34DNUYsadjhbsjaNHudgG+KqQ== --database SALESDB --schemas dbo --tables Orders Persons suppliers
+```
 
 
 
@@ -110,13 +166,13 @@ export ORACLE_HOME='path where oracle clients are downloaded and unzipped'(Eg:/h
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME
 
 
-python RDBMS_metadata_generator.py oracle --host <your_oracle_host_ip> --port <your_oracle_host_port> --service <service_id> --user <your_user> --password <your_password> --schemas <space_seperated_list_of_your_selective_schemas>
+python oracle_metadata_analysis_with_watermark.py --host <your_oracle_host_ip> --port <your_oracle_host_port> --service <service_id> --user <your_user> --password <your_password> --schemas <space_seperated_list_of_your_selective_schemas>
 
 ```
 
 ### Vertica:
 ```shell
-python RDBMS_metadata_generator.py vertica --host <your_vertica_host_ip> --port <your_vertica_host_port> --user <your_user> --password <your_password> --schemas <space_seperated_list_of_your_selective_schemas>
+python vertica_metadata_analysis_with_watermark.py --host <your_vertica_host_ip> --port <your_vertica_host_port> --user <your_user> --password <your_password> --schemas <space_seperated_list_of_your_selective_schemas>
 ```
 
 7) Edit conf/configurations.json  according to your need
@@ -138,7 +194,7 @@ Provide the output of above command in configurations json as password in export
 
 8) Run the bulk table configure script
 ```shell
-python bulk_table_configure_with_watermark_via_sdk.py --source_id <teradata_source_id/oracle_source_id/vertica_source_id> --refresh_token <your_refresh_token_with_admin_privileges> --domain_name <domain_where_workflows_will_be_created> --source_type <oracle/teradata/vertica> --configure <all(default)/tg/workflow>
+python bulk_table_configure_with_watermark.py --source_id <teradata_source_id/oracle_source_id/vertica_source_id> --refresh_token <your_refresh_token_with_admin_privileges> --domain_name <domain_where_workflows_will_be_created> --source_type <oracle/teradata/vertica> --configure <all(default)/tg/workflow>
 ```
 
 

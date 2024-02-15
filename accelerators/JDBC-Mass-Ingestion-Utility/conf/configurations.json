@@ -10,19 +10,8 @@
 	"split_by_keys":"",
 	"ingestion_storage_format":"parquet",
 	"default_table_type":"infoworks_managed_table",
-	"export_configurations":{
-	    "target_data_connection_name": "POSTGRES_TRGT",
-	    "target_configuration": {
-	      "schema_name": "PostgreTestSchema",
-	      "is_existing_schema": false,
-	      "is_existing_table": false,
-	      "indexing_details": {
-		"index_type": "none",
-		"index_columns": []
-		},
-	      "partition_type": "none"
-	      }
-	  },
+	"exclude_audit_columns": false,
+	"export_configurations":{},
 	"source_connection_properties": {
 		"host": "",
 		"port": 1025,

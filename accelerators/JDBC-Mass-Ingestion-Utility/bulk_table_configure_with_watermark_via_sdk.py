@@ -3,6 +3,7 @@ Usage: python bulk_table_configure_with_watermark.py --source_id <your_source_id
 <your_refresh_token> --configure <all/table/tg/workflow> --domain_id <domain_id_where_workflow_will_be_created>
 --source_type oracle/teradata/vertica
 """
+import re
 import sys
 import json
 import os
@@ -20,7 +21,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def configure_logger(folder, filename):
-    log_level = 'DEBUG'
+    log_level = 'INFO'
     log_file = "{}/{}".format(folder, filename)
     if os.path.exists(log_file):
         os.remove(log_file)
@@ -207,7 +208,7 @@ def configure_split_by_for_table(table_name, database_name, columns, column_type
                 "split_column": "iwDerivedColumn"
             }
     else:
-        table_payload_dict["split_by_key"] = {}
+        table_payload_dict["split_by_key"] = None
     return table_payload_dict
 
 
@@ -334,6 +335,8 @@ def configure_ingestion_strategy(table_name, database_name, columns, table_paylo
                     if eval(scd_type_val.capitalize()) in [False, True]:
                         scd_type = eval(scd_type_val.capitalize())
                     table_payload_dict["is_scd2_table"] = scd_type
+                    if scd_type is False:
+                        table_payload_dict["scd_type"] = "SCD_1"
                 except (KeyError, IndexError):
                     logger.info(f"Did not find the SCD_TYPE_2 column in csv defaulting to SCD TYPE 1 for merge")
 
@@ -505,7 +508,7 @@ def configure_table_export(table, export_config, incremental, natural_keys, sync
         target_config_object = export_config.get('target_configuration', {}).copy()
         if target_config_object.get('schema_name', "") == "":
             target_config_object['schema_name'] = table.get('configuration', {}).get('target_schema_name',
-                                                                                     table.get('catalog_name',''))
+                                                                                     table.get('catalog_name', ''))
         target_config_object['table_name'] = table.get('configuration', {}).get('target_table_name',
                                                                                 table.get('original_table_name', ''))
         target_config_object['natural_key'] = natural_keys
@@ -640,17 +643,25 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
         tg_default_dict = defaultdict(list)
 
         for table in tables:
-            table_report = {}
-            table_report["database"] = table['catalog_name'] if table.get('catalog_is_database','') else table[
-                'schema_name_at_source']
-            table_report["table"] = table['original_table_name']
-
-            tg_tables.append({"table_id": str(table['id']), "connection_quota": default_connection_quota})
-
             if table['original_table_name'].upper() not in tables_in_metadata_csv:
                 logger.info(f"Table not found in metadata CSV. "
                             f"Skipping the table configurations for table {table['original_table_name'].upper()}")
                 continue
+
+            table_report = {}
+            if source_type in ("snowflake", "sqlserver"):
+                table_report["database"] = table['schema_name_at_source']
+            else:
+                if table.get('catalog_is_database', ''):
+                    table_report["database"] = table['catalog_name']
+                else:
+                    table_report["database"] = table['schema_name_at_source']
+
+           # table_report["database"] = table['catalog_name'] if table.get('catalog_is_database','') else table[
+            #    'schema_name_at_source']
+            table_report["table"] = table['original_table_name']
+
+            tg_tables.append({"table_id": str(table['id']), "connection_quota": default_connection_quota})
 
             table_payload_dict = {}
 
@@ -660,7 +671,14 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
             incremental = False
             sync_type = ''
             watermark_column = ''
-            database_name = table['catalog_name'] if table.get('catalog_is_database','') else table['schema_name_at_source']
+            if source_type in ("snowflake", "sqlserver"):
+                database_name = table['schema_name_at_source']
+            else:
+                if table.get('catalog_is_database', ''):
+                    database_name = table['catalog_name']
+                else:
+                    database_name = table['schema_name_at_source']
+           # database_name = table['catalog_name'] if table.get('catalog_is_database','') else table['schema_name_at_source']
             columns = []
             column_type_dict = {}
             col_object_array = table.get('columns', [])
@@ -697,6 +715,54 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
             else:
                 logger.error("Please provide the valid storage format(orc,parquet,delta or avro)\nExiting..")
                 raise Exception("Invalid storage format")
+
+            # Configure Sub Set Filters
+            try:
+                crawl_filters = database_info_df.query(
+                    f"TABLENAME.str.upper() =='{table_name.upper()}' & DATABASENAME.str.upper()=='{database_name.upper()}'")[
+                    'CRAWL_FILTER_CONDITION'].tolist()[0].strip()
+                # print(crawl_filters)
+                lowercase_to_column_mapping = {}
+                for column in columns:
+                    lowercase_to_column_mapping[column.lower()] = column
+                # print(lowercase_to_column_mapping)
+                if crawl_filters:
+                    filters = []
+                    result = re.split(r'(\[AND\]|\[and\]|\[OR\]|\[or\])', crawl_filters)
+                    parent_condition = None
+                    for filter_expression in result:
+                        if filter_expression in ('[AND]', '[and]', '[OR]', '[or]'):
+                            parent_condition = filter_expression.replace('[', '').replace(']', '').upper()
+                        else:
+                            result = re.split(r'(<=>|<>|<=|>=|=|<|>|is null|IS NULL'
+                                              r'|is not null|IS NOT NULL|like|LIKE|not like|NOT LIKE'
+                                              r'|rlike|RLIKE|in|IN|not in|NOT IN)',
+                                              filter_expression)
+                            # print(result)
+                            operand = result[0].strip()
+                            if operand.lower() in lowercase_to_column_mapping:
+                                operand_column_case = lowercase_to_column_mapping[operand.lower()]
+                            else:
+                                raise Exception(f"Unknown column {operand} in table")
+                            operator = result[1].strip().upper()
+                            if operator in ('IS NULL', 'IS NOT NULL'):
+                                value = ""
+                                filter_value_disabled = True
+                            else:
+                                value = result[2].strip()
+                                filter_value_disabled = False
+                            filter_dict = {"filter_column": operand_column_case, "filter_operator": operator,
+                                           "filter_value": value,
+                                           "combine_condition": parent_condition if parent_condition else "-",
+                                           "filter_value_disabled": filter_value_disabled}
+                            filters.append(filter_dict)
+                    table_payload_dict['crawl_data_filter_enabled'] = True
+                    table_payload_dict['crawl_filter_conditions'] = filters
+            except (KeyError, IndexError) as error:
+                logger.warning(f"CRAWL_FILTER_CONDITION column is not found in CSV."
+                               f"Skipping Crawl Filter Condition configuration.")
+            except Exception as error:
+                logger.error(f"Failed to configure CRAWL_FILTER_CONDITION: {error}")
 
             # Configuring Natural Keys
             probable_natural_keys = ''
@@ -815,8 +881,8 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                     '')['TARGET_SCHEMA_NAME'].tolist()[0].strip()
             except (IndexError, KeyError):
                 # Using Previous Target Table Configuration
-                target_schema_name = table['target_schema_name']
-                target_table_name = table['target_table_name']
+               # target_schema_name = table['target_schema_name']
+               # target_table_name = table['target_table_name']
                 logger.info("Defaulting to original table name and schema name as target table name "
                             "and schema name as the entry was not found in csv")
 
@@ -825,7 +891,7 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                 table_payload_dict["target_table_name"] = target_table_name.replace(" ", "_")
             else:
                 target_table_name = table["configuration"]['target_table_name']
-                table_payload_dict["target_table_name"]=target_table_name
+                table_payload_dict["target_table_name"] = target_table_name
             if target_schema_name != '':
                 logger.info(f"target_schema_name : {target_schema_name}")
                 table_payload_dict["target_schema_name"] = target_schema_name.replace(" ", "_")
@@ -1000,13 +1066,13 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                             #bigint = -5
                             #decimal = 3
                             #integer = 4
-                            if snowflake_metasync_source_table_columns_dict.get(column["name"].lower(),{}).get("sql_type","")==92 and column.get("sql_type","") in [-5,3,4]:
+                            if snowflake_metasync_source_table_columns_dict.get(column["name"].lower(),{}).get("sql_type","")==92 and column["sql_type"] in [-5,3,4]:
                                 column["transform_mode"] = "advanced"
                                 column["transform_derivation"] = f"from_unixtime({column['name']},'HH:mm:ss')"
-                            elif snowflake_metasync_source_table_columns_dict.get(column["name"].lower(),{}).get("sql_type","")==91 and column.get("sql_type","") in [-5,3,4]:
+                            elif snowflake_metasync_source_table_columns_dict.get(column["name"].lower(),{}).get("sql_type","")==91 and column["sql_type"] in [-5,3,4]:
                                 column["transform_mode"] = "advanced"
                                 column["transform_derivation"] = f"to_date(from_unixtime({column['name']},'yyyy-MM-dd'),'yyyy-MM-dd')"
-                            elif snowflake_metasync_source_table_columns_dict.get(column["name"].lower(),{}).get("sql_type","")==93 and column.get("sql_type","") in [-5,3,4]:
+                            elif snowflake_metasync_source_table_columns_dict.get(column["name"].lower(),{}).get("sql_type","")==93 and column["sql_type"] in [-5,3,4]:
                                 column["transform_mode"] = "advanced"
                                 column["transform_derivation"] = f"to_timestamp(from_unixtime({column['name']},'yyyy-MM-dd HH:mm:ss.SSS'),'yyyy-MM-dd HH:mm:ss.SSS')"
                             else:
@@ -1418,8 +1484,8 @@ def main():
                         choices=['all', 'table', 'tg', 'workflow'])
     parser.add_argument('--domain_name', type=str,
                         help='Pass the domain in which workflows are to be created.Creates new domain if not exists')
-    parser.add_argument('--source_type', type=str, required=True, help='Enter source type teradata/oracle/netezza',
-                        choices=['teradata', 'oracle', 'vertica', 'netezza', 'mysql'])
+    parser.add_argument('--source_type', type=str, required=True, help='Enter source type teradata/oracle/netezza/snowflake/sql server',
+                        choices=['teradata', 'oracle', 'vertica', 'netezza', 'mysql', 'snowflake', 'sqlserver'])
     parser.add_argument('--metadata_csv_path', type=str, required=True,
                         help='Pass the absolute path of metadata csv file')
     parser.add_argument('--config_json_path', type=str, required=True,

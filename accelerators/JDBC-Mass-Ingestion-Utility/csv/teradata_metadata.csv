@@ -1,10 +1,10 @@
 DATABASENAME,TABLENAME,PROBABLE_NATURAL_KEY_COLUMNS,SPLIT_BY_KEY_CANDIDATES,STORAGE_FORMAT,INGESTION_STRATEGY,WATERMARK_COLUMN,TPT_READER_INSTANCES,TPT_WRITER_INSTANCES,TPT_OR_JDBC,TARGET_SCHEMA_NAME,TARGET_TABLE_NAME,TABLE_GROUP_NAME,CONNECTION_QUOTA,PARTITION_COLUMN,DERIVED_PARTITION,DERIVED_FORMAT,TPT_WITHOUT_IWX_PROCESSING,TABLE_TYPE
-AUTOMATION_DB_SMROSIE,batch_based_jdbc,FNAME,date_col,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,batch_based_jdbc,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,batch_based_tpt,FNAME,,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,batch_based_tpt,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,bigger_orders,col1,,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,bigger_orders,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,full_ingestion_jdbc,FNAME,"REC CHG TS, REC ADD TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,full_ingestion_jdbc,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,full_ingestion_tpt,FNAME,"REC ADD TS, REC CHG TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,full_ingestion_tpt,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,scd_insert,fname,"hist, rec_eff_dt",parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,scd_insert,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,test5mil,col1,,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,test5mil,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,timestamp_based_jdbc,FNAME,"REC ADD TS, REC CHG TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,timestamp_based_jdbc,,,,False,,False,user_managed_table_with_data
-AUTOMATION_DB_SMROSIE,timestamp_based_tpt,FNAME,"REC CHG TS, REC ADD TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,timestamp_based_tpt,,,,False,,False,user_managed_table_with_data
+AUTOMATION_DB_SMROSIE,batch_based_jdbc,FNAME,date_col,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,batch_based_jdbc,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,batch_based_tpt,FNAME,,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,batch_based_tpt,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,bigger_orders,col1,,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,bigger_orders,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,full_ingestion_jdbc,FNAME,"REC ADD TS, REC CHG TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,full_ingestion_jdbc,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,full_ingestion_tpt,FNAME,"REC CHG TS, REC ADD TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,full_ingestion_tpt,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,scd_insert,fname,"hist, rec_eff_dt",parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,scd_insert,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,test5mil,col1,,parquet,FULL_REFRESH,,,,,AUTOMATION_DB_SMROSIE,test5mil,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,timestamp_based_jdbc,FNAME,"REC ADD TS, REC CHG TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,timestamp_based_jdbc,,,,False,,False,user_managed_table_without_data
+AUTOMATION_DB_SMROSIE,timestamp_based_tpt,FNAME,"REC CHG TS, REC ADD TS",parquet,INCREMENTAL_MERGE,REC CHG TS,,,,AUTOMATION_DB_SMROSIE,timestamp_based_tpt,,,,False,,False,user_managed_table_without_data
