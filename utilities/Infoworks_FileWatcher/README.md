@@ -18,7 +18,7 @@ The Infoworks File Watcher is a Python program designed to monitor files in Azur
 Before setting up the Infoworks File Watcher workflow, ensure the following prerequisites are met:
 
 - The bash node should have read access to the ADLS directory where the `.done` files will land.
-- Utilize the custom image `iwxcs.azurecr.io/infoworkssdk:v1` within the bash node of the workflow.
+- Utilize the custom image `iwxcs.azurecr.io/infoworkssdk:v4` within the bash node of the workflow.
 - Upload the scripts and configuration files as part of the Infoworks job hook to access them from the workflow. The command to run the script would be:
 
 ```bash
