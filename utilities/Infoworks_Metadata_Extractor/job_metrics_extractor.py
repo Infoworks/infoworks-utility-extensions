@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO,
                     )
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==4.0a8'}
+    required = {'pandas', 'infoworkssdk==4.0a14'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
 

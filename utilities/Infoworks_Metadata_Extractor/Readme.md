@@ -102,6 +102,10 @@ The attributes offer a comprehensive view of the objects created in Infoworks en
  | source_table_name            | Name of the table at Source                              |
 | source_file_name             | Pattern to ingest files if Source Connector is File type |
 | source_columns_and_datatypes | Columns and Datatypes of Table at Source                 |
+| data_environment_name         | Data Environment Name attached to the Source             |
+| data_environment_type         | Type of Data Environment (Azure, Snowflake etc)          |
+| snowflake_profile             | Configured Profile of Snowflake Data Environment         |
+| snowflake_profile_username    | Username of Snowflake Profile                            |
  | target_type                  | Connector Type of the Target configured                  |
  | target_database_name         | Name of the database at Target                           |
  | target_schema_name           | Name of the schema at Target                             |

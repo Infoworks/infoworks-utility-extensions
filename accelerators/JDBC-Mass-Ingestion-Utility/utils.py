@@ -44,13 +44,13 @@ def aes_decrypt(encrypted_data):
     try:
         if len(encrypted_data.strip(" ")) == 0:
             return ""
-        password = "infoworks"
+        plain_text = "infoworks"
         ciphertext = base64.b64decode(encrypted_data)
         salt = ciphertext[0:16]
         iv = ciphertext[16:28]
         auth_tag = ciphertext[-16:]
         text = ciphertext[28:-16]
-        key = PBKDF2(password, salt, dkLen=256, count=65536, hmac_hash_module=SHA256)
+        key = PBKDF2(plain_text, salt, dkLen=256, count=65536, hmac_hash_module=SHA256)
         key = key[0:32]
         cipher = AES.new(key, AES.MODE_GCM, nonce=iv)
         decrypttext = cipher.decrypt_and_verify(text, auth_tag)
