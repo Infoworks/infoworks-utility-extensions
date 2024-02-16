@@ -19,7 +19,7 @@ def configure_logger():
     """
     Wrapper function to configure a logger to write to console and file.
     """
-    file_console_logger = logging.getLogger('BulkPipelineConfigure')
+    file_console_logger = logging.getLogger('IWXFileWatcher')
     file_console_logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG)
