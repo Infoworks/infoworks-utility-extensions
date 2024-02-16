@@ -1,0 +1,3 @@
+infoworkssdk==4.0a14
+azure-storage-blob
+glob2regex
