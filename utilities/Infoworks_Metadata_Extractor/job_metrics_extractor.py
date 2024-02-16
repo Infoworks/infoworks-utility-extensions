@@ -6,6 +6,9 @@ import sys
 import argparse
 import json
 import warnings
+import requests
+from infoworks.sdk.utils import IWUtils
+
 warnings.filterwarnings('ignore', '.*Unverified HTTPS request.*', )
 warnings.filterwarnings("ignore")
 
@@ -25,7 +28,6 @@ if __name__ == "__main__":
 
     import pandas as pd
     import warnings
-
     warnings.filterwarnings('ignore', '.*Unverified HTTPS request.*', )
     from infoworks.sdk.client import InfoworksClientSDK
     try:
@@ -33,11 +35,16 @@ if __name__ == "__main__":
         parser.add_argument('--config_file', required=True, help='Fully qualified path of the configuration file')
         parser.add_argument('--time_range_for_jobs_in_mins', required=True, type=str,
                             help='Time Period to fetch the executed jobs')
+        parser.add_argument('--output_file', default='JobMetrics.csv')
 
         args = parser.parse_args()
         config_file_path = args.config_file
+        output_file = args.output_file
         if not os.path.exists(config_file_path):
             raise Exception(f"{config_file_path} not found")
+        if not output_file.endswith('.csv'):
+            raise Exception(f"{output_file} is not of csv type. Only csv is supported")
+
         with open(config_file_path) as f:
             config = json.load(f)
         iwx_client = InfoworksClientSDK()
@@ -52,16 +59,17 @@ if __name__ == "__main__":
             user_details = iwx_client.get_user_details()
             if user_details['result'].get('response', {}).get('result'):
                 user_details_df = pd.DataFrame(user_details['result']['response']['result'])
-                user_details_df['email'] = user_details_df['profile'].apply(lambda x: x.get('email',''))
-                user_details_df['name'] = user_details_df['profile'].apply(lambda x: x.get('name',''))
+                user_details_df['email'] = user_details_df['profile'].apply(lambda x: x.get('email', ''))
+                user_details_df['name'] = user_details_df['profile'].apply(lambda x: x.get('name', ''))
                 user_details_df = user_details_df[["id", "name", "email"]]
-                final_df = pd.merge(job_metrics_df, user_details_df, left_on='job_created_by', right_on='id', how='left') \
+                final_df = pd.merge(job_metrics_df, user_details_df, left_on='job_created_by', right_on='id',
+                                    how='left') \
                     .drop('id', axis=1)
             else:
                 logging.error("Failed to get users list!")
-                final_df = job_metrics_df
-            logging.info("Saving Output as JobMetrics.csv")
-            pd.DataFrame(final_df).to_csv("JobMetrics.csv")
+                final_df = job_metrics_df  
+            logging.info(f"Saving Output: {output_file}")
+            pd.DataFrame(final_df).to_csv(output_file)
 
     except Exception as error:
         logging.error("Failed to capture Job Metrics \nError: {error}".format(error=repr(error)))
