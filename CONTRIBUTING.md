@@ -99,6 +99,28 @@ If you are an Infoworks Employee below are the guidelines for contribution:
 - Click on Create branch. This will automatically create the github branch for you.
 - Subsequently, you can proceed with your regular development tasks on the new feature branch, and all commits and pull requests will be logged and associated with specific Jira issues.
 
+## Miscellaneous
+
+### Pre Commit hook false positive
+
+While commiting the code, if the pre commit hook throws error on the secrets being commited.
+Review the line that is pointed out, and if you are sure that its not a secret, add the below comment next to your code.
+```python
+# pragma: allowlist-secret
+```
+
+For example if the pre commit hook has detected the secret as 
+```html
+secret_type="azure_keyvault" <!--- pragma: allowlist-secret-->
+```
+and I am sure that this is not a secret after reviewing, I will add the comment as follow.
+
+```python
+secret_type="azure_keyvault" # pragma: allowlist-secret
+```
+
+**Note** : Above example is for python language, you can give the same comment as per syntax of your language of choice.
+
 ## Conclusion
 Adhering to this branching strategy will contribute to a streamlined development process, effective collaboration, and a more stable production environment. Regularly review and update this document to reflect any changes in the development workflow.
 
