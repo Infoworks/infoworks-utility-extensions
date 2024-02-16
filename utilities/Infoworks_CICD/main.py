@@ -7,13 +7,13 @@ import sys
 import os
 import argparse
 #sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==4.0a12'}
+required = {'infoworkssdk==4.0a14'}
 import pkg_resources
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
 if missing:
     python = sys.executable
-    subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
+    subprocess.check_call([python, '-m', 'pip', 'install', *missing, '--user'], stdout=subprocess.DEVNULL)
 from infoworks.sdk.client import InfoworksClientSDK
 from infoworks.sdk import local_configurations
 local_configurations.POLLING_TIMEOUT=120000
@@ -92,13 +92,15 @@ def execute(thread_number, q):
                     configuration_file_path=task["pipeline_config_path"],
                     domain_name=task["domain_name"],
                     read_passwords_from_secrets=True,
-                    env_tag=env_tag, secret_type="azure_keyvault")
+                    env_tag=env_tag, secret_type="azure_keyvault" # pragma: allowlist-secret
+                )
             elif entity_type == "source":
                 print(f"Source {task['source_config_path']} in progress")
                 res = iwx_client_prd.cicd_upload_source_configurations(
                     configuration_file_path=task["source_config_path"],
                     read_passwords_from_secrets=True,
-                    env_tag=env_tag, secret_type="azure_keyvault")
+                    env_tag=env_tag, secret_type="azure_keyvault" # pragma: allowlist-secret
+                )
                 # add in sdk 1.0.15
                 # , config_ini_path = initfile
             elif entity_type == "workflow":
