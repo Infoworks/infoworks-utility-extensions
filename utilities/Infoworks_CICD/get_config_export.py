@@ -13,6 +13,9 @@ missing = required - installed
 if missing:
     python = sys.executable
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', *missing, '--user'], stdout=subprocess.DEVNULL)
+    user_site = subprocess.run([python, "-m", "site", "--user-site"], capture_output=True, text=True)
+    module_path = user_site.stdout.strip()
+    sys.path.append(module_path)
 from infoworks.sdk.client import InfoworksClientSDK
 from infoworks.sdk.cicd.download_configurations.utils import Utils
 
