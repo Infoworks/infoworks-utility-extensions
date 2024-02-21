@@ -3,10 +3,10 @@
 Product Compatibility: IWX 5.3.1+
 
 ## Introduction
-This product recepie is responsible for migration of Infoworks artifacts from lower environment(Dev/QA) to higher environment(Prod).
+This product recepie is responsible for ETL Workload migration based on predefined JSON templates.
 
 <br>
-Supports Infoworks version 5.2 onwards
+Supports Infoworks version 5.3 onwards
 
 ## Table of Contents
 - [Introduction](#introduction)
