@@ -17,14 +17,14 @@ Supports Infoworks version 5.2 onwards
 
 # Prerequisites
 
-- The deployment server VM should have access to the Github repository and should be given read/write access.
-- The deployment server VM should be able to talk to the source and target IWX environments on the 3001/443 port
+- The VM server where you are running this script should be able to talk to the source and target IWX environments on the 3001/443 port
 - The Secrets with the connection details to Pre-Prod/QA environments should be created before executing the migration
-- The Target/upper Infoworks Environment version should be the same as the source/lower Infoworks Environment version.
-- Infoworks Target Environment should be installed and the environment should be created with the necessary storage and compute interactive cluster.
-- The License key should be installed in the Target Infoworks environment with all the required source connector options.
-- Ensure that the interactive clusters in both the Source and Target Infoworks Environment are up and running through the migration process. 
-- The other infoworks users have to be created in the target environment and the roles and access to the domains should be created post-migration.
+- Infoworks Environment should have the environment created with the necessary storage and compute interactive cluster.
+- The License key should be installed in the Infoworks environment with all the required source connector options.
+- Ensure that the interactive clusters are up and running prior to running below scripts.
+- The user must have access to the domain in which the pipelines/workflows are supposed to be created.
+- Any secrets,extensions,target_data_connections,prehooks, posthooks etc created should be manually migrated prior to this process.
+
 
 # Installation
 
