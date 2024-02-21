@@ -188,8 +188,8 @@
         "table_configs": [
             /* regular table */
             {
-                "entity_type": "table",
-                "entity_id": "651d179dfbc7410007377086",
+                "entity_type": "table", // mandatory
+                "entity_id": "651d179dfbc7410007377086", // mandatory any random UUID
                 "configuration": {
                     "configuration": {
                         "exclude_legacy_audit_columns": true,
@@ -423,7 +423,7 @@
                 },
                 "table_type": "TABLE"
             },
-            /* query table*/
+            /* query table */
             {
                 "entity_type": "table",
                 "entity_id": "655dbc973755807a5cd333d8",
@@ -1112,24 +1112,24 @@
             }
         ],
         "source_configs": {
-            "id": "651d16f8c0136b614afeafa9",
-            "name": "RDBMS_SQLServer",
-            "data_lake_schema": "RDBMS_SQLSERVER_55_SCHEMA",
-            "type": "rdbms",
-            "sub_type": "sqlserver",
+            "id": "651d16f8c0136b614afeafa9", // mandatory any random UUID
+            "name": "RDBMS_SQLServer", // mandatory
+            "data_lake_schema": "RDBMS_SQLSERVER_55_SCHEMA", // mandatory
+            "type": "rdbms", // mandatory
+            "sub_type": "sqlserver", // mandatory
             "connection": {
-                "snowflake_profile": "Default",
-                "warehouse": "DEMO_WH",
-                "connection_mode": "JDBC",
-                "connection_url": "jdbc:sqlserver://10.17.3.201:1433;databaseName=SALESDB",
-                "username": "Infoadmin",
+                "snowflake_profile": "Default", // mandatory
+                "warehouse": "DEMO_WH", // mandatory
+                "connection_mode": "JDBC", // mandatory
+                "connection_url": "jdbc:sqlserver://10.17.3.201:1433;databaseName=SALESDB", // mandatory
+                "username": "Infoadmin", // mandatory
                 "password": {
-                    "password_type": "secret_store", //pragma: allowlist secret
+                    "password_type": "secret_store", //pragma: allowlist secret // mandatory
                     "secret_id": "6418304b7eeb1c40de2b6008", //pragma: allowlist secret
-                    "secret_name": "mongo-pg-pwd" //pragma: allowlist secret
+                    "secret_name": "mongo-pg-pwd" //pragma: allowlist secret // mandatory
                 },
-                "driver_name": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-                "database": "SQLSERVER",
+                "driver_name": "com.microsoft.sqlserver.jdbc.SQLServerDriver", // mandatory
+                "database": "SQLSERVER", // mandatory
                 "parameters": [
                     {
                         "is_active": true,
@@ -1162,17 +1162,17 @@
             "is_oem_connector": false,
             "quoted_identifier": "\"",
             "transformation_extensions": [],
-            "target_database_name": "RDBMS_SQLSERVER_55_DEMO",
+            "target_database_name": "RDBMS_SQLSERVER_55_DEMO", // mandatory
             "is_database_case_sensitive": false,
             "is_schema_case_sensitive": false,
-            "staging_schema_name": "RDBMS_SQLSERVER_55_SCHEMA",
+            "staging_schema_name": "RDBMS_SQLSERVER_55_SCHEMA", // mandatory
             "is_staging_schema_case_sensitive": false,
             "use_staging_schema_for_infoworks_managed_tables": false,
             "bigquery_labels": [],
             "associated_domains": [
                 "64df054b9921f15bab88c643"
             ],
-            "data_lake_path": "/iw/sources/RDBMS_SQLServer_schema",
+            "data_lake_path": "/iw/sources/RDBMS_SQLServer_schema", // mandatory
             "associated_domain_names": [
                 "sf_domain"
             ]

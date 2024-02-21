@@ -3,30 +3,30 @@
         "entity_configs": [],
         "iw_mappings": [
             {
-                "entity_type": "pipeline",
-                "entity_id": "64df32959921f15bab88c656",
+                "entity_type": "pipeline", // mandatory
+                "entity_id": "64df32959921f15bab88c656", // mandatory
                 "recommendation": {
-                    "pipeline_name": "pipeline1"
+                    "pipeline_name": "pipeline1" // mandatory
                 }
             },
             {
-                "entity_type": "table",
-                "entity_id": "651d179dfbc7410007377089",
+                "entity_type": "table", // mandatory
+                "entity_id": "651d179dfbc7410007377089", // mandatory
                 "recommendation": {
-                    "source_name": "RDBMS_SQLServer",
-                    "table_name": "ORDERS",
-                    "schema_name_at_source": "SALESDB",
-                    "catalog_name": "SALESDB"
+                    "source_name": "RDBMS_SQLServer", // mandatory
+                    "table_name": "ORDERS", // mandatory
+                    "schema_name_at_source": "SALESDB", // mandatory
+                    "catalog_name": "SALESDB" // mandatory
                 }
             }
         ],
         "entity": {
-            "entity_type": "pipeline",
+            "entity_type": "pipeline", // mandatory
             "entity_id": "64df32959921f15bab88c656",
-            "entity_name": "pipeline1",
-            "subEntityName": "V1",
-            "environmentName": "Snowflake_env",
-            "warehouse": "TEST_WH"
+            "entity_name": "pipeline1", // mandatory
+            "subEntityName": "V1", // mandatory
+            "environmentName": "Snowflake_env", // mandatory
+            "warehouse": "TEST_WH" // mandatory
         },
         "export": {
             "exported_at": "2024-02-21T08:56:20.809Z",

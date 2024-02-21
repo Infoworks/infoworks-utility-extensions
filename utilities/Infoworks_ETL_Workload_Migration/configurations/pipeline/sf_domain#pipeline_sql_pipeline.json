@@ -3,32 +3,34 @@
         "entity_configs": [],
         "iw_mappings": [
             {
-                "entity_type": "pipeline",
-                "entity_id": "64df33ed9921f15bab88c65c",
+                "entity_type": "pipeline", // mandatory
+                "entity_id": "64df33ed9921f15bab88c65c", // mandatory
                 "recommendation": {
-                    "pipeline_name": "sql_pipeline"
+                    "pipeline_name": "sql_pipeline" // mandatory
                 }
             },
             {
                 "entity_type": "query",
+                // mandatory
                 /* base64 quivalent of your query */
+                // mandatory
                 "recommendation": {
                     "query": "Y3JlYXRlIHRhYmxlIHNxbF9waXBlbGluZV8xX3RhYmxlIGFzIHNlbGVjdCAqIGZyb20gZGV2LmN1c3RvbWVyczsKc2VsZWN0ICogZnJvbSBkZXYub3JkZXJzOw==" //pragma: allowlist secret
                 }
             }
         ],
         "entity": {
-            "entity_type": "pipeline",
-            "entity_id": "64df33ed9921f15bab88c65c",
+            "entity_type": "pipeline", // mandatory
+            "entity_id": "64df33ed9921f15bab88c65c", // mandatory any random UUID
             "entity_name": "sql_pipeline",
-            "environmentName": "Snowflake_env",
-            "warehouse": "DEMO_WH"
+            "environmentName": "Snowflake_env", // mandatory
+            "warehouse": "DEMO_WH" // mandatory
         },
         "pipeline_configs": {
             "description": "",
-            "type": "sql",
+            "type": "sql", // mandatory
             /* base64 quivalent of your query */
-            "query": "Y3JlYXRlIHRhYmxlIHNxbF9waXBlbGluZV8xX3RhYmxlIGFzIHNlbGVjdCAqIGZyb20gZGV2LmN1c3RvbWVyczsKc2VsZWN0ICogZnJvbSBkZXYub3JkZXJzOw==", //pragma: allowlist secret
+            "query": "Y3JlYXRlIHRhYmxlIHNxbF9waXBlbGluZV8xX3RhYmxlIGFzIHNlbGVjdCAqIGZyb20gZGV2LmN1c3RvbWVyczsKc2VsZWN0ICogZnJvbSBkZXYub3JkZXJzOw==", //pragma: allowlist secret // mandatory
             /* Any session variables in Snowflake referenced as $var will be part of below pipeline_parameters */
             "pipeline_parameters": [
                 {
@@ -36,12 +38,12 @@
                     "value": "SUPPORT_DB"
                 }
             ],
-            "snowflake_profile": "Default",
-            "batch_engine": "SNOWFLAKE"
+            "snowflake_profile": "Default", // mandatory
+            "batch_engine": "SNOWFLAKE" // mandatory
         }
     },
     "environment_configurations": {
-        "environment_name": "Snowflake_env",
+        "environment_name": "Snowflake_env", // mandatory
         "environment_compute_template_name": null,
         "environment_storage_name": null
     },
