@@ -1,0 +1,272 @@
+{
+    "configuration": {
+        "entity_configs": [],
+        "iw_mappings": [
+            {
+                "entity_type": "source",
+                "entity_id": "6538975d3b20096747bdba07",
+                "recommendation": {
+                    "source_name": "AR_CSV_TEST"
+                }
+            },
+            {
+                "entity_type": "job_hook",
+                "entity_id": "653b6883d5cd170007f287f8",
+                "recommendation": {
+                    "entity_name": "test_prehook_secrets"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "653898c4d772570007ea382d",
+                "recommendation": {
+                    "table_name": "TRINO_TEST_TABLE"
+                }
+            },
+            {
+                "entity_type": "table_group",
+                "entity_id": "65b1ef1bba60734601edc318",
+                "recommendation": {
+                    "table_group_name": "tg1"
+                }
+            },
+            {
+                "entity_type": "environment_compute_template",
+                "entity_id": "653895a44a05a00ab7f470ba",
+                "recommendation": {
+                    "compute_name": "Latest_Default_Persistent_Compute_Template"
+                }
+            }
+        ],
+        "entity": {
+            "entity_type": "source",
+            "entity_id": "6538975d3b20096747bdba07",
+            "entity_name": "AR_CSV_TEST"
+        },
+        "export": {
+            "exported_at": "2024-01-25T07:52:15.479Z",
+            "exported_by": "6RkfybTRQQByEey3v",
+            "exported_by_username": "Infoworks Admin"
+        },
+        "table_configs": [
+            {
+                "entity_type": "table",
+                "entity_id": "653898c4d772570007ea382d",
+                "configuration": {
+                    "configuration": {
+                        "exclude_legacy_audit_columns": true,
+                        "sync_type": "full-load",
+                        "write_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "read_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "target_table_name": "TRINO_TEST_TABLE",
+                        "storage_format": "delta",
+                        "target_schema_name": "PUBLIC",
+                        "is_table_case_sensitive": false,
+                        "is_schema_case_sensitive": false,
+                        "target_database_name": "ABHI_DATABASE",
+                        "is_database_case_sensitive": false,
+                        "bigquery_labels": [],
+                        "schema_mismatch": false,
+                        "target_relative_path": "/trino_test",
+                        "detect_schema_change": false,
+                        "scd1_columns": [],
+                        "scd_type": "SCD_1",
+                        "dedup_columns": [],
+                        "is_scd2_table": false,
+                        "ingest_subdirectories": true,
+                        "is_archive_enabled": false,
+                        "natural_keys": [],
+                        "generate_history_view": false,
+                        "target_table_type": "infoworks_managed_table",
+                        "exclude_filename_regex": "",
+                        "include_filename_regex": ".*",
+                        "source_relative_path": "/input_files",
+                        "deltaLake_table_name": "TRINO_TEST_TABLE",
+                        "source_file_type": "csv",
+                        "source_file_properties": {
+                            "header_rows_count": 1,
+                            "column_separator": ",",
+                            "column_enclosed_by": "'",
+                            "escape_character": "\\",
+                            "encoding": "UTF-8",
+                            "footer_rows_count": 0,
+                            "use_custom_record_separator": false
+                        }
+                    },
+                    "columns": [
+                        {
+                            "sql_type": 4,
+                            "is_deleted": false,
+                            "name": "id",
+                            "original_name": "id",
+                            "target_sql_type": 4,
+                            "target_column_order": 1,
+                            "is_audit_column": false,
+                            "is_excluded_column": false
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "struct_column",
+                            "original_name": "struct_column",
+                            "target_sql_type": 12,
+                            "target_column_order": 2,
+                            "is_audit_column": false,
+                            "is_excluded_column": false,
+                            "transform_derivation": "from_json(struct_column, \"integer_col int, string_col string, float_col float\")",
+                            "transform_mode": "advanced"
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "ziw_file_name",
+                            "original_name": "ziw_file_name",
+                            "target_sql_type": 12,
+                            "target_column_order": 3,
+                            "is_audit_column": true,
+                            "is_excluded_column": false
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "ziw_file_modified_timestamp",
+                            "original_name": "ziw_file_modified_timestamp",
+                            "target_sql_type": 93,
+                            "target_column_order": 4,
+                            "is_audit_column": true,
+                            "is_excluded_column": false,
+                            "format": "yyyy-MM-dd HH:mm:ss"
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "ziw_target_timestamp",
+                            "original_name": "ziw_target_timestamp",
+                            "target_sql_type": 93,
+                            "target_column_order": 5,
+                            "is_audit_column": true,
+                            "is_excluded_column": false,
+                            "target_scale": "6",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 6,
+                            "format": "yyyy-MM-dd HH:mm:ss"
+                        },
+                        {
+                            "sql_type": 16,
+                            "is_deleted": false,
+                            "name": "ziw_is_deleted",
+                            "original_name": "ziw_is_deleted",
+                            "target_sql_type": 16,
+                            "target_column_order": 6,
+                            "is_audit_column": true,
+                            "is_excluded_column": false,
+                            "target_scale": "0",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 0
+                        }
+                    ],
+                    "name": "TRINO_TEST_TABLE",
+                    "export_configuration": {
+                        "target_configuration": {}
+                    },
+                    "meta_crawl_performed": true
+                }
+            }
+        ],
+        "table_group_configs": [
+            {
+                "entity_type": "table_group",
+                "entity_id": "65b1ef1bba60734601edc318",
+                "configuration": {
+                    "id": "65b1ef1bba60734601edc318",
+                    "environment_compute_template": {
+                        "environment_compute_template_id": "653895a44a05a00ab7f470ba"
+                    },
+                    "name": "tg1",
+                    "max_parallel_entities": 1,
+                    "tables": [
+                        {
+                            "table_id": "653898c4d772570007ea382d"
+                        }
+                    ],
+                    "warehouse": "DEMO_WH"
+                }
+            }
+        ],
+        "source_configs": {
+            "id": "6538975d3b20096747bdba07",
+            "name": "AR_CSV_TEST",
+            "data_lake_schema": "PUBLIC",
+            "type": "file",
+            "sub_type": "structured",
+            "connection": {
+                "snowflake_profile": "Default",
+                "warehouse": "DEMO_WH",
+                "source_base_path": "abfss://csv-test@cicddatalake.dfs.core.windows.net/",
+                "storage": {
+                    "storage_type": "cloud",
+                    "cloud_type": "adls_gen2",
+                    "access_type": "access_key",
+                    "access_scheme": "abfss://",
+                    "storage_account_name": "cicddatalake",
+                    "file_system": "csv-test",
+                    "access_key_name": {
+                        "password_type": "secret_store", //pragma: allowlist secret
+                        "secret_id": "6418304b7eeb1c40de2b6008", //pragma: allowlist secret
+                        "secret_name": "mongo-pg-pwd" //pragma: allowlist secret
+                    },
+                    "support_gov_cloud": false
+                },
+                "source_base_path_relative": "/trino_test"
+            },
+            "environment_id": "a801283f2e8077120d000b49",
+            "is_generic_jdbc_source_type": false,
+            "is_oem_connector": false,
+            "transformation_extensions": [],
+            "job_hooks": {
+                "pre_job_hook": "653b6883d5cd170007f287f8",
+                "post_job_hook": null
+            },
+            "target_database_name": "ABHI_DATABASE",
+            "is_database_case_sensitive": false,
+            "is_schema_case_sensitive": false,
+            "staging_schema_name": "PUBLIC",
+            "is_staging_schema_case_sensitive": false,
+            "use_staging_schema_for_infoworks_managed_tables": false,
+            "bigquery_labels": [],
+            "associated_domains": [],
+            "data_lake_path": "/iw/sources/AR_CSV_TEST_schema"
+        },
+        "file_mappings": [],
+        "topic_mappings": [],
+        "environment": {
+            "compute_engine": "databricks",
+            "platform": "azure",
+            "data_warehouse_type": "snowflake"
+        }
+    },
+    "filter_tables_properties": {},
+    "steps_to_run": {
+        "configure_csv_source": true,
+        "import_source_configuration": true,
+        "configure_rdbms_source_connection": true,
+        "test_source_connection": true,
+        "browse_source_tables": true,
+        "add_tables_to_source": true,
+        "configure_tables_and_tablegroups": true
+    },
+    "environment_configurations": {
+        "environment_name": "Snowflake_env",
+        "environment_compute_template_name": null,
+        "environment_storage_name": "Default_Storage"
+    },
+    "user_email": "admin@infoworks.io"
+}

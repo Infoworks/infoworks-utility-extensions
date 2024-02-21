@@ -1,0 +1,83 @@
+{
+    "configuration": {
+        "entity_configs": [],
+        "iw_mappings": [
+            {
+                "entity_type": "pipeline_group",
+                "entity_id": "64df345ac4cc38503f5d8290",
+                "recommendation": {
+                    "pipeline_group_name": "CICD_pipeline_group",
+                    "domain_name": "sf_domain"
+                }
+            }
+        ],
+        "entity": {
+            "entity_type": "workflow",
+            "entity_id": "64df34759921f15bab88c660",
+            "entity_name": "CICD_WORKFLOW"
+        },
+        "export": {
+            "exported_at": "2023-10-19T09:18:34.291Z",
+            "exported_by": "6RkfybTRQQByEey3v",
+            "exported_by_username": "Infoworks Admin"
+        },
+        "workflow": {
+            "description": "",
+            "workflow_graph": {
+                "tasks": [
+                    {
+                        "is_group": false,
+                        "task_type": "ingest_table_group",
+                        "task_id": "SI_7A00",
+                        "location": "-345 -205",
+                        "title": "Ingest Source",
+                        "description": "",
+                        "task_properties": {
+                            "source_id": "64df01ec20578e35f069b56f",
+                            "table_group_id": "64df05849921f15bab88c646",
+                            "ingest_type": "all"
+                        },
+                        "run_properties": {
+                            "trigger_rule": "all_success",
+                            "num_retries": 0
+                        }
+                    },
+                    {
+                        "is_group": false,
+                        "task_type": "pipeline_build",
+                        "task_id": "PB_0C9A",
+                        "location": "-165 -205",
+                        "title": "Build Pipeline",
+                        "description": "",
+                        "task_properties": {
+                            "task_subtype": "pipeline_group",
+                            "domain_id": "64df054b9921f15bab88c643",
+                            "pipeline_group_id": "64df345ac4cc38503f5d8290",
+                            "pipeline_group_parameters": []
+                        },
+                        "run_properties": {
+                            "trigger_rule": "all_success",
+                            "num_retries": 0
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "from_task": "SI_7A00",
+                        "to_task": "PB_0C9A",
+                        "category": "LINK",
+                        "task_id": -1
+                    }
+                ]
+            }
+        }
+    },
+    "environment_configurations": {
+        "environment_name": [
+            "Snowflake_env"
+        ],
+        "environment_compute_template_name": null,
+        "environment_storage_name": null
+    },
+    "user_email": "admin@infoworks.io"
+}

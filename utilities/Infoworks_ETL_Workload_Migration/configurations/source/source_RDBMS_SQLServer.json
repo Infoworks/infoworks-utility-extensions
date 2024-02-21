@@ -1,0 +1,864 @@
+{
+    "configuration": {
+        "entity_configs": [],
+        "iw_mappings": [
+            {
+                "entity_type": "source",
+                "entity_id": "651d16f8c0136b614afeafa9",
+                "recommendation": {
+                    "source_name": "RDBMS_SQLServer"
+                }
+            },
+            {
+                "entity_type": "connection_parameter",
+                "entity_id": "65b213343ff34b00076b515c",
+                "recommendation": {
+                    "key": "TCP",
+                    "value": "NODELAY+KEEPALIVE+RECEIVE2048000"
+                },
+                "entity_name": "TCP"
+            },
+            {
+                "entity_type": "connection_parameter",
+                "entity_id": "65b213343ff34b00076b515d",
+                "recommendation": {
+                    "key": "SSLMode",
+                    "value": "allow"
+                },
+                "entity_name": "SSLMode"
+            },
+            {
+                "entity_type": "connection_parameter",
+                "entity_id": "65b213343ff34b00076b515e",
+                "recommendation": {
+                    "key": "DBS_PORT",
+                    "value": "1025"
+                },
+                "entity_name": "DBS_PORT"
+            },
+            {
+                "entity_type": "connection_parameter",
+                "entity_id": "65b213343ff34b00076b515f",
+                "recommendation": {
+                    "key": "database",
+                    "value": "SALESDB"
+                },
+                "entity_name": "database"
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377086",
+                "recommendation": {
+                    "table_name": "CUSTOMERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc741000737708a",
+                "recommendation": {
+                    "table_name": "PLAYERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377085",
+                "recommendation": {
+                    "table_name": "CATEGORIES",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377087",
+                "recommendation": {
+                    "table_name": "EMPLOYEES",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377088",
+                "recommendation": {
+                    "table_name": "ORDER_DETAILS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377089",
+                "recommendation": {
+                    "table_name": "ORDERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d2f30fbc741000737708b",
+                "recommendation": {
+                    "table_name": "SHIPPERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "652cdee2ff40a200079a965f",
+                "recommendation": {
+                    "table_name": "SUPPLIERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "653f55a24159620007dcb897",
+                "recommendation": {
+                    "table_name": "CUSTOMERS_VIEW",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "65558b03738dd9000607c235",
+                "recommendation": {
+                    "table_name": "TEST#HASH_CHARACTER",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "655b576108938c0007c9561b",
+                "recommendation": {
+                    "table_name": "diamonds",
+                    "schema_name_at_source": "dbo",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "655b576108938c0007c9561c",
+                "recommendation": {
+                    "table_name": "Employee_records",
+                    "schema_name_at_source": "dbo",
+                    "catalog_name": "SALESDB"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "655dbc973755807a5cd333d8",
+                "recommendation": {
+                    "table_name": "ORDERS_QT"
+                }
+            },
+            {
+                "entity_type": "table_group",
+                "entity_id": "651d17d99c1e6d62eb79d34c",
+                "recommendation": {
+                    "table_group_name": "Default_Table_Group"
+                }
+            },
+            {
+                "entity_type": "environment_compute_template",
+                "entity_id": "653895a44a05a00ab7f470ba",
+                "recommendation": {
+                    "compute_name": "Latest_Default_Persistent_Compute_Template"
+                }
+            }
+        ],
+        "entity": {
+            "entity_type": "source",
+            "entity_id": "651d16f8c0136b614afeafa9",
+            "entity_name": "RDBMS_SQLServer"
+        },
+        "export": {
+            "exported_at": "2024-01-25T07:52:20.476Z",
+            "exported_by": "6RkfybTRQQByEey3v",
+            "exported_by_username": "Infoworks Admin"
+        },
+        "table_configs": [
+            /* regular table */
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377086",
+                "configuration": {
+                    "configuration": {
+                        "exclude_legacy_audit_columns": true,
+                        "sync_type": "full-load",
+                        "write_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "read_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "target_table_name": "CUSTOMERS",
+                        "storage_format": "delta",
+                        "target_schema_name": "RDBMS_SQLSERVER_55_SCHEMA",
+                        "is_table_case_sensitive": false,
+                        "is_schema_case_sensitive": false,
+                        "target_database_name": "RDBMS_SQLSERVER_55_DEMO",
+                        "is_database_case_sensitive": false,
+                        "bigquery_labels": [],
+                        "detect_schema_change": false,
+                        "dedup_columns": [],
+                        "use_capture_table": false,
+                        "is_scd2_table": false,
+                        "is_archive_enabled": false,
+                        "natural_keys": [
+                            "CUSTOMERID"
+                        ],
+                        "generate_history_view": false,
+                        "target_table_type": "infoworks_managed_table",
+                        "crawl_data_filter_enabled": false
+                    },
+                    "columns": [
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "CUSTOMERID",
+                            "original_name": "CUSTOMERID",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 1,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 5,
+                            "precision": 5,
+                            "target_precision": "5",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "COMPANYNAME",
+                            "original_name": "COMPANYNAME",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 2,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 40,
+                            "precision": 40,
+                            "target_precision": "40",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "CONTACTNAME",
+                            "original_name": "CONTACTNAME",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 3,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 30,
+                            "precision": 30,
+                            "target_precision": "30",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "CONTACTTITLE",
+                            "original_name": "CONTACTTITLE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 4,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 30,
+                            "precision": 30,
+                            "target_precision": "30",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "ADDRESS",
+                            "original_name": "ADDRESS",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 5,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 60,
+                            "precision": 60,
+                            "target_precision": "60",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "CITY",
+                            "original_name": "CITY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 6,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "REGION",
+                            "original_name": "REGION",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 7,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "POSTALCODE",
+                            "original_name": "POSTALCODE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 8,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 10,
+                            "precision": 10,
+                            "target_precision": "10",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "COUNTRY",
+                            "original_name": "COUNTRY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 9,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "PHONE",
+                            "original_name": "PHONE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 10,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 24,
+                            "precision": 24,
+                            "target_precision": "24",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "FAX",
+                            "original_name": "FAX",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 11,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 24,
+                            "precision": 24,
+                            "target_precision": "24",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "ziw_target_timestamp",
+                            "original_name": "ziw_target_timestamp",
+                            "target_sql_type": 93,
+                            "target_column_order": 12,
+                            "is_audit_column": true,
+                            "target_scale": "6",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 6,
+                            "format": "yyyy-MM-dd HH:mm:ss"
+                        },
+                        {
+                            "sql_type": 16,
+                            "is_deleted": false,
+                            "name": "ziw_is_deleted",
+                            "original_name": "ziw_is_deleted",
+                            "target_sql_type": 16,
+                            "target_column_order": 13,
+                            "is_audit_column": true,
+                            "target_scale": "0",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 0
+                        }
+                    ],
+                    "name": "CUSTOMERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB",
+                    "meta_crawl_performed": true
+                },
+                "table_type": "TABLE"
+            },
+            /* query table*/
+            {
+                "entity_type": "table",
+                "entity_id": "655dbc973755807a5cd333d8",
+                "configuration": {
+                    "configuration": {
+                        "exclude_legacy_audit_columns": true,
+                        "sync_type": "full-load",
+                        "write_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "read_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "target_table_name": "ORDERS_QT",
+                        "storage_format": "delta",
+                        "target_schema_name": "SALESDB",
+                        "query": "select * from \"SALESDB\".\"ORDERS\"",
+                        "is_table_case_sensitive": false,
+                        "is_schema_case_sensitive": false,
+                        "target_database_name": "ABHI_DATABASE",
+                        "is_database_case_sensitive": false,
+                        "bigquery_labels": [],
+                        "detect_schema_change": false,
+                        "dedup_columns": [],
+                        "use_capture_table": false,
+                        "is_scd2_table": false,
+                        "is_archive_enabled": false,
+                        "natural_keys": [
+                            "ORDERID"
+                        ],
+                        "generate_history_view": false,
+                        "target_table_type": "user_managed_table_without_data",
+                        "crawl_data_filter_enabled": false
+                    },
+                    "columns": [
+                        {
+                            "sql_type": 8,
+                            "is_deleted": false,
+                            "name": "ORDERID",
+                            "original_name": "ORDERID",
+                            "target_sql_type": 8,
+                            "col_type_name": "float",
+                            "target_column_order": 1,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 22,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "CUSTOMERID",
+                            "original_name": "CUSTOMERID",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 2,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 5,
+                            "precision": 5,
+                            "target_precision": "5",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": -5,
+                            "is_deleted": false,
+                            "name": "EMPLOYEEID",
+                            "original_name": "EMPLOYEEID",
+                            "target_sql_type": -5,
+                            "col_type_name": "bigint",
+                            "target_column_order": 3,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 20,
+                            "precision": 19,
+                            "target_precision": "19",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "ORDERDATE",
+                            "original_name": "ORDERDATE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 4,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "REQUIREDDATE",
+                            "original_name": "REQUIREDDATE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 5,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPPEDDATE",
+                            "original_name": "SHIPPEDDATE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 6,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 8,
+                            "is_deleted": false,
+                            "name": "SHIPVIA",
+                            "original_name": "SHIPVIA",
+                            "target_sql_type": 8,
+                            "col_type_name": "float",
+                            "target_column_order": 7,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 22,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 8,
+                            "is_deleted": false,
+                            "name": "FREIGHT",
+                            "original_name": "FREIGHT",
+                            "target_sql_type": 8,
+                            "col_type_name": "float",
+                            "target_column_order": 8,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 22,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPNAME",
+                            "original_name": "SHIPNAME",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 9,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 40,
+                            "precision": 40,
+                            "target_precision": "40",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPADDRESS",
+                            "original_name": "SHIPADDRESS",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 10,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 60,
+                            "precision": 60,
+                            "target_precision": "60",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPCITY",
+                            "original_name": "SHIPCITY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 11,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPREGION",
+                            "original_name": "SHIPREGION",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 12,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPPOSTALCODE",
+                            "original_name": "SHIPPOSTALCODE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 13,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 10,
+                            "precision": 10,
+                            "target_precision": "10",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "SHIPCOUNTRY",
+                            "original_name": "SHIPCOUNTRY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 14,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "REC_ADD_TS",
+                            "original_name": "REC_ADD_TS",
+                            "target_sql_type": 93,
+                            "col_type_name": "datetime2",
+                            "target_column_order": 15,
+                            "is_audit_column": false,
+                            "target_scale": "7",
+                            "col_size": 27,
+                            "precision": 27,
+                            "target_precision": "27",
+                            "scale": 7
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "REC_UPD_TS",
+                            "original_name": "REC_UPD_TS",
+                            "target_sql_type": 93,
+                            "col_type_name": "datetime2",
+                            "target_column_order": 16,
+                            "is_audit_column": false,
+                            "target_scale": "7",
+                            "col_size": 27,
+                            "precision": 27,
+                            "target_precision": "27",
+                            "scale": 7
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "ziw_target_timestamp",
+                            "original_name": "ziw_target_timestamp",
+                            "target_sql_type": 93,
+                            "target_column_order": 17,
+                            "is_audit_column": true,
+                            "is_excluded_column": true,
+                            "target_scale": "6",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 6,
+                            "format": "yyyy-MM-dd HH:mm:ss"
+                        },
+                        {
+                            "sql_type": 16,
+                            "is_deleted": false,
+                            "name": "ziw_is_deleted",
+                            "original_name": "ziw_is_deleted",
+                            "target_sql_type": 16,
+                            "target_column_order": 18,
+                            "is_audit_column": true,
+                            "is_excluded_column": true,
+                            "target_scale": "0",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 0
+                        }
+                    ],
+                    "name": "ORDERS_QT",
+                    "export_configuration": {
+                        "target_configuration": {}
+                    },
+                    "meta_crawl_performed": true
+                }
+            }
+        ],
+        "table_group_configs": [
+            {
+                "entity_type": "table_group",
+                "entity_id": "651d17d99c1e6d62eb79d34c",
+                "configuration": {
+                    "id": "651d17d99c1e6d62eb79d34c",
+                    "environment_compute_template": {
+                        "environment_compute_template_id": "653895a44a05a00ab7f470ba"
+                    },
+                    "name": "Default_Table_Group",
+                    "max_parallel_entities": 2,
+                    "max_connections": 2,
+                    "tables": [
+                        {
+                            "table_id": "651d179dfbc7410007377085",
+                            "connection_quota": 50
+                        },
+                        {
+                            "table_id": "655dbc973755807a5cd333d8",
+                            "connection_quota": 50
+                        }
+                    ],
+                    "warehouse": "DEMO_WH"
+                }
+            }
+        ],
+        "source_configs": {
+            "id": "651d16f8c0136b614afeafa9",
+            "name": "RDBMS_SQLServer",
+            "data_lake_schema": "RDBMS_SQLSERVER_55_SCHEMA",
+            "type": "rdbms",
+            "sub_type": "sqlserver",
+            "connection": {
+                "snowflake_profile": "Default",
+                "warehouse": "DEMO_WH",
+                "connection_mode": "JDBC",
+                "connection_url": "jdbc:sqlserver://10.17.3.201:1433;databaseName=SALESDB",
+                "username": "Infoadmin",
+                "password": {
+                    "password_type": "secret_store", //pragma: allowlist secret
+                    "secret_id": "6418304b7eeb1c40de2b6008", //pragma: allowlist secret
+                    "secret_name": "mongo-pg-pwd" //pragma: allowlist secret
+                },
+                "driver_name": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+                "database": "SQLSERVER",
+                "parameters": [
+                    {
+                        "is_active": true,
+                        "is_encrypted": false,
+                        "key": "TCP",
+                        "value": "NODELAY+KEEPALIVE+RECEIVE2048000"
+                    },
+                    {
+                        "is_active": false,
+                        "is_encrypted": false,
+                        "key": "SSLMode",
+                        "value": "allow"
+                    },
+                    {
+                        "is_active": true,
+                        "is_encrypted": false,
+                        "key": "DBS_PORT",
+                        "value": "1025"
+                    },
+                    {
+                        "is_active": true,
+                        "is_encrypted": false,
+                        "key": "database",
+                        "value": "SALESDB"
+                    }
+                ]
+            },
+            "environment_id": "a801283f2e8077120d000b49",
+            "is_generic_jdbc_source_type": false,
+            "is_oem_connector": false,
+            "quoted_identifier": "\"",
+            "transformation_extensions": [],
+            "target_database_name": "RDBMS_SQLSERVER_55_DEMO",
+            "is_database_case_sensitive": false,
+            "is_schema_case_sensitive": false,
+            "staging_schema_name": "RDBMS_SQLSERVER_55_SCHEMA",
+            "is_staging_schema_case_sensitive": false,
+            "use_staging_schema_for_infoworks_managed_tables": false,
+            "bigquery_labels": [],
+            "associated_domains": [
+                "64df054b9921f15bab88c643"
+            ],
+            "data_lake_path": "/iw/sources/RDBMS_SQLServer_schema",
+            "associated_domain_names": [
+                "sf_domain"
+            ]
+        },
+        "file_mappings": [],
+        "topic_mappings": [],
+        "environment": {
+            "compute_engine": "databricks",
+            "platform": "azure",
+            "data_warehouse_type": "snowflake"
+        }
+    },
+    "filter_tables_properties": {
+        "schemas_filter": "%dbo,SALESDB",
+        "catalogs_filter": "%",
+        "tables_filter": "%",
+        "is_data_sync_with_filter": true,
+        "is_filter_enabled": true
+    },
+    "steps_to_run": {
+        "configure_csv_source": true,
+        "import_source_configuration": true,
+        "configure_rdbms_source_connection": true,
+        "test_source_connection": true,
+        "browse_source_tables": true,
+        "add_tables_to_source": true,
+        "configure_tables_and_tablegroups": true
+    },
+    "environment_configurations": {
+        "environment_name": "Snowflake_env",
+        "environment_compute_template_name": null,
+        "environment_storage_name": "Default_Storage"
+    },
+    "user_email": "admin@infoworks.io"
+}

@@ -1,0 +1,1076 @@
+{
+    "configuration": {
+        "entity_configs": [],
+        "iw_mappings": [
+            {
+                "entity_type": "pipeline",
+                "entity_id": "64df32959921f15bab88c656",
+                "recommendation": {
+                    "pipeline_name": "pipeline1"
+                }
+            },
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377089",
+                "recommendation": {
+                    "source_name": "RDBMS_SQLServer",
+                    "table_name": "ORDERS",
+                    "schema_name_at_source": "SALESDB",
+                    "catalog_name": "SALESDB"
+                }
+            }
+        ],
+        "entity": {
+            "entity_type": "pipeline",
+            "entity_id": "64df32959921f15bab88c656",
+            "entity_name": "pipeline1",
+            "subEntityName": "V1",
+            "environmentName": "Snowflake_env",
+            "warehouse": "TEST_WH"
+        },
+        "export": {
+            "exported_at": "2024-02-21T08:56:20.809Z",
+            "exported_by": "6RkfybTRQQByEey3v",
+            "exported_by_username": "Infoworks Admin"
+        },
+        "target_table_configs": [
+            {
+                "entity_type": "table",
+                "entity_id": "64df3325c4cc38503f5d8285",
+                "entity_name": "PIPELINE1_TARGET"
+            }
+        ],
+        "pipeline_configs": {
+            "description": "",
+            "type": "visual",
+            "model": {
+                "nodes": {
+                    "SNOWFLAKE_TARGET_95c7": {
+                        "loc": "115 -125",
+                        "loading": false,
+                        "input_ports": {
+                            "8087": {
+                                "port_name": "P0",
+                                "node_id": "SOURCE_TABLE_e815"
+                            }
+                        },
+                        "input_entities": [
+                            {
+                                "id": "a5a0ac7a-1dc9-4ecc-94ba-0bea1b2166c1",
+                                "name": "ORDERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "c5e20553-0212-498c-8dff-1d5a7dfd51f8"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "1ec03b7c-3b54-4b04-b91e-ecd64e2eaeb2",
+                                "name": "CUSTOMERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "6f6a4fbc-5d32-4bc6-996f-4f7e113977e3"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "4427d408-8635-4f83-bdee-b857cc227411",
+                                "name": "EMPLOYEEID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "817136f7-aedc-47fd-ba21-0269fb5083cf"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "int"
+                                }
+                            },
+                            {
+                                "id": "245098bc-a6ca-4638-b231-9bec6edd7297",
+                                "name": "ORDERDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "360fbafd-af9f-4969-924a-a2f8c198a31d"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "04512e3e-81f7-4f92-ba81-149903d8b9db",
+                                "name": "REQUIREDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "7a92af36-b821-4a0c-85f3-7a9b040c53f3"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "585713a5-ea3f-4066-ad6e-0b86a30d24e7",
+                                "name": "SHIPPEDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "d2cf0203-99c2-4ecd-ba67-6cb39fe88dfe"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "adb7066c-e9b1-441c-be6f-8abcc1c10561",
+                                "name": "SHIPVIA",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "973484d9-4169-4ba2-8cfe-9d60d370ca39"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "a73e52c0-c872-4374-8713-009d16f348af",
+                                "name": "FREIGHT",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "98a8f2f4-a39d-4110-bd39-00dc376d4b7e"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "6edac422-95e9-4c48-a623-a2b16fb206d7",
+                                "name": "SHIPNAME",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "788a6d93-4a7d-4ce5-96c9-14da89322043"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "d6e19bb3-3b8b-44a1-b76d-37a608d695fa",
+                                "name": "SHIPADDRESS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "37d470dc-7380-4a52-a2ba-51636d8c82ca"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "c176094c-5356-4e0e-a6c9-2420245e6bf2",
+                                "name": "SHIPCITY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "489e60b8-f81d-43c1-985d-9e9f1fe4e962"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "d7d15d29-bb0d-4767-b44a-8bde7c3cc666",
+                                "name": "SHIPREGION",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "a16f1fbd-c350-4689-95a2-a28bccf991e9"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "8b0f5fbf-9712-4e52-a985-827b1578cbe2",
+                                "name": "SHIPPOSTALCODE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "84036c0a-f56d-4d47-999c-29763c8158f6"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "1df3e5a0-425b-4c62-9064-b7732cfb9c7c",
+                                "name": "SHIPCOUNTRY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "56adc8b6-9d45-4290-bc10-64d649228fd3"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "7052b802-6401-41fa-bba2-8a4bcf183eac",
+                                "name": "REC_ADD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "508b5002-015d-46bc-8765-935543259f94"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "timestamp"
+                                }
+                            },
+                            {
+                                "id": "ca1fa20a-1d94-4338-8a90-b281a12615df",
+                                "name": "REC_UPD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "8087",
+                                    "reference_id": "89f3590a-6827-48fb-b29a-419e00634e2e"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "timestamp"
+                                }
+                            }
+                        ],
+                        "output_entities": [
+                            {
+                                "id": "ba2ad2e3-4e2c-4135-b6bd-a9fd214e3c65",
+                                "name": "ORDERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "a5a0ac7a-1dc9-4ecc-94ba-0bea1b2166c1"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "e21a8d3f-fddc-4add-9e4b-e01ac6c6c7b1",
+                                "name": "CUSTOMERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "1ec03b7c-3b54-4b04-b91e-ecd64e2eaeb2"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "5d62889d-b411-4590-8205-4bbc416afa92",
+                                "name": "EMPLOYEEID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "4427d408-8635-4f83-bdee-b857cc227411"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "int"
+                                }
+                            },
+                            {
+                                "id": "eb0587eb-0c44-49c2-8562-b1065c01e45e",
+                                "name": "ORDERDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "245098bc-a6ca-4638-b231-9bec6edd7297"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "a96257d8-753a-487a-8cdf-82015a1f3529",
+                                "name": "REQUIREDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "04512e3e-81f7-4f92-ba81-149903d8b9db"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "df7d2d54-49bb-4171-ac5e-140a7507bf59",
+                                "name": "SHIPPEDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "585713a5-ea3f-4066-ad6e-0b86a30d24e7"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "a3c6a9f0-6b0e-40cd-9b9c-41793f8a25cc",
+                                "name": "SHIPVIA",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "adb7066c-e9b1-441c-be6f-8abcc1c10561"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "bc5898e5-c19d-4fc8-8bed-76c38d160275",
+                                "name": "FREIGHT",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "a73e52c0-c872-4374-8713-009d16f348af"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "ab49c0ab-3925-4728-8d30-e0b3ef298dd1",
+                                "name": "SHIPNAME",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "6edac422-95e9-4c48-a623-a2b16fb206d7"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "d9e794bc-7c4d-412c-bb62-9e1a572f1bdc",
+                                "name": "SHIPADDRESS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "d6e19bb3-3b8b-44a1-b76d-37a608d695fa"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "18925f39-8510-4f03-b853-2b8e5ab176f8",
+                                "name": "SHIPCITY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "c176094c-5356-4e0e-a6c9-2420245e6bf2"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "5dfa854c-a3a0-4d80-baaa-edafa6c8731e",
+                                "name": "SHIPREGION",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "d7d15d29-bb0d-4767-b44a-8bde7c3cc666"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "50a5337f-ce25-491a-8145-18288dd06f68",
+                                "name": "SHIPPOSTALCODE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "8b0f5fbf-9712-4e52-a985-827b1578cbe2"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "9edfbfa5-426a-431f-9095-f9994b6c6cd7",
+                                "name": "SHIPCOUNTRY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "1df3e5a0-425b-4c62-9064-b7732cfb9c7c"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "b5cd8215-fd13-458d-b195-ba4ee626ae6f",
+                                "name": "REC_ADD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "7052b802-6401-41fa-bba2-8a4bcf183eac"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "timestamp"
+                                }
+                            },
+                            {
+                                "id": "23784097-6d7b-4801-a61e-ce880ed7cb6f",
+                                "name": "REC_UPD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "ca1fa20a-1d94-4338-8a90-b281a12615df"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "timestamp"
+                                }
+                            }
+                        ],
+                        "temporary_entities": [],
+                        "derivations": [],
+                        "properties": {
+                            "data_connection_sub_type": "SNOWFLAKE",
+                            "build_mode": "OVERWRITE",
+                            "is_existing_database": false,
+                            "is_existing_schema": false,
+                            "is_existing_table": false,
+                            "is_database_case_sensitive": false,
+                            "is_schema_case_sensitive": false,
+                            "is_table_case_sensitive": false,
+                            "is_existing_staging_database": true,
+                            "is_existing_staging_schema": true,
+                            "staging_schema_name": "TESTCICDPIPELINESCHEMA55",
+                            "staging_database_name": "TEST_DATABASE",
+                            "natural_key": [
+                                "ORDERID",
+                                "CUSTOMERID"
+                            ],
+                            "table_name": "PIPELINE1_TARGET",
+                            "schema_name": "TESTCICDPIPELINESCHEMA55",
+                            "database_name": "TEST_DATABASE"
+                        },
+                        "post_configurations": {},
+                        "name": "Target",
+                        "type": "SNOWFLAKE_TARGET",
+                        "id": "SNOWFLAKE_TARGET_95c7"
+                    },
+                    "SOURCE_TABLE_e815": {
+                        "loc": "-135 -125",
+                        "loading": false,
+                        "input_ports": {
+                            "b795": {
+                                "port_name": "P0"
+                            }
+                        },
+                        "input_entities": [
+                            {
+                                "id": "d3bc29ff-5809-4640-8a37-67a28c7d1305",
+                                "name": "ORDERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "2a9baa5a-015f-41ce-beb2-0e0677e38838",
+                                "name": "CUSTOMERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "a2e66e19-00f4-40d2-81a1-f777150e2812",
+                                "name": "EMPLOYEEID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "int"
+                                }
+                            },
+                            {
+                                "id": "994a66bf-fe78-4316-b96a-860d371784f0",
+                                "name": "ORDERDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "07d3c150-3c3e-4227-8189-56fa4f817dbe",
+                                "name": "REQUIREDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "6a0c3cab-6144-4468-a0cd-90a65e34a882",
+                                "name": "SHIPPEDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "9f8cef04-9ee0-4688-a81d-615041b766ce",
+                                "name": "SHIPVIA",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "aebeaa90-58a4-4aa3-93ce-d8fafd2e57f3",
+                                "name": "FREIGHT",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "cf36ff89-43ba-4fd2-bb0a-85b7ce9f0dc1",
+                                "name": "SHIPNAME",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "a46b838c-9ee1-4794-94f2-e288100333ad",
+                                "name": "SHIPADDRESS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "e9c6fd11-bca4-4928-8715-d156f6be15f8",
+                                "name": "SHIPCITY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "af5d4f99-d106-4d0c-9020-735778753229",
+                                "name": "SHIPREGION",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "3cc5f61c-9844-4a53-b5eb-5fc4344d6ad5",
+                                "name": "SHIPPOSTALCODE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "6cc430e7-01e6-46f5-8ad2-1a681583177e",
+                                "name": "SHIPCOUNTRY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "4f6a7bd8-1b6d-421b-9aea-a91c4b5b0a1a",
+                                "name": "REC_ADD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "timestamp"
+                                }
+                            },
+                            {
+                                "id": "ec5cf3a2-4817-4c02-984b-f6fe66b3b7a6",
+                                "name": "REC_UPD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "is_excluded": false,
+                                    "data_type": "timestamp"
+                                }
+                            },
+                            {
+                                "id": "bc4766fd-79f2-4405-b50d-ba2be7d07b7c",
+                                "name": "ziw_target_timestamp",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [
+                                        "WAS_AUDIT"
+                                    ],
+                                    "is_excluded": true,
+                                    "data_type": "timestamp"
+                                }
+                            },
+                            {
+                                "id": "1ec35804-b7f9-4b7c-9dbf-e919ad10b36d",
+                                "name": "ziw_is_deleted",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "PORT",
+                                    "reference_port_id": "b795",
+                                    "reference_id": null
+                                },
+                                "entity_attributes": {
+                                    "column_type": [
+                                        "WAS_AUDIT"
+                                    ],
+                                    "is_excluded": true,
+                                    "data_type": "boolean"
+                                }
+                            }
+                        ],
+                        "output_entities": [
+                            {
+                                "id": "c5e20553-0212-498c-8dff-1d5a7dfd51f8",
+                                "name": "ORDERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "d3bc29ff-5809-4640-8a37-67a28c7d1305"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "6f6a4fbc-5d32-4bc6-996f-4f7e113977e3",
+                                "name": "CUSTOMERID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "2a9baa5a-015f-41ce-beb2-0e0677e38838"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "817136f7-aedc-47fd-ba21-0269fb5083cf",
+                                "name": "EMPLOYEEID",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "a2e66e19-00f4-40d2-81a1-f777150e2812"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "int"
+                                }
+                            },
+                            {
+                                "id": "360fbafd-af9f-4969-924a-a2f8c198a31d",
+                                "name": "ORDERDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "994a66bf-fe78-4316-b96a-860d371784f0"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "7a92af36-b821-4a0c-85f3-7a9b040c53f3",
+                                "name": "REQUIREDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "07d3c150-3c3e-4227-8189-56fa4f817dbe"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "d2cf0203-99c2-4ecd-ba67-6cb39fe88dfe",
+                                "name": "SHIPPEDDATE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "6a0c3cab-6144-4468-a0cd-90a65e34a882"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "973484d9-4169-4ba2-8cfe-9d60d370ca39",
+                                "name": "SHIPVIA",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "9f8cef04-9ee0-4688-a81d-615041b766ce"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "98a8f2f4-a39d-4110-bd39-00dc376d4b7e",
+                                "name": "FREIGHT",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "aebeaa90-58a4-4aa3-93ce-d8fafd2e57f3"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "double"
+                                }
+                            },
+                            {
+                                "id": "788a6d93-4a7d-4ce5-96c9-14da89322043",
+                                "name": "SHIPNAME",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "cf36ff89-43ba-4fd2-bb0a-85b7ce9f0dc1"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "37d470dc-7380-4a52-a2ba-51636d8c82ca",
+                                "name": "SHIPADDRESS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "a46b838c-9ee1-4794-94f2-e288100333ad"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "489e60b8-f81d-43c1-985d-9e9f1fe4e962",
+                                "name": "SHIPCITY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "e9c6fd11-bca4-4928-8715-d156f6be15f8"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "a16f1fbd-c350-4689-95a2-a28bccf991e9",
+                                "name": "SHIPREGION",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "af5d4f99-d106-4d0c-9020-735778753229"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "84036c0a-f56d-4d47-999c-29763c8158f6",
+                                "name": "SHIPPOSTALCODE",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "3cc5f61c-9844-4a53-b5eb-5fc4344d6ad5"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "56adc8b6-9d45-4290-bc10-64d649228fd3",
+                                "name": "SHIPCOUNTRY",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "6cc430e7-01e6-46f5-8ad2-1a681583177e"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "varchar"
+                                }
+                            },
+                            {
+                                "id": "508b5002-015d-46bc-8765-935543259f94",
+                                "name": "REC_ADD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "4f6a7bd8-1b6d-421b-9aea-a91c4b5b0a1a"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "timestamp"
+                                }
+                            },
+                            {
+                                "id": "89f3590a-6827-48fb-b29a-419e00634e2e",
+                                "name": "REC_UPD_TS",
+                                "entity_type": "COLUMN",
+                                "mapping": {
+                                    "reference_type": "INPUT",
+                                    "reference_id": "ec5cf3a2-4817-4c02-984b-f6fe66b3b7a6"
+                                },
+                                "entity_attributes": {
+                                    "column_type": [],
+                                    "data_type": "timestamp"
+                                }
+                            }
+                        ],
+                        "temporary_entities": [],
+                        "derivations": [],
+                        "properties": {
+                            "entity_type": "source",
+                            "table_id": "651d179dfbc7410007377089",
+                            "entity_id": "651d16f8c0136b614afeafa9"
+                        },
+                        "post_configurations": {},
+                        "name": "ORDERS",
+                        "datalake_table_name": "ORDERS",
+                        "type": "SOURCE_TABLE",
+                        "id": "SOURCE_TABLE_e815"
+                    }
+                },
+                "pipeline_graph": [
+                    {
+                        "from": "SOURCE_TABLE_e815",
+                        "to": "SNOWFLAKE_TARGET_95c7",
+                        "category": "LINK"
+                    }
+                ]
+            },
+            "view_options": {
+                "linkStyle": "orthogonal",
+                "layout": {
+                    "orientation": "horizontal",
+                    "layerSpacing": 25
+                }
+            },
+            "pipeline_parameters": [
+                {
+                    "key": "database",
+                    "value": "test"
+                }
+            ],
+            "snowflake_profile": "Default",
+            "batch_engine": "SNOWFLAKE"
+        }
+    },
+    "environment_configurations": {
+        "environment_name": "Snowflake_env",
+        "environment_compute_template_name": null,
+        "environment_storage_name": null
+    },
+    "user_email": "admin@infoworks.io"
+}
