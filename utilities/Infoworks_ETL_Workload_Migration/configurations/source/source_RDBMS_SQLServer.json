@@ -202,12 +202,12 @@
                             "SNOWFLAKE",
                             "SPARK"
                         ],
-                        "target_table_name": "CUSTOMERS",
+                        "target_table_name": "CUSTOMERS", // mandatory
                         "storage_format": "delta",
-                        "target_schema_name": "RDBMS_SQLSERVER_55_SCHEMA",
+                        "target_schema_name": "RDBMS_SQLSERVER_55_SCHEMA", // mandatory
                         "is_table_case_sensitive": false,
                         "is_schema_case_sensitive": false,
-                        "target_database_name": "RDBMS_SQLSERVER_55_DEMO",
+                        "target_database_name": "RDBMS_SQLSERVER_55_DEMO", // mandatory
                         "is_database_case_sensitive": false,
                         "bigquery_labels": [],
                         "detect_schema_change": false,
@@ -417,8 +417,8 @@
                         }
                     ],
                     "name": "CUSTOMERS",
-                    "schema_name_at_source": "SALESDB",
-                    "catalog_name": "SALESDB",
+                    "schema_name_at_source": "SALESDB", // mandatory
+                    "catalog_name": "SALESDB", // mandatory
                     "meta_crawl_performed": true
                 },
                 "table_type": "TABLE"
@@ -439,13 +439,13 @@
                             "SNOWFLAKE",
                             "SPARK"
                         ],
-                        "target_table_name": "ORDERS_QT",
+                        "target_table_name": "ORDERS_QT", // mandatory
                         "storage_format": "delta",
-                        "target_schema_name": "SALESDB",
-                        "query": "select * from \"SALESDB\".\"ORDERS\"",
+                        "target_schema_name": "SALESDB", // mandatory
+                        "query": "select * from \"SALESDB\".\"ORDERS\"", // mandatory
                         "is_table_case_sensitive": false,
                         "is_schema_case_sensitive": false,
-                        "target_database_name": "ABHI_DATABASE",
+                        "target_database_name": "ABHI_DATABASE", // mandatory
                         "is_database_case_sensitive": false,
                         "bigquery_labels": [],
                         "detect_schema_change": false,
@@ -737,6 +737,352 @@
                     },
                     "meta_crawl_performed": true
                 }
+            },
+            /* regular table with incremental */
+            {
+                "entity_type": "table",
+                "entity_id": "651d179dfbc7410007377087",
+                "configuration": {
+                    "configuration": {
+                        "exclude_legacy_audit_columns": true,
+                        "sync_type": "incremental",
+                        "write_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "read_supported_engines": [
+                            "SNOWFLAKE",
+                            "SPARK"
+                        ],
+                        "target_table_name": "EMPLOYEES", // mandatory
+                        "storage_format": "delta",
+                        "target_schema_name": "RDBMS_SQLSERVER_55_SCHEMA", // mandatory
+                        "is_table_case_sensitive": false,
+                        "is_schema_case_sensitive": false,
+                        "target_database_name": "RDBMS_SQLSERVER_55_DEMO", // mandatory
+                        "is_database_case_sensitive": false,
+                        "bigquery_labels": [],
+                        "detect_schema_change": false,
+                        "dedup_columns": [],
+                        "watermark_columns": [
+                            "EMPLOYEE_ID"
+                        ],
+                        "use_capture_table": false,
+                        "update_strategy": "append",
+                        "is_scd2_table": false,
+                        "is_archive_enabled": false,
+                        "natural_keys": [
+                            "EMPLOYEE_ID"
+                        ],
+                        "generate_history_view": false,
+                        "target_table_type": "user_managed_table_without_data",
+                        "crawl_data_filter_enabled": false
+                    },
+                    "columns": [
+                        {
+                            "sql_type": -5,
+                            "is_deleted": false,
+                            "name": "EMPLOYEE_ID",
+                            "original_name": "EMPLOYEE_ID",
+                            "target_sql_type": -5,
+                            "col_type_name": "bigint",
+                            "target_column_order": 1,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 20,
+                            "precision": 19,
+                            "target_precision": "19",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "LASTNAME",
+                            "original_name": "LASTNAME",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 2,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 20,
+                            "precision": 20,
+                            "target_precision": "20",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "FIRSTNAME",
+                            "original_name": "FIRSTNAME",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 3,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 10,
+                            "precision": 10,
+                            "target_precision": "10",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "TITLE",
+                            "original_name": "TITLE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 4,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 30,
+                            "precision": 30,
+                            "target_precision": "30",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "TITLE_OF_COURTESY",
+                            "original_name": "TITLE_OF_COURTESY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 5,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 25,
+                            "precision": 25,
+                            "target_precision": "25",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "BIRTHDATE",
+                            "original_name": "BIRTHDATE",
+                            "target_sql_type": 93,
+                            "col_type_name": "datetime",
+                            "target_column_order": 6,
+                            "is_audit_column": false,
+                            "target_scale": "3",
+                            "col_size": 23,
+                            "precision": 23,
+                            "target_precision": "23",
+                            "scale": 3
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "HIREDATE",
+                            "original_name": "HIREDATE",
+                            "target_sql_type": 93,
+                            "col_type_name": "datetime",
+                            "target_column_order": 7,
+                            "is_audit_column": false,
+                            "target_scale": "3",
+                            "col_size": 23,
+                            "precision": 23,
+                            "target_precision": "23",
+                            "scale": 3
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "ADDRESS",
+                            "original_name": "ADDRESS",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 8,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 60,
+                            "precision": 60,
+                            "target_precision": "60",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "CITY",
+                            "original_name": "CITY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 9,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "REGION",
+                            "original_name": "REGION",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 10,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "POSTAL_CODE",
+                            "original_name": "POSTAL_CODE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 11,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 10,
+                            "precision": 10,
+                            "target_precision": "10",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "COUNTRY",
+                            "original_name": "COUNTRY",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 12,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 15,
+                            "precision": 15,
+                            "target_precision": "15",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "HOME_PHONE",
+                            "original_name": "HOME_PHONE",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 13,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 24,
+                            "precision": 24,
+                            "target_precision": "24",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "EXTENSION",
+                            "original_name": "EXTENSION",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 14,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 4,
+                            "precision": 4,
+                            "target_precision": "4",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "PHOTO",
+                            "original_name": "PHOTO",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 15,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 255,
+                            "precision": 255,
+                            "target_precision": "255",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "NOTES",
+                            "original_name": "NOTES",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 16,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 2000,
+                            "precision": 2000,
+                            "target_precision": "2000",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": -5,
+                            "is_deleted": false,
+                            "name": "REPORTS_TO",
+                            "original_name": "REPORTS_TO",
+                            "target_sql_type": -5,
+                            "col_type_name": "bigint",
+                            "target_column_order": 17,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 20,
+                            "precision": 19,
+                            "target_precision": "19",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 12,
+                            "is_deleted": false,
+                            "name": "new_column",
+                            "original_name": "new_column",
+                            "target_sql_type": 12,
+                            "col_type_name": "varchar",
+                            "target_column_order": 18,
+                            "is_audit_column": false,
+                            "target_scale": "0",
+                            "col_size": 100,
+                            "precision": 100,
+                            "target_precision": "100",
+                            "scale": 0
+                        },
+                        {
+                            "sql_type": 93,
+                            "is_deleted": false,
+                            "name": "ziw_target_timestamp",
+                            "original_name": "ziw_target_timestamp",
+                            "target_sql_type": 93,
+                            "target_column_order": 19,
+                            "is_audit_column": true,
+                            "target_scale": "6",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 6,
+                            "format": "yyyy-MM-dd HH:mm:ss"
+                        },
+                        {
+                            "sql_type": 16,
+                            "is_deleted": false,
+                            "name": "ziw_is_deleted",
+                            "original_name": "ziw_is_deleted",
+                            "target_sql_type": 16,
+                            "target_column_order": 20,
+                            "is_audit_column": true,
+                            "target_scale": "0",
+                            "precision": 0,
+                            "target_precision": "0",
+                            "scale": 0
+                        }
+                    ],
+                    "name": "EMPLOYEES",
+                    "schema_name_at_source": "SALESDB", // mandatory
+                    "catalog_name": "SALESDB", // mandatory
+                    "meta_crawl_performed": true
+                },
+                "table_type": "TABLE"
             }
         ],
         "table_group_configs": [
