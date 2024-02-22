@@ -89,6 +89,7 @@ cd Infoworks_ETL_Workload_Migration
 ```bash
 ./configurations/
 ```
+**Note** : The keys marked with mandatory comment are supposed to be mandatorily passed by the user, rest of them can be ignored if they want to go with default values.
 
 ### Sources:
 1) [RDBMS Source Sample JSON](./configurations/source/source_RDBMS_SQLServer.json)
