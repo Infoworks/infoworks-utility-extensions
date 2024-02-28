@@ -17,8 +17,7 @@ Supports Infoworks version 5.3 onwards
 
 # Prerequisites
 
-- The VM server where you are running this script should be able to talk to the source and target IWX environments on the 3001/443 port
-- The Secrets with the connection details to Pre-Prod/QA environments should be created before executing the migration
+- The VM server where you are running this script should be able to talk to IWX environment on the 3001/443 port
 - Infoworks Environment should have the environment created with the necessary storage and compute interactive cluster.
 - The License key should be installed in the Infoworks environment with all the required source connector options.
 - Ensure that the interactive clusters are up and running prior to running below scripts.
