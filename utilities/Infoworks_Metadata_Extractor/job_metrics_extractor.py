@@ -73,3 +73,4 @@ if __name__ == "__main__":
 
     except Exception as error:
         logging.error("Failed to capture Job Metrics \nError: {error}".format(error=repr(error)))
+        sys.exit(1)
