@@ -15,10 +15,10 @@ This prehook script connects to a Linux server hosting GPG encrypted files and d
 2) Navigate to Admin > Extensions > Job Hooks. 
    - Create a job hook with the desired name and upload the scripts along with the ssh key file.
    ![prehook_configuration_image](../img/gpg_prehook.png)
-   - Pass the necessary command line parameters to the script.
-   $1 - First argument - hostname/IP of the SFTP host
-   $2 - Second argument - username of the SFTP host
-   $3 - Third argument - Private key file name which will be used for gpg encryption.
+   - Pass the below mentioned command line parameters to the script.
+   - $1 - First argument - hostname/IP of the SFTP host
+   - $2 - Second argument - username of the SFTP host
+   - $3 - Third argument - Private key file name which will be used for gpg encryption.
 3) The uploaded job hook should be attached to the infoworks source.
    - Source Setup > Job Hooks > Attach your job hook created in step 3.
 
