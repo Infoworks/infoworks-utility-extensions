@@ -139,10 +139,9 @@ def main():
                     "filter": {"name": {"$regex": args.workflow_name_regex}}})
                 workflows = workflows_response["result"]["response"]["result"]
                 workflow_ids = [workflow["id"] for workflow in workflows]
-                iwx_client_dev.cicd_get_workflowconfig_export(pipeline_ids=workflow_ids,
+                iwx_client_dev.cicd_get_workflowconfig_export(workflow_ids=workflow_ids,
                                                               config_file_export_path=os.path.join(base_path,
-                                                                                                   "configurations"),
-                                                              pipeline_grp_config=None)
+                                                                                                   "configurations"))
         else:
             file_to_truncate = open(os.path.join(base_path, "configurations","modified_files","workflow.csv"), 'w')
             file_to_truncate.close()

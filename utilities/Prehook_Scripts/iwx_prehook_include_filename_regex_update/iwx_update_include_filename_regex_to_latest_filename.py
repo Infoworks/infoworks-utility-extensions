@@ -81,7 +81,7 @@ def main():
             datetime_object = datetime.strptime(max_modified_timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             datetime_object = datetime_object + timedelta(seconds=1)
             formatted_timestamp = datetime_object.strftime('%Y-%m-%d %H:%M:%S')
-            find_command = f"""find {REMOTE_DIR} -type f -newermt "{formatted_timestamp}" -printf "%T+ %p\\n" | sort -nr | cut -d " " -f 2 |head -n 1 |xargs -0 -n 1 basename"""
+            find_command = f"""find {REMOTE_DIR} -type f -newermt "{formatted_timestamp}" -printf "%T+ %p\\n" | sort -nr | cut -d " " -f 2 |head -n 1 |xargs --no-run-if-empty -0 -n 1 basename"""
             ssh_command = f"ssh -o StrictHostKeyChecking=no -i {PRIVATE_KEY_PATH} -p {SFTP_PORT} {SFTP_USERNAME}@{SFTP_SERVER} 'cd {REMOTE_DIR} && {find_command}'"
             print("ssh_command:",ssh_command)
         else:
