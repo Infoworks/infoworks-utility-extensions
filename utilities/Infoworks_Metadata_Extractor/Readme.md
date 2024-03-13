@@ -22,7 +22,7 @@ retrieves static and dynamic information of the Infoworks objects via Infoworks 
 
 ### table_metadata_extractor_V4.py
 ```
-python3 table_metadata_extractor_V4.py --config_file <Fully qualified path of the configuration file>
+python3 table_metadata_extractor_V4.py --config_file <Fully qualified path of the configuration file> --output_dir <Fully qualified output directory path>
 ```
 #### Fields inside configuration file
 
@@ -65,13 +65,14 @@ Either domain_names or domain_ids should be specified.
 
 ### job_metrics_extractor.py
 ```
-python3 job_metrics_extractor.py --config_file <Fully qualified path of the configuration file> --time_range_for_jobs_in_mins < TIME_IN_MINS>
+python3 job_metrics_extractor.py --config_file <Fully qualified path of the configuration file> --time_range_for_jobs_in_mins < TIME_IN_MINS> --output_file <Output File Name>
 ```
 #### Input Arguments
 
 | **Parameter**                  | **Description**                                                       |
 |:-------------------------------|:----------------------------------------------------------------------|
  | `time_range_for_jobs_in_mins`* | Time Range (in Minutes) to extract all the executed jobs in Infoworks |  
+ | `output_file`| Output File Name |
 
 #### Fields inside configuration file
 
