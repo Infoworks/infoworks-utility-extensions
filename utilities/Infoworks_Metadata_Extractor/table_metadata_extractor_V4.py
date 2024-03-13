@@ -75,6 +75,7 @@ def get_source_connection_details(source_id):
     except Exception as source_connection_error:
         logging.error("Failed to retrieve source connection details \nError: {error}"
                       .format(error=source_connection_error))
+        return {}
         # sys.exit(-1)
 
 
@@ -215,7 +216,7 @@ def extract_table_metadata(result):
 
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==4.0a8'}
+    required = {'pandas', 'infoworkssdk==4.0a14'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
 
@@ -233,8 +234,17 @@ if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser(description='Extracts metadata of tables and columns created in Infoworks')
         parser.add_argument('--config_file', required=True, help='Fully qualified path of the configuration file')
+        parser.add_argument('--output_dir', default=None)
         args = parser.parse_args()
         config_file_path = args.config_file
+        if args.output_dir:
+            output_file = args.output_dir+"/TableMetadata.csv"
+            output_failed_file = args.output_dir+"/Failed_Tables.csv"
+        else:
+            current_directory = os.getcwd()
+            output_file = current_directory+"/TableMetadata.csv"
+            output_failed_file = current_directory+"/Failed_Tables.csv"
+
         if not os.path.exists(config_file_path):
             raise Exception(f"{config_file_path} not found")
         with open(config_file_path) as f:
@@ -339,8 +349,8 @@ if __name__ == "__main__":
                         failed_data.append({'source_name': source_name, 'table_name': table['name'],
                                             'error_message': error_msg})
         if len(final_data) > 0:
-            logging.info("Saving Output as TableMetadata.csv ")
-            pd.DataFrame(final_data).to_csv("TableMetadata.csv",
+            logging.info(f"Saving Output: {output_file}")
+            pd.DataFrame(final_data).to_csv(output_file,
                                             columns=['source_name', 'source_type', 'source_sub_type',
                                                      'source_connection_url', 'snowflake_warehouse',
                                                      'source_connection_username',
@@ -355,11 +365,12 @@ if __name__ == "__main__":
                                                      ],
                                             index=False)
         if len(failed_data) > 0:
-            logging.info("Failed Tables Found, Please check Failed_Tables.csv for more information")
-            pd.DataFrame(failed_data).to_csv("Failed_Tables.csv", columns=['source_name', 'table_name',
+            logging.info(f"Failed Tables Found, Please check {output_failed_file} for more information")
+            pd.DataFrame(failed_data).to_csv(output_failed_file, columns=['source_name', 'table_name',
                                                                            'error_message'],
                                              index=False)
 
     except Exception as error:
         logging.error("Failed to fetch table metadata \nError: {error}".format(error=repr(error)))
         traceback.print_exc()
+        sys.exit(-1)
