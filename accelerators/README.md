@@ -13,7 +13,7 @@ Welcome to the Accelerators directory, a comprehensive solution designed to spee
 
 ### 2. BTEQ2Infoworks-SnowConvert
 
-- **Description:** This Product Recipe will enable clients to integrate the Infoworks metadata with systems that track metadata. The Product Recipe retrieves static and dynamic information of the Infoworks objects such as table metadata,job metrics,pipeline metadata etc via Infoworks APIs
+- **Description:** This Product Recipe will Use SnowConvert to transform Teradata BTEQ scripts to SnowSQL, and imports the converted SnowSQL as Infoworks SQL Pipeline. 
 - **Link:** [BTEQ2Infoworks-SnowConvert](./BTEQ2Infoworks-SnowConvert/)
 
 ### 3. Bulk-Admin-Entity-Creation-Utility
