@@ -33,8 +33,7 @@ Links to additional resources such as API documentation, forums, and community d
 ## Developers
 Individuals or teams looking to build applications or services using our SDK.
 ## System Integrators
-## Technical professionals
-People integrating our software with other systems or platforms.
+Technical professionals integrating our software with other systems or platforms.
 ## Technical Leaders
 Decision-makers evaluating the SDK for its capabilities, performance, and suitability for their technical needs.
 
