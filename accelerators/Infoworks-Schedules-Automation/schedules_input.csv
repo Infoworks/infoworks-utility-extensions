@@ -1,0 +1,3 @@
+source_id,table_group_id,domain_id,workflow_id,start_date,start_hour,start_min,repeat_interval_unit,repeat_interval_measure,repeat_on_last_day,specified_days,ends,end_date,end_hour,end_min,is_custom_job,custom_job_details
+,,64ad413c3a553b7d1e16e896,64ef3d00164d9b56be2de918,10/03/2023,14,0,WEEK,1,False,"1,2,3,4,5,6",FalSE,,,,True,"{'starts_daily_at':'06:00','ends_daily_at':'20:00','repeat_interval_unit':'minutes','repeat_interval_measure':60}"
+64c9f07f5b3b07f82f2ce148,64d61f1b86f8502b88b0b382,,,10/06/2023,14,0,WEEK,1,False,"1,2,3,4,5,6",FalSE,,,,,
