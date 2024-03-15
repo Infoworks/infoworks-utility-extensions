@@ -38,14 +38,21 @@ Technical professionals integrating our software with other systems or platforms
 Decision-makers evaluating the SDK for its capabilities, performance, and suitability for their technical needs.
 
 # How to Use This Notebook
-We recommend starting with the "Getting Started" section to set up your development environment correctly. From there, proceed to the "SDK Overview" to gain a comprehensive understanding of the SDK's capabilities. Once comfortable, explore the "Practical Examples" and "Advanced Features" to deepen your knowledge and skills.
+
+Ensure to validate the prerequisites mentioned. 
+This Notebook consists of 6 Lab exercises that give a good understanding of SDK under different scenarios.
+
+1) Lab 1: Authenticating with tokens and performing basic queries
+2) Lab 2: Configuring RDBMS data sources for ingestion
+3) Lab 3: Batch loading file-based (CSV) data
+4) Lab 4: Using Transformation Pipelines with SDK methods
+5) Lab 5: Using the Workflow SDK methods
+6) Lab 6: Miscellaneous Utilities with Useful Functionalities
 
 ## Feedback and Contributions
-Your feedback is crucial to the continuous improvement of the SDK Usage Notebook. If you have suggestions, encounter any issues, or wish to contribute examples or best practices, please reach out to us via GitHub issues or pull requests.
+Your feedback is crucial to the continuous improvement of the SDK Usage Notebook. If you have suggestions, encounter any issues, or wish to contribute examples or best practices, please contact us at customer-engineering@infoworks.io. 
 
 Thank you for choosing our SDK for your development needs. We look forward to seeing the innovative solutions you'll create.
-
-
 
 
 
