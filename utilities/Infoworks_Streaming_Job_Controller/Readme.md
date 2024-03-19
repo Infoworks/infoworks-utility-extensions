@@ -1,7 +1,7 @@
 # Infoworks Streaming Job Controller
 
 ## Introduction
-The script integrated with Infoworks Python SDK provides a simple solution to start and stop Infoworks streaming jobs via REST APIs.
+The script integrated with Infoworks Python SDK provides a simple solution to start and stop Infoworks streaming jobs via REST APIs. To know more about streaming jobs: [Onboard Streaming Jobs](https://docs.infoworks.io/onboard-data/kafka-ingestion)
 
 ## Prerequisites
 * Python 3.6
