@@ -15,6 +15,14 @@ Supports Infoworks version 5.2 onwards
 - [Usage](#usage)
 - [Authors](#authors)
 
+# CICD Flow
+
+![cicd_flow image_1](./img/cicd_flow_1.png)
+
+![cicd_flow image_2](./img/cicd_flow_2.png)
+
+![cicd_flow image_3](./img/cicd_flow_3.png)
+
 # Prerequisites
 
 - The deployment server VM should have access to the Github repository and should be given read/write access.
@@ -166,7 +174,7 @@ SUPPORT_DB=PRD_DB
    "configuration": {
        "pipeline_configs": {
            "type": "sql",
-           "query": "Y3JlYXRlIHRhYmxlIHNxbF9waXBlbGluZV8xX3RhYmxlIGFzIHNlbGVjdCAqIGZyb20gY3VzdG9tZXJz",
+           "query": "Y3JlYXRlIHRhYmxlIHNxbF9waXBlbGluZV8xX3RhYmxlIGFzIHNlbGVjdCAqIGZyb20gY3VzdG9tZXJz", //pragma: allowlist secret
            "pipeline_parameters": [
                {
                    "key": "DB_NAME",
