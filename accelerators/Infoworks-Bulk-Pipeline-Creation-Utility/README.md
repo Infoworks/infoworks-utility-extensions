@@ -32,7 +32,7 @@ cd bulk_pipeline_creation_automation
 ```json
 {
  "protocol": "https",
- "host": "att-iwx-pri.infoworks.technology",
+ "host": "<your_infoworks_host_name>",
  "port": "443",
  "refresh_token": "<your infoworks user refresh_token>",
  "environment_name": "azure_environment_new",
