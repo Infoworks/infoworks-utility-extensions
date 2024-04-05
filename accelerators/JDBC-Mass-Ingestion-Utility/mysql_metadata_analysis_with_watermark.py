@@ -190,6 +190,8 @@ def main():
     resultant_df = resultant_df.assign(SCD_TYPE_2='False')
     table_type = configuration_json.get("default_table_type", "infoworks_managed_table")
     resultant_df = resultant_df.assign(TABLE_TYPE=table_type)
+    apply_rtrim_to_strings = configuration_json.get("rtrim_string_columns", False)
+    resultant_df = resultant_df.assign(RTRIM_STRING_COLUMNS=apply_rtrim_to_strings)
     resultant_df = resultant_df.assign(USER_MANAGED_TABLE_TARGET_PATH='')
     with ThreadPoolExecutor(max_workers=10) as executor:
         executor.map(get_ingestion_strategy, resultant_df.itertuples())

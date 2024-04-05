@@ -189,6 +189,8 @@ for index,row in resultant.iterrows():
 #print the rows in the table
 #print(resultant)
 #print(resultant.to_string(index=False))
+apply_rtrim_to_strings = configuration_json.get("rtrim_string_columns",False)
+resultant=resultant.assign(RTRIM_STRING_COLUMNS=apply_rtrim_to_strings)
 resultant=resultant.fillna('')
 try:
     resultant.to_csv(f'{metadata_csv_path}',index=False)

@@ -1023,6 +1023,22 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                 for column in table_schema:
                     if column.get("is_audit_column", ""):
                         column["is_excluded_column"] = False
+
+            # add rtrim function to strings if RTRIM_STRING_COLUMNS is True in csv
+            apply_rtrim_to_strings=False
+            try:
+                apply_rtrim_to_strings = str(database_info_df.query(
+                    f"TABLENAME.str.upper()=='{table_name.upper()}' & DATABASENAME.str.upper()=='{database_name.upper()}'").fillna(
+                    False)['RTRIM_STRING_COLUMNS'].tolist()[0])
+            except (IndexError, KeyError):
+                apply_rtrim_to_strings=False
+            if eval(apply_rtrim_to_strings):
+                for column in table_schema:
+                    if column.get("sql_type","")==12:
+                        column["transform_mode"] = "advanced"
+                        if column.get("transform_derivation","")=="":
+                            column["transform_derivation"] = f"nvl(rtrim({column['name']}),'')"
+
             if snowflake_metasync_source_id is not None:
                 target_table_name = table_payload_dict["target_table_name"]
                 target_schema_name = table_payload_dict["target_schema_name"]

@@ -11,6 +11,7 @@
 	"ingestion_storage_format":"parquet",
 	"default_table_type":"infoworks_managed_table",
 	"exclude_audit_columns": false,
+	"rtrim_string_columns": false,
 	"export_configurations":{},
 	"source_connection_properties": {
 		"host": "",
