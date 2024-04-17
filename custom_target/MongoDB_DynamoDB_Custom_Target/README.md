@@ -3,7 +3,7 @@
         <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
     </head>
     <body style="width: 100%;" class="c2 doc-content">
-        <p class="c6 c32 title" id="h.j5qaxkjyceud"><span class="c25">Infoworks Custom Target for MongoDB</span></p>
+        <p class="c6 c32 title" id="h.j5qaxkjyceud"><span class="c25"><h1>Infoworks Custom Target for MongoDB</h1></span></p>
         <p class="c0 c4"><span class="c1"></span></p>
         <p class="c0 c6"><span class="c11">Infoworks custom target solution to write the pipeline data to MongoDB in OVERWRITE/APPEND/MERGE mode.</span></p>
         <h1 class="c24 c6" id="h.pjv8tujelwqn"><span class="c15 c17">Step 1: Create Pipeline Extension</span></h1>
@@ -163,7 +163,7 @@
         <p class="c0 c4"><span class="c14 c13"></span></p>
         <p class="c0 c4"><span class="c14 c13"></span></p>
         <p class="c0 c4"><span class="c14 c13"></span></p>
-        <p class="c32 c6 title" id="h.eb9by9xp9zr0"><span class="c25">Infoworks Custom Target for DynamoDB</span></p>
+        <p class="c32 c6 title" id="h.eb9by9xp9zr0"><span class="c25"><h1>Infoworks Custom Target for DynamoDB</h1></span></p>
         <p class="c0 c4"><span class="c11"></span></p>
         <p class="c0 c6"><span class="c11">Infoworks custom target solution to write the pipeline data to DynamoDB in OVERWRITE/UPSERT/INSERT ONLY mode.</span></p>
         <h1 class="c24 c6" id="h.fl0jlrv779n5"><span class="c15 c17">Prerequisites</span></h1>
