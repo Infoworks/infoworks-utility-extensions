@@ -65,8 +65,88 @@ source ./env/bin/activate
 ```shell
 python -m pip install -r requirements.txt
 ```
+6) Edit configurations.json file under conf directory
 
-6) 
+Configurations.json 
+Location: ./conf/configurations.json
+Functionality : This file is responsible for providing all the details regarding the configurations like, host name of IWX, port,environment details, ingestion format for tables etc)
+
+( some of the commonly used updated timestamps,created timestamps that can be used as candidates for watermark columns)
+
+If any of the keys mentioned in merge_water_marks_columns is present in current table, then that column will be used as the watermark column for the current table.
+
+```json
+{
+   "protocol": "",
+   "host": "",
+   "port": "",
+  "environment_name":"",
+  "environment_storage_name":"Default_Storage",
+  "environment_compute_name":"Default_Persistent_Compute_Template",
+  "append_water_marks_columns":["insert_timestamp","LOADDATE","REC ADD TS","STARTDATE","CREATE_DATE"],
+  "merge_water_marks_columns":["UPDATEDATE","UPDATE_DATE","CREATE_DATE","update_timestamp","REC_UPD_TS","REC CHG TS","it_update_date","OrderDate"],
+  "split_by_keys":"",
+  "ingestion_storage_format":"parquet",
+  "exclude_audit_columns": true,
+  "rtrim_string_columns": false,
+  "default_table_type":"infoworks_managed_table",
+  "export_configurations":{
+     "sfURL": "",
+     "sfAccount":"",
+         "sfUser": "",
+         "sfPassword": "",
+         "sfDatabase": "",
+         "sfSchema": "",
+         "sfWarehouse": ""
+  },
+  "source_connection_properties": {
+     "host": "",
+     "port": 1025,
+     "username": "",
+     "encrypted_password": "",
+     "default_source_db": ""
+  },
+  "filter_properties": {
+     "is_filter_enabled":true,
+     "schemas_filter": "",
+     "tables_filter":""
+  },
+  "sfDatabase": "",
+  "sfSchema": "",
+  "sfStageSchema":"",
+  "sfWarehouse": "DEMO_WH",
+    "table_groups":[{
+             "name":"tg1",
+             "max_connections_to_source":4,
+             "max_parallel_tables":4,
+             "environment_compute_name":"Default_Persistent_Compute_Template",
+             "table_names":[]
+
+},
+   {
+             "name":"tg2",
+             "max_connections_to_source":4,
+             "max_parallel_tables":4,
+             "environment_compute_name":"Default_Persistent_Compute_Template",
+             "table_names":[]
+
+}],
+"run_workflow":false,
+"poll_workflow":false
+}
+```
+
+You could set the run_workflow to true if you want the workflow to be run after workflow creation, else false.
+
+By default it is true.
+
+Table names are case sensitive and must be listed as they appear in Infoworks.
+
+More Details about individual keys of configurations.json can be found here:
+https://docs.google.com/spreadsheets/d/19y2xSfc0K9-rDusVNQ0Ys3oFveyhEB21GG8n6W0puog/edit?usp=sharing
+
+
+7) 
 ### Teradata:
 ```shell
 
