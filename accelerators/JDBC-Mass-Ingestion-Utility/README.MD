@@ -24,6 +24,23 @@ Currently via Infoworks, individual tables need to be configured manually by goi
 ## Flowdiagram
 ![RDBMS Automated table configuration flow diagram](./images/automation_demo.png?raw=true "RDBMS Automated table configuration flow diagram")
 
+Intermediate CSV sample file structure(first few rows) from teradata source:(full CSV can be found here)
+
+### Sub Set Filters
+
+Syntax to be followed to configure sub set filters:
+
+Combinational conditions i.e. AND, OR should be enclosed within in square brackets ([AND], [and], [OR], [or])
+
+These are the conditions/operators supported currently
+```
+<=>, <>, <=, >=, =, <, >, is null, IS NULL, is not null, IS NOT NULL, like, LIKE, not like, NOT LIKE, rlike, RLIKE, in, IN, not in, NOT IN
+```
+Usage of any other operator other than these might produce unexpected results.
+
+Examples: Actionid=value [or] actionid is null, AllocGroupId is not null
+
+
 ## Installation:
 ```bash
 wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_55.tar.gz
