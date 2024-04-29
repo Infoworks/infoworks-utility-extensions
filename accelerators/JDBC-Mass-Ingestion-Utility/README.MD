@@ -26,7 +26,7 @@ Currently via Infoworks, individual tables need to be configured manually by goi
 
 ## Installation:
 ```bash
-wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_54.tar.gz
+wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_55.tar.gz
 ```
 
 ## Usage:
@@ -42,17 +42,17 @@ DBC.TablesV,DBC.IndicesV,DBC.ColumnsV
 1) Login to your local VM or any machine with python3 installation.
 2) Download the package 
 ```shell
-wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_54.tar.gz
+wget --no-check-certificate https://infoworks-releases.s3.amazonaws.com/automated_table_configuration_rdbms_55.tar.gz
 ```
 
 Untar the package:
 ```shell
-tar -xvf automated_table_configuration_rdbms_54.tar.gz
+tar -xvf automated_table_configuration_rdbms_55.tar.gz
 ```
 
 3) Navigate to untarred folder
 ```shell
-cd ./automated_table_configuration_rdbms_54/
+cd ./automated_table_configuration_rdbms_55/
 ```
 
 4) Create and activate a virtual env
@@ -92,7 +92,7 @@ Result of above command should be encrypted password fFCuy3JaHWk5Qy7o4o4oewqtCh0
 Eg:
 ```shell
 
-python teradata_metadata_analysis_with_watermark.py --host 34.204.88.33 --port 1025 --user dbc --password fFCuy3JaHWk5Qy7ko4o4oewqtCh0RdIVBzEqELaxJ0yKJAfHAK2K05JZ9/ZUHISGgQIvPKQ== --schemas automation_db
+python teradata_metadata_analysis_with_watermark.py --host <IP> --port 1025 --user dbc --password fFCuy3JaHWk5Qy7ko4o4oewqtCh0RdIVBzEqELaxJ0yKJAfHAK2K05JZ9/ZUHISGgQIvP --schemas automation_db
 ```
 
 
