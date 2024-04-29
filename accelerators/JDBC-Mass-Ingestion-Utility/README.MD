@@ -24,7 +24,7 @@ Currently via Infoworks, individual tables need to be configured manually by goi
 ## Flowdiagram
 ![RDBMS Automated table configuration flow diagram](./images/automation_demo.png?raw=true "RDBMS Automated table configuration flow diagram")
 
-Intermediate CSV sample file structure(first few rows) from teradata source:(full CSV can be found here)
+Intermediate CSV sample file structure(first few rows) from teradata source:[full CSV can be found here](https://docs.google.com/spreadsheets/d/1TDc4B4jvvydkLBP9R8hWB9zrJ8QbRNzAG4Z5SLZVtdU/edit?usp=sharing)
 
 ### Sub Set Filters
 
