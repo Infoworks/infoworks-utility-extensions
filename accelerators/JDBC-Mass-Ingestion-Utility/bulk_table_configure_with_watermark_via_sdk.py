@@ -1039,6 +1039,30 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                         if column.get("transform_derivation","")=="":
                             column["transform_derivation"] = f"nvl(rtrim({column['name']}),'')"
 
+            # configure sort by columns if given for snowflake environment
+            sort_by_columns = None
+            try:
+                sort_by_columns = str(database_info_df.query(
+                    f"TABLENAME.str.upper()=='{table_name.upper()}' & DATABASENAME.str.upper()=='{database_name.upper()}'").fillna(
+                    False)['SORT_BY_COLUMNS'].tolist()[0])
+            except (IndexError, KeyError):
+                sort_by_columns = None
+            if sort_by_columns:
+                sort_by_columns = list(map(trim_spaces, sort_by_columns.split(',')))
+                try:
+                    sort_by_columns = [column_name_case_compatible_dict[i.upper()] for i in sort_by_columns]
+                    sort_by_columns = [iwx_column_name_mappings[i] for i in sort_by_columns]
+                except KeyError as e:
+                    logger.error(f"Columns present in this table are : {columns}\n "
+                                 f"Unknown column provided {str(e)} as SORT_BY_COLUMNS\n "
+                                 f"Please validate the same and rerun the script")
+                    raise Exception("Unknown column provided")
+            else:
+                sort_by_columns = []
+
+            if sort_by_columns and data_environment_type.lower() in ["snowflake","bigquery"]:
+                logger.info(f"sorting_columns : {sort_by_columns}")
+                table_payload_dict["sorting_columns"] = sort_by_columns
             if snowflake_metasync_source_id is not None:
                 target_table_name = table_payload_dict["target_table_name"]
                 target_schema_name = table_payload_dict["target_schema_name"]
