@@ -298,6 +298,180 @@ python3 pipeline_metadata_extractor.py --config_file config.json --domain_names 
 08-Mar-23 15:59:36 — [ INFO ] — Saving Output as PipelineMetadata.csv 
 ```
 
+
+### environment_metadata_extractor.py
+
+#### Description:
+
+This script is responsible for extracting the Infoworks environments,computes and storage details and export them to CSV file for further analysis.
+
+```shell
+python3 environment_metadata_extractor.py --config_file ./config.json --output_directory ./csv/
+```
+#### Input Arguments
+
+| **Parameter**      | **Description**                                    | Default                                                                     |
+|:-------------------|:---------------------------------------------------|:----------------------------------------------------------------------------|
+ | `config_file` *    | Config JSON file path along with filename          |                                                                             |
+ | `output_directory` | Directory where the Output files should be stored. | ./csv                                                                       |
+ | `reports`          | Param to decide whether to generate all reports or individual reports passed to reports params.[{extract_compute_details,extract_environment_details,extract_storage_details} ...] | extract_environment_details,extract_compute_details,extract_storage_details |
+
+**All Parameters marked with * are Required**
+
+#### Fields inside configuration file
+
+| **Parameter**    | **Description**                       |
+|:-----------------|:--------------------------------------|
+| `host`*          | IP Address of Infoworks VM            |
+| `port`*          | 443 for https / 3000 for http         |
+| `protocol`*      | http/https                            |
+ | `refresh_token`* | Refresh Token from Infoworks Account  |
+
+
+### Attributes from extract_environment_details.csv
+| **Attribute**             | **Description**                                             |
+|:--------------------------|:------------------------------------------------------------|
+| name                      | Name of the Infoworks environment                           |
+| compute_engine            | Type of compute engine used (databricks)                    |
+| region                    | Region of Databricks Cluster                                |
+| workspace_url             | Databricks Workspace URL                                    |
+| secret_name               | Name of the secret where databricks token is stored         |
+| platform                  | Name of cloud platform used (azure,aws,gcp)                 |
+| warehouse                 | Name of the warehouse in case of Data warehouse environment |
+| authentication_properties | Authentication properties                                   |
+| additional_params         | Additional parameters set at environment level if any       |
+| session_params            | Session parameters set at environment level if any          |
+| snowflake_profiles        | List of Snowflake profiles available under this environment |
+
+
+### Attributes from extract_compute_details.csv
+| **Attribute**            | **Description**                                                                   |
+|:-------------------------|:----------------------------------------------------------------------------------|
+| name                     | Name of the Compute Name                                                          |
+| environment_name         | Name of the Infoworks Environment                                                 |
+| launch_strategy          | Launch Strategy (persistent/ephemeral)                                            |
+| cluster_id               | Databricks Cluster ID                                                             |
+| workspace_url            | Databricks Workspace URL                                                          |
+| region                   | Databricks Cluster launch region                                                  |
+| service_auth_name        | Authentication Service for storing Databricks Token                               |       
+| driver_node_type         | Type of Drive node                                                                | 
+| worker_node_type         | Type of Worker node                                                               | 
+| num_worker_nodes         | Number of worker nodes to start with                                              | 
+| max_allowed_workers      | Maximum number of worker nodes that can be launched                               |     
+| idle_termination_timeout | Idle time for databricks cluster termination                                      |
+| allow_zero_workers       | Boolean value to indicate whther or not zero workers are allowed for this compute |      
+| enable_autoscale         | Boolean value to indicate whether or not this compute can autoscale               |   
+| advanced_configurations  | Advance configurations if any                                                     |
+
+### Attributes from extract_storage_details.csv
+| **Attribute**        | **Description**                                                     |
+|:---------------------|:--------------------------------------------------------------------|
+| name                 | Name of the Compute Name                                            |
+| environment_name     | Name of the Infoworks Environment                                   |
+| storage_type         | Type of Storage (dbfs/wasb/adls_gen2)                               |
+| scheme               | Type of Scheme (`adl://`/`abfs://`/`abfss://`/`wasb://`/`wasbs://`) |
+| storage_account_name | Name of storage account in case of ADLS/Blob Storage                |                     |
+| container_name       | Name of container in case of ADLS/Blob Storage                      |                     |
+| secret_name          | Name of the secret used for storing account key                     |
+| is_default_storage   | Boolean value to indicate if it is default storage or not           |
+
+### adhoc_metrics_report_extractor.py
+
+#### Description:
+
+This script will extract some adhoc reports from Infoworks metadata.
+
+```shell
+python3 adhoc_metrics_report_extractor.py --config_file ./config.json --output_directory ./csv/
+```
+#### Input Arguments
+
+| **Parameter**      | **Description**                                                                                                                                                                                                                                                                       | Default                                                                                                                                                                         |
+|:-------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+ | `config_file` *    | Config JSON file path along with filename                                                                                                                                                                                                                                             |                                                                                                                                                                                 |
+ | `output_directory` | Directory where the Output files should be stored.                                                                                                                                                                                                                                    | ./csv                                                                                                                                                                           |
+ | `reports`          | Param to decide whether to generate all reports or individual reports passed to reports params.[{extract_generic_source_types_usage_report,extract_job_hook_usage,extract_infoworks_artifact_creator,extract_extension_report,extract_workflow_with_bash_node_with_last_runtime} ...] | extract_generic_source_types_usage_report,extract_job_hook_usage,extract_infoworks_artifact_creator,extract_extension_report,extract_workflow_with_bash_node_with_last_runtime  |
+
+**All Parameters marked with * are Required**
+
+#### Fields inside configuration file
+
+| **Parameter**    | **Description**                       |
+|:-----------------|:--------------------------------------|
+| `host`*          | IP Address of Infoworks VM            |
+| `port`*          | 443 for https / 3000 for http         |
+| `protocol`*      | http/https                            |
+ | `refresh_token`* | Refresh Token from Infoworks Account  |
+
+#### Some sample reports generated by script are as follows:
+
+##### extract_job_hook_usage.csv
+
+This metadata csv contains information about the job hooks(prehook/posthooks) registered in Infoworks.
+A job hook in infoworks can be attached either as prehook or posthook job.
+
+| **Attribute**            | **Description**                                   |
+|:-------------------------|:--------------------------------------------------|
+| job_hook_id              | Id of job hook                                    |
+| job_hook_name            | Name of job hook                                  |         
+| execution_type           | Execution type of job hook (BASH/PYTHON)          |          
+| executable_file_name     | Executable filename                               |    
+| sources_using_job_hook   | Infoworks sources which are using this job hook   |  
+| pipelines_using_job_hook | Infoworks pipelines which are using this job hook |  
+| workflows_using_job_hook | Infoworks workflows which are using this job hook |  
+| file_details             | List of files added to this jobhook               |         
+
+##### extract_infoworks_artifact_creator.csv
+
+This script extracts information about who created what artifact along with artifacts type.
+
+| **Attribute**  | **Description**                            |
+|:---------------|:-------------------------------------------|
+| artifact_id    | ID of the artifact in Infoworks            |
+| artifact_name  | Name of the artifact in Infoworks          |
+| artifact_type  | Type of artifact (Source/Pipeline/Workflow |
+| creator_name   | Artifact creator name                      |
+| creator_email  | Artifact creator email                     |
+| domain_name    | Artifact Domain (for pipelines/workflows)  |
+
+##### extract_extension_report.csv
+
+This script extracts information about Infoworks extensions along with its usage across different types of artifacts
+
+
+| **Attribute**             | **Description**                                                                                                     |
+|:--------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| id                        | Id of extension in Infoworks                                                                                        |
+| extension_name            | Name of extension in Infoworks                                                                                      |
+| extension_type            | Type of extension (`custom_target`/`Hive_UDF`/`Custom_Deserializer` etc)                                            |       
+| execution_type            | Execution Type(`JAVA`/ `PYTHON`)                                                                                    |                                       |       
+| transformations           | Transformations under given extension                                                                               |
+| ingestion_extension_type  | Ingestion extension type if its is ingestion extension (`source_extension`/`streaming_extension`)                   |
+| registered_udf            | UDFs registered if ingestion extension                                                                              | 
+| upload_option             | upload option (`fileUpload`,`serverLocation`)                                                                       |   
+| server_path               | server path if files are present on the VM.                                                                         |              
+| file_details              | files uploaded details                                                                                              |            
+| pipelines_using_extension | pipelines which are using this extension if extension is of type `custom_target`                                    |
+| domain_name               | Domain under which the extension is accessible                                                                      |           
+| sources_using_extension   | sources which are using this extension if ingestion extension type is  (`source_extension`/`streaming_extension`)   |
+
+
+##### extract_workflow_with_bash_node_with_last_runtime.csv
+
+This script extracts information about Infoworks workflows containing bash node along with their latest workflow run time.
+
+| **Attribute**               | **Description**                                         |
+|:----------------------------|:--------------------------------------------------------|
+| domain_id                   | Id of Workflow domain in Infoworks                      |
+| domain_name                 | Name of Workflow domain in Infoworks                    |
+| workflow_id                 | Id of workflow                                          |                      
+| workflow_name               | Name of workflow                                        |    
+| bash_node                   | Bash node details                                       |    
+| custom_image_url            | Custom image URL if the bash node is using custom image |
+| workflow_latest_run_id      | Latest workflow run ID                                  |                               
+| workflow_latest_run_time    | Latest workflow ID run time                             |
+
+
 ## Authors
 * Sanath Singavarapu
 * Abhishek R
