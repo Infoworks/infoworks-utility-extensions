@@ -7,7 +7,6 @@ import subprocess
 import sys
 import re
 from collections import defaultdict
-sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
 import pkg_resources
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -38,7 +37,7 @@ class AdhocMetricsReport:
             print(str(e))
             raise Exception("Error generating report")
 
-    def test_extract_workflow_with_bash_node_with_last_runtime(self):
+    def extract_workflow_with_bash_node_with_last_runtime(self):
         response = self.iwx_client.list_domains()
         domains = response["result"]["response"]["result"]
         workflow_with_bash_nodes=[]
@@ -74,7 +73,7 @@ class AdhocMetricsReport:
         workflow_with_bash_nodes_df = pd.DataFrame(workflow_with_bash_nodes)
         self.dataframe_writer(dataframe=workflow_with_bash_nodes_df, report_type="extract_workflow_with_bash_node_with_last_runtime")
 
-    def test_extract_job_hook_usage(self):
+    def extract_job_hook_usage(self):
         response = self.iwx_client.list_job_hooks()
         job_hooks = response["result"]["response"]["result"]
         job_hook_dependencies_list=[]
@@ -103,7 +102,7 @@ class AdhocMetricsReport:
         job_hook_dependencies_df = pd.DataFrame(job_hook_dependencies_list)
         self.dataframe_writer(job_hook_dependencies_df,report_type=inspect.stack()[0][3])
 
-    def test_extract_infoworks_artifact_creator(self):
+    def extract_infoworks_artifact_creator(self):
         response = self.iwx_client.get_list_of_sources()
         sources = response["result"]["response"]["result"]
         users = self.iwx_client.list_users()
@@ -144,7 +143,7 @@ class AdhocMetricsReport:
         extract_infoworks_artifact_creator_df = pd.DataFrame(artifact_creator_list)
         self.dataframe_writer(extract_infoworks_artifact_creator_df, report_type=inspect.stack()[0][3])
 
-    def test_extract_extension_report(self):
+    def extract_extension_report(self):
         extract_extensions_list=[]
         domains = self.iwx_client.list_domains()
         domains = domains.get("result", {}).get("response", {}).get("result", [])
@@ -240,7 +239,7 @@ class AdhocMetricsReport:
         print(resultant_df)
         self.dataframe_writer(resultant_df, report_type=inspect.stack()[0][3])
 
-    def test_extract_generic_source_types_usage_report(self):
+    def extract_generic_source_types_usage_report(self):
         response = self.iwx_client.list_generic_source_types()
         generic_source_types = response["result"]["response"]["result"]
         generic_source_types_dependencies_list=[]
@@ -262,7 +261,7 @@ def get_all_report_methods() -> List[str]:
     return method_list
 
 def main():
-    required = {'pandas', 'infoworkssdk==4.0a14'}
+    required = {'pandas', 'infoworkssdk==4.0'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
 

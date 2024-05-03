@@ -226,7 +226,7 @@ def get_all_report_methods() -> List[str]:
     return method_list
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==4.0a14'}
+    required = {'pandas', 'infoworkssdk==4.0'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
     file_path = os.path.dirname(os.path.realpath(__file__))

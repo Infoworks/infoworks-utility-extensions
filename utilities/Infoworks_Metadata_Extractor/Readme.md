@@ -199,14 +199,6 @@ python3 table_metadata_extractor_V4.py --config_file config.json
 02-Feb-23 11:06:52 — [ INFO ] — Initiating Request to get all tables in source id : 42d6e843a70bd1b59e2f6c28 
 02-Feb-23 11:06:52 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/42d6e843a70bd1b59e2f6c28/tables?&limit=50
 02-Feb-23 11:06:53 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/fc041084abd4cbe7a9150e4a/configurations/connection
-02-Feb-23 11:06:53 — [ INFO ] — Initiating Request to get all tables in source id : fc041084abd4cbe7a9150e4a 
-02-Feb-23 11:06:53 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/fc041084abd4cbe7a9150e4a/tables?&limit=50
-02-Feb-23 11:06:53 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/fc041084abd4cbe7a9150e4a/tables?limit=50&offset=50
-02-Feb-23 11:06:54 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/13ade36593776fccbd6a0aad/configurations/connection
-02-Feb-23 11:06:54 — [ INFO ] — Initiating Request to get all tables in source id : 13ade36593776fccbd6a0aad 
-02-Feb-23 11:06:54 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/13ade36593776fccbd6a0aad/tables?&limit=50
-02-Feb-23 11:06:55 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/13ade36593776fccbd6a0aad/tables?limit=50&offset=50
-02-Feb-23 11:06:55 — [ INFO ] — Calling https://iwx-host.infoworks.technology:443/v3/sources/ac0f2f370e6737f783a9bc7c/configurations/connection
 02-Feb-23 11:06:56 — [ INFO ] — Saving Output as TableMetadata.csv 
 ```
 
@@ -253,48 +245,6 @@ python3 pipeline_metadata_extractor.py --config_file config.json --domain_names 
 08-Mar-23 15:59:24 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines?limit=20&offset=20
 08-Mar-23 15:59:24 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines/f9d990827c6e5e25c97ba8fc
 08-Mar-23 15:59:25 — [ INFO ] — Successfully got the pipeline f9d990827c6e5e25c97ba8fc details.
-08-Mar-23 15:59:25 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines/f9d990827c6e5e25c97ba8fc/config-migration
-08-Mar-23 15:59:26 — [ INFO ] — Successfully got the pipeline f9d990827c6e5e25c97ba8fc configuration json.
-08-Mar-23 15:59:26 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines/41640e354219f5703e0785fb
-08-Mar-23 15:59:26 — [ INFO ] — Successfully got the pipeline 41640e354219f5703e0785fb details.
-08-Mar-23 15:59:26 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines/41640e354219f5703e0785fb/config-migration
-08-Mar-23 15:59:27 — [ INFO ] — Successfully got the pipeline 41640e354219f5703e0785fb configuration json.
-08-Mar-23 15:59:27 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines/a69379edcaf6dc8733f55ed5
-08-Mar-23 15:59:27 — [ INFO ] — Successfully got the pipeline a69379edcaf6dc8733f55ed5 details.
-08-Mar-23 15:59:27 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/2a433e1e323d9cd72514a813/pipelines/a69379edcaf6dc8733f55ed5/config-migration
-08-Mar-23 15:59:28 — [ INFO ] — Successfully got the pipeline a69379edcaf6dc8733f55ed5 configuration json.
-08-Mar-23 15:59:28 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/bdfe5575830bc626aa55888c/pipelines?&limit=20
-08-Mar-23 15:59:28 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/bdfe5575830bc626aa55888c/pipelines?limit=20&offset=20
-08-Mar-23 15:59:28 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/bdfe5575830bc626aa55888c/pipelines/28470c0a5be4e8fdd2c0522e
-08-Mar-23 15:59:29 — [ INFO ] — Successfully got the pipeline 28470c0a5be4e8fdd2c0522e details.
-08-Mar-23 15:59:29 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/bdfe5575830bc626aa55888c/pipelines/28470c0a5be4e8fdd2c0522e/config-migration
-08-Mar-23 15:59:29 — [ INFO ] — Successfully got the pipeline 28470c0a5be4e8fdd2c0522e configuration json.
-08-Mar-23 15:59:29 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/bdfe5575830bc626aa55888c/pipelines/b89dd5534b534c751b5886c4
-08-Mar-23 15:59:30 — [ INFO ] — Successfully got the pipeline b89dd5534b534c751b5886c4 details.
-08-Mar-23 15:59:30 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/bdfe5575830bc626aa55888c/pipelines/b89dd5534b534c751b5886c4/config-migration
-08-Mar-23 15:59:30 — [ INFO ] — Successfully got the pipeline b89dd5534b534c751b5886c4 configuration json.
-08-Mar-23 15:59:30 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines?&limit=20
-08-Mar-23 15:59:30 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines?limit=20&offset=20
-08-Mar-23 15:59:31 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/716651e171c79626a5c2cb6e
-08-Mar-23 15:59:31 — [ INFO ] — Successfully got the pipeline 716651e171c79626a5c2cb6e details.
-08-Mar-23 15:59:31 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/716651e171c79626a5c2cb6e/config-migration
-08-Mar-23 15:59:32 — [ INFO ] — Successfully got the pipeline 716651e171c79626a5c2cb6e configuration json.
-08-Mar-23 15:59:32 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/e60f861da306f5ade6fb0647
-08-Mar-23 15:59:32 — [ INFO ] — Successfully got the pipeline e60f861da306f5ade6fb0647 details.
-08-Mar-23 15:59:32 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/e60f861da306f5ade6fb0647/config-migration
-08-Mar-23 15:59:33 — [ INFO ] — Successfully got the pipeline e60f861da306f5ade6fb0647 configuration json.
-08-Mar-23 15:59:33 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/838b7424c0ad539bc031b8e1
-08-Mar-23 15:59:34 — [ INFO ] — Successfully got the pipeline 838b7424c0ad539bc031b8e1 details.
-08-Mar-23 15:59:34 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/838b7424c0ad539bc031b8e1/config-migration
-08-Mar-23 15:59:34 — [ INFO ] — Successfully got the pipeline 838b7424c0ad539bc031b8e1 configuration json.
-08-Mar-23 15:59:34 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/6fa15f29fa442d99b054d342
-08-Mar-23 15:59:35 — [ INFO ] — Successfully got the pipeline 6fa15f29fa442d99b054d342 details.
-08-Mar-23 15:59:35 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/6fa15f29fa442d99b054d342/config-migration
-08-Mar-23 15:59:36 — [ INFO ] — Successfully got the pipeline 6fa15f29fa442d99b054d342 configuration json.
-08-Mar-23 15:59:36 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/5c416d068adfb00bcb74da79
-08-Mar-23 15:59:36 — [ INFO ] — Successfully got the pipeline 5c416d068adfb00bcb74da79 details.
-08-Mar-23 15:59:36 — [ INFO ] — Calling https://support-test-att.cs.infoworks.cloud:443/v3/domains/e7a2b0162978ac12ed5b242d/pipelines/5c416d068adfb00bcb74da79/config-migration
-08-Mar-23 15:59:36 — [ INFO ] — Successfully got the pipeline 5c416d068adfb00bcb74da79 configuration json.
 08-Mar-23 15:59:36 — [ INFO ] — Saving Output as PipelineMetadata.csv 
 ```
 
@@ -471,7 +421,38 @@ This script extracts information about Infoworks workflows containing bash node 
 | workflow_latest_run_id      | Latest workflow run ID                                  |                               
 | workflow_latest_run_time    | Latest workflow ID run time                             |
 
+##### extract_generic_source_types_usages_report.csv
 
+This script extracts information about Infoworks generic source types along with its usage across different sources.
+
+| **Attribute**     | **Description**                                                |
+|:------------------|:---------------------------------------------------------------|
+| name              | Name of the generic source in Infoworks                        |
+| id                | Id of generic source in Infoworks                              |       
+| dependent_sources | List of sources dependent on or using this generic source type |
+                                
+##### extract_target_data_connections_report.csv
+
+This script extracts information about Infoworks target data connections and their usage across different pipelines and source tables.
+
+| **Attribute**                   | **Description**                                                                 |
+|:--------------------------------|:--------------------------------------------------------------------------------|
+| id                              | Id of target data connection in Infoworks                                       |
+| name                            | Name of target data connection in Infoworks                                     |
+| type                            | Type of target data connection                                                  |                  
+| sub_type                        | Subtype of data connection (SQL_SERVER,POSTGRES,SNOWFLAKE etc)                  |                 
+| properties                      | JDBC url properties                                                             |                   
+| created_at                      | Target data connection creation time                                            |                 
+| created_by                      | Target data connection created by which user                                    |                  
+| modified_at                     | Target data connection modification time                                        |           
+| modified_by                     | Target data connection modified by which user                                   |             
+| description                     | Description if any                                                              |               
+| pipelines_using_data_connection | list of pipelines using the data connection                                     |
+| domain_name                     | list of domains using the data connection                                       |   
+| source_tables_using_extension   | list of source tables using data connection in format (table_name, source_name) |
+| data_connection_id              | Id of data connection                                                           |    
+
+                                
 ## Authors
 * Sanath Singavarapu
 * Abhishek R
