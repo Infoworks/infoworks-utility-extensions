@@ -1034,7 +1034,7 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                 apply_rtrim_to_strings=False
             if eval(apply_rtrim_to_strings):
                 for column in table_schema:
-                    if column.get("sql_type","")==12:
+                    if column.get("target_sql_type","") == 12:
                         column["transform_mode"] = "advanced"
                         if column.get("transform_derivation","")=="":
                             column["transform_derivation"] = f"nvl(rtrim({column['name']}),'')"
