@@ -110,7 +110,7 @@ class EnvironmentEntity(AdminEntity):
                         print(f"secret {secret_name} not found.Exiting...")
                         exit(-100)
                     if secret_id:
-                        temp["authentication_properties"]["password"]["password_type"]="secret_store"
+                        temp["authentication_properties"]["password"]["password_type"]="secret_store" #pragma: allowlist secret
                         temp["authentication_properties"]["password"]["secret_id"]=secret_id
                 snowflake_profile.append(temp)
         env_configuration_response = self.iwx_client.get_environment_details(environment_id=self.environment_id)
@@ -261,6 +261,19 @@ class DomainEntity(AdminEntity):
                     for source_name in accessible_sources]
                 if len(accessible_source_ids) > 0:
                     temp["entity_ids"] = accessible_source_ids
+
+                # 6.0 specific changes support for assigning secrets at domain
+                secret_names = row.get("secret_names", "").split(",")
+                secrets = []
+                for secret_name in secret_names:
+                    get_secret_details = self.iwx_client.list_secrets(params={"filter": {"name": secret_name}})
+                    get_secret_details = get_secret_details.get("result", {}).get("response", {}).get("result", [])
+                    secret_id = None
+                    if get_secret_details:
+                        secret_id = get_secret_details[0].get("id", None)
+                        secrets.append(secret_id)
+                if secrets:
+                    temp["secrets"] = secrets
                 create_domain_response = self.create_entity(temp)
                 print(f"{row.get('name','')} :",create_domain_response)
             return
