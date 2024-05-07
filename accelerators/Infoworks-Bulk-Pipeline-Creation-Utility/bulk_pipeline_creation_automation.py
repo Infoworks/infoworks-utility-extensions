@@ -140,6 +140,9 @@ class BulkPipeline():
                 pipeline_config_body["compute_template_id"]=compute_id
             if storage_id:
                 pipeline_config_body["storage_id"] = storage_id
+        else:
+            pipeline_config_body["batch_engine"]=environment_type.upper()
+            pipeline_config_body["run_job_on_data_plane"] = self.configuration_json.get("run_job_on_data_plane", False)
         #logger.info("pipeline body:{pipeline_config_body}")
         pipeline_create_response = self.iwx_client.create_pipeline(pipeline_config=pipeline_config_body)
         pipeline_id = pipeline_create_response.get("result",{}).get("response",{}).get("result",{}).get("id",None)
