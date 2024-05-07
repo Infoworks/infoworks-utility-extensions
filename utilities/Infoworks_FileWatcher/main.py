@@ -138,13 +138,13 @@ def main():
                 storage_details = src_details.get("result", {}).get("response", {}).get("result", {}).get("connection",
                                                                                                           {}).get(
                     "storage", {})
-                storage_account_name = storage_details.get("storage_account_name", None)
-                container = storage_details.get("file_system", None)
+                storage_account_name = storage_details.get("account_name", None)
+                container = storage_details.get("container_name", None)
                 if storage_account_name is None or container is None or source_base_path_relative is None:
                     logger.info(f"{source_base_path_relative is source_base_path_relative}")
                     logger.info(f"{storage_account_name is storage_account_name}")
                     logger.info(f"{container is container}")
-                    logger.error("Invalid storage details for source {source_name}. Skipping this source...")
+                    logger.error(f"Invalid storage details for source {source_name}. Skipping this source...")
                     continue
 
                 list_tables_response = iwx_client_obj.list_tables_in_source(source_id=source_id)
@@ -221,6 +221,7 @@ def main():
         else:
             logger.info(
                 "All the source files are ready and ingestion triggered successfully. Hence terminating gracefully")
+            break
 
 
 if __name__ == '__main__':
