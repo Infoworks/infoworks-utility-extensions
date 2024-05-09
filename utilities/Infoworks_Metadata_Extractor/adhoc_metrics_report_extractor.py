@@ -264,13 +264,12 @@ def main():
     required = {'pandas', 'infoworkssdk==4.0'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
-
+    file_path = os.path.dirname(os.path.realpath(__file__))
     if missing:
         logging.info("Found Missing Libraries, Installing Required")
         python = sys.executable
         subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
     import warnings
-
     warnings.filterwarnings('ignore', '.*Unverified HTTPS request.*', )
     from infoworks.sdk.client import InfoworksClientSDK
     import infoworks.sdk.local_configurations
@@ -278,7 +277,7 @@ def main():
     #parser.add_argument('--data-source', type=str, help='Data source path', required=True)
     parser.add_argument('--config_file', required=True, help='Fully qualified path of the configuration file')
     parser.add_argument('--output_directory', required=False, type=str,
-                        help='Pass the directory where the reports are to be exported')
+                        help='Pass the directory where the reports are to be exported',default=f"{file_path}/csv/")
     parser.add_argument('--reports', nargs='+', help='List of reports to generate. If not specified, all will be generated.', default=get_all_report_methods(),choices=get_all_report_methods())
     args = parser.parse_args()
     config_file_path = args.config_file
@@ -288,13 +287,16 @@ def main():
         config = json.load(f)
     if not os.path.exists(args.output_directory):
         os.makedirs(args.output_directory)
+    output_directory = args.output_directory
+    if not output_directory.endswith('/'):
+        output_directory = output_directory + '/'
     # Infoworks Client SDK Initialization
     infoworks.sdk.local_configurations.REQUEST_TIMEOUT_IN_SEC = 60
     infoworks.sdk.local_configurations.MAX_RETRIES = 3  # Retry configuration, in case of api failure.
     iwx_client = InfoworksClientSDK()
     iwx_client.initialize_client_with_defaults(config.get("protocol", "https"), config.get("host", None),
                                                config.get("port", 443), config.get("refresh_token", None))
-    report_generator = AdhocMetricsReport(iwx_client=iwx_client,output_directory="./csv/")
+    report_generator = AdhocMetricsReport(iwx_client=iwx_client,output_directory=output_directory)
     report_methods=args.reports
     report_methods.sort(key=lambda x: getattr(AdhocMetricsReport, x).__code__.co_firstlineno)
     for report in report_methods:

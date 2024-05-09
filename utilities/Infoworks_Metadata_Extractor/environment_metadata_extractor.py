@@ -246,7 +246,7 @@ if __name__ == "__main__":
         parser.add_argument('--reports', nargs='+',
                             help='List of reports to generate. If not specified, all will be generated.',
                             default=get_all_report_methods(), choices=get_all_report_methods())
-        parser.add_argument('--output_directory', required=False, type=str, default=f"{file_path}/csv",
+        parser.add_argument('--output_directory', required=False, type=str, default=f"{file_path}/csv/",
                             help='Pass the directory where the reports are to be exported')
         args = parser.parse_args()
         config_file_path = args.config_file
@@ -256,13 +256,16 @@ if __name__ == "__main__":
             config = json.load(f)
         if not os.path.exists(args.output_directory):
             os.makedirs(args.output_directory)
+        output_directory = args.output_directory
+        if not output_directory.endswith('/'):
+            output_directory = output_directory + '/'
         # Infoworks Client SDK Initialization
         infoworks.sdk.local_configurations.REQUEST_TIMEOUT_IN_SEC = 60
         infoworks.sdk.local_configurations.MAX_RETRIES = 3  # Retry configuration, in case of api failure.
         iwx_client = InfoworksClientSDK()
         iwx_client.initialize_client_with_defaults(config.get("protocol", "https"), config.get("host", None),
                                                    config.get("port", 443), config.get("refresh_token", None))
-        environment_metadata_extractor_obj = Environment_Metadata_Extractor(iwx_client,args.output_directory)
+        environment_metadata_extractor_obj = Environment_Metadata_Extractor(iwx_client,output_directory)
         report_methods = args.reports
         report_methods.sort(key=lambda x: getattr(Environment_Metadata_Extractor, x).__code__.co_firstlineno)
         for report in report_methods:
