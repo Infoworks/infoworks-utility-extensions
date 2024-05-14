@@ -6,8 +6,8 @@ import traceback
 import pkg_resources
 import urllib3
 urllib3.disable_warnings()
-#sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==4.0a14'}
+# sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
+required = {'infoworkssdk==4.1'}
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
 if missing:
@@ -35,12 +35,14 @@ def main():
     parser.add_argument('--workflow_name_regex', required=False, type=str,
                         help='Workflow name regex to automatically get list of workflow ids based on regex')
     parser.add_argument('--domain_name',required=False, type=str, help='Name of domain to search under for regex match of pipelines and workflows')
+    parser.add_argument('--dump_watermarks',required=False, type=str, help='Dump watermark for tables True/False',default="False",choices=["True","False"])
     args = parser.parse_args()
     # Connect to Dev environment and get the source export
     refresh_token = args.refresh_token
     iwx_client_dev = InfoworksClientSDK()
     iwx_client_dev.initialize_client_with_defaults(args.protocol, args.host, args.port, refresh_token)
     base_path = os.path.dirname(os.path.realpath(__file__))
+    dump_watermarks = eval(args.dump_watermarks)
     pipeline_grp_ids=[]
     utils_obj = Utils("admin@infoworks.io")
     if args.pipeline_group_ids is not None:
@@ -49,7 +51,7 @@ def main():
     try:
         if args.source_ids is not None:
             iwx_client_dev.cicd_get_sourceconfig_export(source_ids=args.source_ids.split(","),
-                                                   config_file_export_path=os.path.join(base_path, "configurations"))
+                                                   config_file_export_path=os.path.join(base_path, "configurations"),dump_watermarks=dump_watermarks)
         elif args.source_name_regex is not None:
             sources_response = iwx_client_dev.get_list_of_sources(params={"filter": {"name": {"$regex": args.source_name_regex}}})
             sources = sources_response["result"]["response"]["result"]

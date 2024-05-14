@@ -7,7 +7,7 @@ import sys
 import os
 import argparse
 #sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==4.0a14'}
+required = {'infoworkssdk==4.1'}
 import pkg_resources
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
