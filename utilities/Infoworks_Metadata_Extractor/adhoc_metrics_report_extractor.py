@@ -137,7 +137,7 @@ class AdhocMetricsReport:
                 temp = {}
                 temp["artifact_id"] = workflow["id"]
                 temp["artifact_type"] = "workflow"
-                temp["creator_name"], temp["creator_email"] = users_lookup[workflow.get("created_by", "")]
+                temp["creator_name"], temp["creator_email"] = users_lookup.get(workflow.get("created_by", ("deleted_user","deleted_user")),("deleted_user","deleted_user"))
                 artifact_creator_list.append(temp)
 
         extract_infoworks_artifact_creator_df = pd.DataFrame(artifact_creator_list)
@@ -159,7 +159,7 @@ class AdhocMetricsReport:
                 for node_name,node in pipeline_version_details.get("model",{}).get("nodes",{}).items():
                     if node_name.upper().startswith("CUSTOM_TARGET"):
                         extension_id = node.get("properties",{}).get("extension_id","")
-                        extension_usage_list.append({"pipeline_id":pipeline["id"],"pipelines_using_extension":pipeline["name"],"domain_name":domain["name"], "extension_id":extension_id})
+                        extension_usage_list.append({"pipeline_id":pipeline["id"],"pipelines_using_extension":pipeline["name"],"domain_name":domain["name"], "extension_id":extension_id,"sources_using_extension":[]})
             extract_extensions_list.extend(pipeline_extensions)
         source_extensions = self.iwx_client.list_source_extensions()
         source_extension_list = source_extensions.get("result", {}).get("response", {}).get("result", [])
@@ -171,7 +171,7 @@ class AdhocMetricsReport:
             extension_usage_list.append({"extension_id":source_extension_id,"sources_using_extension":dependencies.get("sources",[])})
         extract_extensions_df = pd.DataFrame(extract_extensions_list)
         extension_usage_df = pd.DataFrame(extension_usage_list,columns=["pipeline_id","pipelines_using_extension","domain_name","extension_id","sources_using_extension"])
-        extension_usage_df["sources_using_extension"] = extension_usage_df["sources_using_extension"].apply(lambda x: ', '.join(map(str, x)) if pd.notna(x) else '')
+        extension_usage_df["sources_using_extension"] = extension_usage_df["sources_using_extension"].apply(lambda x: ', '.join(map(str, x)) if isinstance(x,list) else "")
         extension_usage_df = extension_usage_df.groupby(["extension_id"])['pipelines_using_extension','domain_name','sources_using_extension'].agg(set)
         extension_usage_df["domain_name"] = extension_usage_df["domain_name"].apply(lambda x: list(x))
         extension_usage_df["pipelines_using_extension"] = extension_usage_df["pipelines_using_extension"].apply(lambda x: list(x))
@@ -255,6 +255,27 @@ class AdhocMetricsReport:
             generic_source_types_dependencies_list.append(temp)
         extract_generic_source_types_dependencies_df = pd.DataFrame(generic_source_types_dependencies_list)
         self.dataframe_writer(extract_generic_source_types_dependencies_df, report_type=inspect.stack()[0][3])
+
+    def extract_admin_schedules_report(self):
+        response = self.iwx_client.list_schedules_as_admin()
+        admin_schedules = response["result"]["response"]["result"]
+        domains = self.iwx_client.list_domains()
+        domains = domains["result"]["response"]["result"]
+        domains_name_look_up = {}
+        for domain in domains:
+            domains_name_look_up[domain["id"]]=domain["name"]
+        print(domains_name_look_up)
+        extract_admin_schedules_report_list=[]
+        for schedule in admin_schedules:
+            temp=schedule.copy()
+            if schedule.get("parent_id",None):
+                parent_id = schedule.get("parent_id",None)
+                domain_name = domains_name_look_up.get(parent_id,None)
+                if domain_name:
+                    temp["domain_name"] = domain_name
+            extract_admin_schedules_report_list.append(temp)
+        extract_admin_schedules_report_df = pd.DataFrame(extract_admin_schedules_report_list)
+        self.dataframe_writer(extract_admin_schedules_report_df, report_type=inspect.stack()[0][3])
 
 def get_all_report_methods() -> List[str]:
     method_list = [func for func in dir(AdhocMetricsReport) if callable(getattr(AdhocMetricsReport, func)) and not func.startswith("__") and func.startswith("extract")]
