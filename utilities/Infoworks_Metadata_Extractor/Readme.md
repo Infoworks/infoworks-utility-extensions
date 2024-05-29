@@ -452,6 +452,22 @@ This script extracts information about Infoworks target data connections and the
 | source_tables_using_extension   | list of source tables using data connection in format (table_name, source_name) |
 | data_connection_id              | Id of data connection                                                           |    
 
+##### extract_admin_schedules_report.csv
+
+This script extracts information about Infoworks schedules along with schedule user information.
+
+| **Attribute**     | **Description**                                                                       |
+|:------------------|:--------------------------------------------------------------------------------------|
+| entity_id         | Scheduled entity id                                                                   |
+| entity_name       | Scheduled entity name                                                                 |
+| schedule_type     | Type of Schedule (mongo-backup,table-group-cdc,workflow-build etc)                    |
+| schedule_username | Name of user who scheduled                                                            | 
+| schedule_details  | Details of schedule includes(schedule_status,start_date,start_hour,start_min etc)     |
+| created_by_name   | Schedule user name                                                                    |
+| parent_id         | Parent entity id (domain id for workflow-build, and source_id for table-group-cdc)    |
+| domain_name       | Name of the domain that scheduled workflow belongs to                                 |
+
+
                                 
 ## Authors
 * Sanath Singavarapu
