@@ -110,7 +110,7 @@ class EnvironmentEntity(AdminEntity):
                         print(f"secret {secret_name} not found.Exiting...")
                         exit(-100)
                     if secret_id:
-                        temp["authentication_properties"]["password"]["password_type"]="secret_store"
+                        temp["authentication_properties"]["password"]["password_type"]="secret_store" #pragma: allowlist secret
                         temp["authentication_properties"]["password"]["secret_id"]=secret_id
                 snowflake_profile.append(temp)
         env_configuration_response = self.iwx_client.get_environment_details(environment_id=self.environment_id)
@@ -252,6 +252,18 @@ class DomainEntity(AdminEntity):
                 if len(current_user_result)>0:
                     current_user_id=current_user_result[0]["id"]
                     temp["users"]=[current_user_id]
+                users = row.get("users", "").split(",")
+                for user in users:
+                    user_details = self.iwx_client.list_users(
+                        params={"filter": {"profile.email": user}})
+                    user_result = user_details.get("result", {}).get("response", {}).get("result", [])
+                    for filtered_user in user_result:
+                        filtered_user_id = filtered_user.get("id", "")
+                        if filtered_user_id:
+                            temp["users"].append(filtered_user_id)
+                        else:
+                            filtered_user_email = filtered_user.get("profile", {}).get("email", "")
+                            print(f"Did not find user id {filtered_user_email}. Ignoring the user")
                 accessible_sources = row.get("accessible_sources", [])
                 accessible_sources=accessible_sources.split(",") if accessible_sources is not None else []
                 accessible_source_ids = [
