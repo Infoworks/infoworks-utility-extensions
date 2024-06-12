@@ -172,7 +172,7 @@ class AdhocMetricsReport:
         extract_extensions_df = pd.DataFrame(extract_extensions_list)
         extension_usage_df = pd.DataFrame(extension_usage_list,columns=["pipeline_id","pipelines_using_extension","domain_name","extension_id","sources_using_extension"])
         extension_usage_df["sources_using_extension"] = extension_usage_df["sources_using_extension"].apply(lambda x: ', '.join(map(str, x)) if isinstance(x,list) else "")
-        extension_usage_df = extension_usage_df.groupby(["extension_id"])['pipelines_using_extension','domain_name','sources_using_extension'].agg(set)
+        extension_usage_df = extension_usage_df.groupby(["extension_id"])[['pipelines_using_extension','domain_name','sources_using_extension']].agg(set)
         extension_usage_df["domain_name"] = extension_usage_df["domain_name"].apply(lambda x: list(x))
         extension_usage_df["pipelines_using_extension"] = extension_usage_df["pipelines_using_extension"].apply(lambda x: list(x))
         extension_usage_df["sources_using_extension"] = extension_usage_df["sources_using_extension"].apply(lambda x: list(x))
