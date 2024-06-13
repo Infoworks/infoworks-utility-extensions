@@ -154,12 +154,14 @@ class AdhocMetricsReport:
             pipelines = self.iwx_client.list_pipelines(domain_id=domain["id"],params={"filter":{"run_job_on_data_plane":True}})
             pipelines = pipelines.get("result", {}).get("response", {}).get("result", [])
             for pipeline in pipelines:
-                pipeline_version_details = self.iwx_client.get_pipeline_version_details(domain_id=domain["id"], pipeline_id=pipeline["id"] ,pipeline_version_id=pipeline["active_version_id"])
-                pipeline_version_details = pipeline_version_details.get("result", {}).get("response", {}).get("result", {})
-                for node_name,node in pipeline_version_details.get("model",{}).get("nodes",{}).items():
-                    if node_name.upper().startswith("CUSTOM_TARGET"):
-                        extension_id = node.get("properties",{}).get("extension_id","")
-                        extension_usage_list.append({"pipeline_id":pipeline["id"],"pipelines_using_extension":pipeline["name"],"domain_name":domain["name"], "extension_id":extension_id,"sources_using_extension":[]})
+                pipeline_active_version_id = pipeline.get("active_version_id", None)
+                if pipeline_active_version_id is not None:
+                    pipeline_version_details = self.iwx_client.get_pipeline_version_details(domain_id=domain["id"], pipeline_id=pipeline["id"] ,pipeline_version_id=pipeline["active_version_id"])
+                    pipeline_version_details = pipeline_version_details.get("result", {}).get("response", {}).get("result", {})
+                    for node_name,node in pipeline_version_details.get("model",{}).get("nodes",{}).items():
+                        if node_name.upper().startswith("CUSTOM_TARGET"):
+                            extension_id = node.get("properties",{}).get("extension_id","")
+                            extension_usage_list.append({"pipeline_id":pipeline["id"],"pipelines_using_extension":pipeline["name"],"domain_name":domain["name"], "extension_id":extension_id,"sources_using_extension":[]})
             extract_extensions_list.extend(pipeline_extensions)
         source_extensions = self.iwx_client.list_source_extensions()
         source_extension_list = source_extensions.get("result", {}).get("response", {}).get("result", [])
@@ -196,19 +198,20 @@ class AdhocMetricsReport:
             pipelines = self.iwx_client.list_pipelines(domain_id=domain["id"])
             pipelines = pipelines.get("result", {}).get("response", {}).get("result", [])
             for pipeline in pipelines:
-                pipeline_version_details = self.iwx_client.get_pipeline_version_details(domain_id=domain["id"],
+                pipeline_active_version_id = pipeline.get("active_version_id",None)
+                if pipeline_active_version_id is not None:
+                    pipeline_version_details = self.iwx_client.get_pipeline_version_details(domain_id=domain["id"],
                                                                                         pipeline_id=pipeline["id"],
-                                                                                        pipeline_version_id=pipeline[
-                                                                                            "active_version_id"])
-                pipeline_version_details = pipeline_version_details.get("result", {}).get("response", {}).get("result",
-                                                                                                              {})
-                for node_name, node in pipeline_version_details.get("model", {}).get("nodes", {}).items():
-                    if "TARGET" in node_name.upper():
-                        data_connection_id = node.get("properties", {}).get("data_connection_id", "")
-                        if data_connection_id!="":
-                            pipelines_using_extension.append(
-                            {"pipeline_id": pipeline["id"], "pipelines_using_data_connection": pipeline["name"],
-                             "domain_name": domain["name"], "data_connection_id": data_connection_id})
+                                                                                        pipeline_version_id=pipeline_active_version_id)
+                    pipeline_version_details = pipeline_version_details.get("result", {}).get("response", {}).get("result",
+                                                                                                                  {})
+                    for node_name, node in pipeline_version_details.get("model", {}).get("nodes", {}).items():
+                        if "TARGET" in node_name.upper():
+                            data_connection_id = node.get("properties", {}).get("data_connection_id", "")
+                            if data_connection_id!="":
+                                pipelines_using_extension.append(
+                                {"pipeline_id": pipeline["id"], "pipelines_using_data_connection": pipeline["name"],
+                                 "domain_name": domain["name"], "data_connection_id": data_connection_id})
 
         pipelines_using_extension_df = pd.DataFrame(pipelines_using_extension)
         pipelines_using_extension_df = pipelines_using_extension_df.groupby(["data_connection_id"])[
