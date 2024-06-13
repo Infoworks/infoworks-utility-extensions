@@ -214,8 +214,8 @@ class AdhocMetricsReport:
                                  "domain_name": domain["name"], "data_connection_id": data_connection_id})
 
         pipelines_using_extension_df = pd.DataFrame(pipelines_using_extension)
-        pipelines_using_extension_df = pipelines_using_extension_df.groupby(["data_connection_id"])[
-            'pipelines_using_data_connection', 'domain_name'].agg(set)
+        pipelines_using_extension_df = pipelines_using_extension_df.groupby(["data_connection_id"])[[
+            'pipelines_using_data_connection', 'domain_name']].agg(set)
         pipelines_using_extension_df["domain_name"] = pipelines_using_extension_df["domain_name"].apply(lambda x: list(x))
         sources = self.iwx_client.get_list_of_sources()
         sources = sources.get("result", {}).get("response", {}).get("result", [])
