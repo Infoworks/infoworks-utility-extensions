@@ -145,7 +145,11 @@ class AdhocMetricsReport:
 
     def extract_extension_report(self):
         extract_extensions_list=[]
-        domains = self.iwx_client.list_domains()
+        databricks_envs_response = self.iwx_client.get_environment_details(
+            params={"filter": {"data_warehouse_type": {"$exists": False}}})
+        databricks_envs = databricks_envs_response.get("result", {}).get("response", {}).get("result", [])
+        databricks_envs_ids = [env["id"] for env in databricks_envs]
+        domains = self.iwx_client.list_domains(params={"filter":{"environment_ids":{"$in":databricks_envs_ids}}})
         domains = domains.get("result", {}).get("response", {}).get("result", [])
         extension_usage_list = []
         for domain in domains:
@@ -188,16 +192,22 @@ class AdhocMetricsReport:
         self.dataframe_writer(resultant_df, report_type=inspect.stack()[0][3])
 
     def extract_target_data_connections_report(self):
+        pipeline_parsed_count =0
         response = self.iwx_client.get_data_connection()
         target_data_connections = response.get("result", {}).get("response", {}).get("result", [])
         target_data_connections_df = pd.DataFrame(target_data_connections)
-        domains = self.iwx_client.list_domains()
+        databricks_envs_response = self.iwx_client.get_environment_details(params={"filter": {"data_warehouse_type": {"$exists": False}}})
+        databricks_envs = databricks_envs_response.get("result", {}).get("response", {}).get("result", [])
+        databricks_envs_ids = [env["id"] for env in databricks_envs]
+        domains = self.iwx_client.list_domains(params={"filter":{"environment_ids":{"$in":databricks_envs_ids}}})
+        #domains = self.iwx_client.list_domains()
         domains = domains.get("result", {}).get("response", {}).get("result", [])
         pipelines_using_extension = []
         for domain in domains:
             pipelines = self.iwx_client.list_pipelines(domain_id=domain["id"])
             pipelines = pipelines.get("result", {}).get("response", {}).get("result", [])
             for pipeline in pipelines:
+                pipeline_parsed_count += 1
                 pipeline_active_version_id = pipeline.get("active_version_id",None)
                 if pipeline_active_version_id is not None:
                     pipeline_version_details = self.iwx_client.get_pipeline_version_details(domain_id=domain["id"],
@@ -217,7 +227,7 @@ class AdhocMetricsReport:
         pipelines_using_extension_df = pipelines_using_extension_df.groupby(["data_connection_id"])[[
             'pipelines_using_data_connection', 'domain_name']].agg(set)
         pipelines_using_extension_df["domain_name"] = pipelines_using_extension_df["domain_name"].apply(lambda x: list(x))
-        sources = self.iwx_client.get_list_of_sources()
+        sources = self.iwx_client.get_list_of_sources(params={"filter":{"environment_id":{"$in":databricks_envs_ids}}})
         sources = sources.get("result", {}).get("response", {}).get("result", [])
         sources_using_target_connection=[]
         for source in sources:
@@ -241,6 +251,7 @@ class AdhocMetricsReport:
                                                         right_on="data_connection_id")
         print(resultant_df)
         self.dataframe_writer(resultant_df, report_type=inspect.stack()[0][3])
+        print("total pipeline parsed : ",pipeline_parsed_count)
 
     def extract_generic_source_types_usage_report(self):
         response = self.iwx_client.list_generic_source_types()
