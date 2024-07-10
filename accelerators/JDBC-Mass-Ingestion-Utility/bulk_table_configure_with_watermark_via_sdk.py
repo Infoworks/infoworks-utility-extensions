@@ -4,6 +4,7 @@ Usage: python bulk_table_configure_with_watermark.py --source_id <your_source_id
 --source_type oracle/teradata/vertica
 """
 import re
+import ast
 import sys
 import json
 import os
@@ -695,6 +696,42 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
             logger.info(f"TableName : {table['original_table_name']}")
             logger.info(f"Columns : {columns}")
 
+            # Configuring Custom Tags
+            try:
+                custom_tags = database_info_df.query(
+                    f"TABLENAME.str.upper() =='{table_name.upper()}' & DATABASENAME.str.upper()=='{database_name.upper()}'")[
+                    'CUSTOM_TAGS'].tolist()[0].strip()
+                if custom_tags:
+                    custom_tags = ast.literal_eval(custom_tags)
+                    logger.info(f"Custom Tags: {custom_tags}")
+                    table_payload_dict['custom_tags'] = []
+                    custom_tag_keys = []
+                    for custom_tag in custom_tags:
+                        custom_tag_key = next(iter(custom_tag))  # Get the key
+                        if custom_tag_key in custom_tag_keys:
+                            logger.info(f"Skipping custom tag '{custom_tag}' as custom tag "
+                                        f"with key '{custom_tag_key}' is configured already")
+                            continue
+                        else:
+                            custom_tag_keys.append(custom_tag_key)
+                        custom_tag_value = custom_tag[custom_tag_key]
+                        custom_tag_response = iwx_client.get_custom_tag_by_key_value(custom_tag_key, custom_tag_value)
+                        custom_tag_response_parsed = custom_tag_response.get('result', {}).get('response', {}) \
+                            .get('result', [])
+                        if custom_tag_response_parsed:
+                            custom_tag_id = custom_tag_response_parsed[0]['id']
+                            table_payload_dict['custom_tags'].append(custom_tag_id)
+                        else:
+                            logger.error(f"Custom Tag not found for '{custom_tag}'")
+                else:
+                    logger.info("No Custom Tags")
+
+            except (IndexError, KeyError) as error:
+                logger.warning(f"CUSTOM_TAGS column is not found in CSV."
+                               f"Skipping custom tags configuration.")
+            except Exception as error:
+                logger.error(f"Failed to configure custom tags configuration : {error}")
+
             # Configuring Target Storage Type
             storage_format_user = configuration_json.get("ingestion_storage_format", "parquet").strip().lower()
             try:
@@ -1031,7 +1068,7 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                     f"TABLENAME.str.upper()=='{table_name.upper()}' & DATABASENAME.str.upper()=='{database_name.upper()}'").fillna(
                     False)['RTRIM_STRING_COLUMNS'].tolist()[0])
             except (IndexError, KeyError):
-                apply_rtrim_to_strings=False
+                apply_rtrim_to_strings='False'
             if eval(apply_rtrim_to_strings):
                 for column in table_schema:
                     if column.get("target_sql_type","") == 12:
