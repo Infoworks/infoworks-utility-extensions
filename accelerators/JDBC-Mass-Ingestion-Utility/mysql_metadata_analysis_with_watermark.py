@@ -193,6 +193,7 @@ def main():
     apply_rtrim_to_strings = configuration_json.get("rtrim_string_columns", False)
     resultant_df = resultant_df.assign(RTRIM_STRING_COLUMNS=apply_rtrim_to_strings)
     resultant_df = resultant_df.assign(USER_MANAGED_TABLE_TARGET_PATH='')
+    resultant_df = resultant_df.assign(CUSTOM_TAGS='')
     with ThreadPoolExecutor(max_workers=10) as executor:
         executor.map(get_ingestion_strategy, resultant_df.itertuples())
         executor.shutdown(wait=True)
