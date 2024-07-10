@@ -113,6 +113,9 @@ def assign_defaults_and_export_to_csv(resultant,source_type,configuration_file_p
     table_type = configuration_json.get("default_table_type","infoworks_managed_table")
     resultant = resultant.assign(TABLE_TYPE=table_type)
     resultant = resultant.assign(USER_MANAGED_TABLE_TARGET_PATH='')
+    apply_rtrim_to_strings = configuration_json.get("rtrim_string_columns", False)
+    resultant = resultant.assign(RTRIM_STRING_COLUMNS=apply_rtrim_to_strings)
+    resultant = resultant.assign(CUSTOM_TAGS='')
     for index, row in resultant.iterrows():
         if resultant['INGESTION_STRATEGY'][index] in ["INCREMENTAL_MERGE","INCREMENTAL_APPEND"]:
             merge_watermark = [value for value in configuration_json["merge_water_marks_columns"] if value in list(map(trim_spaces,
