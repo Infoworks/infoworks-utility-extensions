@@ -1586,7 +1586,8 @@ def main():
             if add_source_to_domain_response['result']['status'] == "success":
                 logger.info("Added source to domain successfully")
             else:
-                raise Exception("API status returned as Failed")
+                logger.info("Failed while adding the source to domain. Please add that manually if not already added.")
+                logger.info(add_source_to_domain_response)
 
         if exists(metadata_csv_path):
             logger.info(f"Opening the {source_type} metadata CSV '{metadata_csv_path}' file for reading")
