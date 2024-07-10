@@ -17,6 +17,7 @@ retrieves static and dynamic information of the Infoworks objects via Infoworks 
 ## Prerequisites
 * Python 3.6
 * Infoworks 5.3.x (not compatible with earlier version of Infoworks)
+* infoworkssdk==5.0
 
 ## Usage
 
@@ -127,7 +128,9 @@ The attributes offer a comprehensive view of the objects created in Infoworks en
 | job_start_time           | Time when Infoworks job started                                                     |
  | job_end_time             | Time when Infoworks job ended                                                       |
  | cluster_id               | Databaricks Compute Cluster ID                                                      |
+ | cluster_name             | Databricks Compute Cluster Name                                                     |
  | job_status               | Infoworks job status [RUNNING,FAILED,SUCCEEDED]                                     |
+ | job_table_status         | Individual Table level status of tables in job                                      |
 | source_name              | Name of Infoworks Source for Ingestion Jobs                                         |
  | source_file_names        | Comma Separated List of files ingested during ingestion jobs for file based sources |
 | source_schema_name       | Name of schema at source                                                            |
@@ -145,6 +148,7 @@ The attributes offer a comprehensive view of the objects created in Infoworks en
  | job_created_by           | User ID who triggered the job                                                       |
  | name                     | Name of the user ID                                                                 |
  | email                    | Email ID of the user                                                                |
+ | workspace_url            | Databricks Compute Workspace URL                                                    |
  
 
 ### Attributes from pipeline_metadata_extractor.py
