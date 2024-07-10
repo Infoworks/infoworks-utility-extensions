@@ -217,7 +217,7 @@ resultant=resultant.assign(CONNECTION_QUOTA='')
 resultant=resultant.assign(PARTITION_COLUMN='')
 resultant=resultant.assign(DERIVED_PARTITION='False')
 resultant=resultant.assign(DERIVED_FORMAT='')
-
+resultant=resultant.assign(CUSTOM_TAGS='')
 for index,row in resultant.iterrows():
     resultant['WATERMARK_COLUMN'][index]=[value for value in configuration_json["merge_water_marks_columns"] if value in list(map(trim_spaces,[value for value in configuration_json["merge_water_marks_columns"] if value in list(map(trim_spaces,resultant['SPLIT_BY_KEY_CANDIDATES'][index].split(',')))]))][0] if resultant['INGESTION_STRATEGY'][index]=='INCREMENTAL_MERGE' else ''
 #resultant['INCREMENTAL_STRATEGY']=resultant.apply(lambda x:'INCREMENTAL_MERGE' if len(list(x['PROBABLE_NATURAL_KEY_COLUMNS']))!=0 and len([value for value in configuration_json["append_water_marks_columns"] if value in x['SPLIT_BY_KEY_CANDIDATES'].split(',')])!=0 else 'FULL_REFRESH')
@@ -237,5 +237,4 @@ try:
 except Exception as e:
     print(str(e))
     exit(0)
-
 
