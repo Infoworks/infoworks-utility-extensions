@@ -157,6 +157,7 @@ resultant = resultant.assign(TPT_WITHOUT_IWX_PROCESSING='False')
 table_type = configuration_json.get("default_table_type", "infoworks_managed_table")
 resultant = resultant.assign(TABLE_TYPE=table_type)
 resultant = resultant.assign(USER_MANAGED_TABLE_TARGET_PATH='')
+resultant = resultant.assign(CUSTOM_TAGS='')
 for index, row in resultant.iterrows():
     if resultant['INGESTION_STRATEGY'][index] in ["INCREMENTAL_MERGE", "INCREMENTAL_APPEND"]:
         merge_watermark = [value for value in configuration_json["merge_water_marks_columns"] if
