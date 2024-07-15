@@ -6,8 +6,9 @@ import traceback
 import sys
 import os
 import argparse
+import pandas as pd
 #sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==4.1'}
+required = {'infoworkssdk==5.0.2','tabulate==0.9.0'}
 import pkg_resources
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
@@ -68,7 +69,7 @@ import networkx as nx
 global_lock = threading.Lock()
 num_fetch_threads = 1
 job_queue = queue.Queue(maxsize=100)
-
+overall_pipelines_report_list=[]
 
 def topological_sort_grouping(g):
     # copy the graph
@@ -91,12 +92,17 @@ def execute(thread_number, q):
             entity_type = task["entity_type"]
             if entity_type == "pipeline":
                 print(f"Pipeline {task['pipeline_config_path']} in progress")
-                iwx_client_prd.cicd_create_configure_pipeline(
+                overall_steps_status = iwx_client_prd.cicd_create_configure_pipeline(
                     configuration_file_path=task["pipeline_config_path"],
                     domain_name=task["domain_name"],
                     read_passwords_from_secrets=True,
                     env_tag=env_tag, secret_type="azure_keyvault" # pragma: allowlist-secret
                 )
+                pipeline_file_name = task['pipeline_config_path'].split("/")[-1]
+                pipeline_name = pipeline_file_name.strip(".json").split("#")[-1]
+                pipeline_name = pipeline_name.strip("pipeline_")
+                overall_status = overall_steps_status[-1][1]
+                overall_pipelines_report_list.append((task['domain_name'],pipeline_name,overall_status,overall_steps_status))
             elif entity_type == "source":
                 print(f"Source {task['source_config_path']} in progress")
                 res = iwx_client_prd.cicd_upload_source_configurations(
@@ -159,7 +165,7 @@ if __name__ == '__main__':
             print('*** Done with All Tasks ***')
     else:
         with open(os.path.join("configurations/modified_files", "pipeline.csv"), "r") as pipeline_files_fp:
-            overall_pipelines_report_list=[]
+
             for pipeline_file in pipeline_files_fp.readlines():
                 pl_name = pipeline_file.strip()
                 domain_name = pl_name.split("#")[0]
@@ -174,6 +180,12 @@ if __name__ == '__main__':
 
         print('*** Main thread waiting to complete all pipeline configuration requests ***')
         job_queue.join()
+        overall_pipelines_report_df = pd.DataFrame(data=overall_pipelines_report_list,
+                                               columns=["DOMAIN", "PIPELINE","OVERALL_STATUS","RESPONSE"])
+        overall_pipelines_report_df['RESPONSE'] = overall_pipelines_report_df['RESPONSE'].apply(lambda tup:"\n".join([f"{i[0]}: ({i[1]}, {i[2]})" for i in tup]))
+
+        print(overall_pipelines_report_df.to_markdown())
+
         print('*** Done with Pipeline Configurations ***')
 
     with open(os.path.join("configurations/modified_files", "pipeline_group.csv"), "r") as pipeline_grp_file_fp:

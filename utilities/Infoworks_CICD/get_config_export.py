@@ -2,12 +2,13 @@ import argparse
 import os
 import subprocess
 import sys
+import json
 import traceback
 import pkg_resources
 import urllib3
 urllib3.disable_warnings()
-# sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==4.1'}
+#sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
+required = {'infoworkssdk==5.0'}
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
 if missing:
@@ -16,6 +17,7 @@ if missing:
     user_site = subprocess.run([python, "-m", "site", "--user-site"], capture_output=True, text=True)
     module_path = user_site.stdout.strip()
     sys.path.append(module_path)
+print(sys.path)
 from infoworks.sdk.client import InfoworksClientSDK
 from infoworks.sdk.cicd.download_configurations.utils import Utils
 
@@ -36,6 +38,8 @@ def main():
                         help='Workflow name regex to automatically get list of workflow ids based on regex')
     parser.add_argument('--domain_name',required=False, type=str, help='Name of domain to search under for regex match of pipelines and workflows')
     parser.add_argument('--dump_watermarks',required=False, type=str, help='Dump watermark for tables True/False',default="False",choices=["True","False"])
+    parser.add_argument("--custom_tag", type=str, required=False, default="{}", help="Custom tag as JSON string")
+    parser.add_argument("--entity_type", type=str, required=False, default="all", help="entity type(source,pipeline,workflow)")
     args = parser.parse_args()
     # Connect to Dev environment and get the source export
     refresh_token = args.refresh_token
@@ -48,12 +52,34 @@ def main():
     if args.pipeline_group_ids is not None:
         pipeline_grp_ids = args.pipeline_group_ids.split(",")
     pipeline_ids=[]
+    print("args.custom_tag", args.custom_tag)
+    custom_tag = json.loads(args.custom_tag)
+    custom_tag_id = None
+    key, value = None, None
+    for k, v in custom_tag.items():
+        key, value = k, v
+    if (key is not None and value is not None):
+        custom_tag_response = iwx_client_dev.get_list_of_custom_tags(
+            params={"filter": {"$and": [{"key": f"{key}", "value": f"{value}"}]}})
+        custom_tag_response = custom_tag_response["result"]["response"]["result"]
+        if custom_tag_response:
+            custom_tag_id = custom_tag_response[0]["id"]
+        else:
+            print(f"Error getting the ID for the custom tag {args.custom_tag}")
+            print(custom_tag_response)
     try:
         if args.source_ids is not None:
             iwx_client_dev.cicd_get_sourceconfig_export(source_ids=args.source_ids.split(","),
-                                                   config_file_export_path=os.path.join(base_path, "configurations"),dump_watermarks=dump_watermarks)
+                                                   config_file_export_path=os.path.join(base_path, "configurations"),dump_watermarks=dump_watermarks,custom_tag_id=custom_tag_id)
         elif args.source_name_regex is not None:
             sources_response = iwx_client_dev.get_list_of_sources(params={"filter": {"name": {"$regex": args.source_name_regex}}})
+            sources = sources_response["result"]["response"]["result"]
+            source_ids = [source["id"] for source in sources]
+            iwx_client_dev.cicd_get_sourceconfig_export(source_ids=source_ids,
+                                                        config_file_export_path=os.path.join(base_path,
+                                                                                             "configurations"))
+        elif custom_tag_id is not None and (args.entity_type == "source" or args.entity_type == "all"):
+            sources_response = iwx_client_dev.get_list_of_sources(params={"filter": {"custom_tags":{"$in":[custom_tag_id]}}})
             sources = sources_response["result"]["response"]["result"]
             source_ids = [source["id"] for source in sources]
             iwx_client_dev.cicd_get_sourceconfig_export(source_ids=source_ids,
@@ -109,6 +135,21 @@ def main():
                                                               config_file_export_path=os.path.join(base_path,
                                                                                                    "configurations"),
                                                               pipeline_grp_config=None)
+        elif custom_tag_id is not None and (args.entity_type == "pipeline" or args.entity_type == "all"):
+            if args.domain_name is None:
+                print("Domain name cannot be None for exporting pipelines based on tags")
+                exit(-100)
+            else:
+                domain_response = iwx_client_dev.get_domain_id(args.domain_name)
+                domain_id = domain_response["result"]["response"]["domain_id"]
+                pipelines_response = iwx_client_dev.list_pipelines(domain_id=domain_id, params={
+                    "filter": {"custom_tags": {"$in": [custom_tag_id]}}})
+                pipelines = pipelines_response["result"]["response"]["result"]
+                pipeline_ids = [pipeline["id"] for pipeline in pipelines]
+                iwx_client_dev.cicd_get_pipelineconfig_export(pipeline_ids=pipeline_ids,
+                                                              config_file_export_path=os.path.join(base_path,
+                                                                                                   "configurations"),
+                                                              pipeline_grp_config=None)
         else:
             pass
         if args.pipeline_ids is None and len(pipeline_grp_ids)==0 and args.pipeline_name_regex is None:
@@ -139,6 +180,21 @@ def main():
                 domain_id = domain_response["result"]["response"]["domain_id"]
                 workflows_response = iwx_client_dev.get_list_of_workflows(domain_id=domain_id, params={
                     "filter": {"name": {"$regex": args.workflow_name_regex}}})
+                workflows = workflows_response["result"]["response"]["result"]
+                workflow_ids = [workflow["id"] for workflow in workflows]
+                iwx_client_dev.cicd_get_workflowconfig_export(workflow_ids=workflow_ids,
+                                                              config_file_export_path=os.path.join(base_path,
+                                                                                                   "configurations"))
+
+        elif custom_tag_id is not None and (args.entity_type == "workflow" or args.entity_type == "all"):
+            if args.domain_name is None:
+                print("Domain name cannot be None for workflow regex match")
+                exit(-100)
+            else:
+                domain_response = iwx_client_dev.get_domain_id(args.domain_name)
+                domain_id = domain_response["result"]["response"]["domain_id"]
+                workflows_response = iwx_client_dev.get_list_of_workflows(domain_id=domain_id, params={
+                    "filter": {"custom_tags": {"$in": [custom_tag_id]}}})
                 workflows = workflows_response["result"]["response"]["result"]
                 workflow_ids = [workflow["id"] for workflow in workflows]
                 iwx_client_dev.cicd_get_workflowconfig_export(workflow_ids=workflow_ids,
