@@ -743,14 +743,14 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                                f"column was not found in csv")
 
             storage_format = storage_format_user.lower()
-            if storage_format in ["orc", "parquet", "avro", "delta", ""]:
+            if storage_format in ["orc", "parquet", "avro", "delta", "uniform",""]:
                 if storage_format != "":
                     logger.info(f"Using the storage format: {storage_format}")
                     table_payload_dict["storage_format"] = storage_format
                 else:
                     pass
             else:
-                logger.error("Please provide the valid storage format(orc,parquet,delta or avro)\nExiting..")
+                logger.error("Please provide the valid storage format(orc,parquet,delta,avro or uniform)\nExiting..")
                 raise Exception("Invalid storage format")
 
             # Configure Sub Set Filters
