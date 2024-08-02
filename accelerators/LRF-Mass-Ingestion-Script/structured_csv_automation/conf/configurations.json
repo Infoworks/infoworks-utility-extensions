@@ -1,0 +1,47 @@
+{
+  "protocol": "https",
+  "host": "",
+  "port": "443",
+  "refresh_token":"",
+  "environment_name":"",
+  "environment_storage_name":"Default_Storage",
+  "environment_compute_name":"Default_Persistent_Compute_Template",
+  "sftp_details": {
+        "sftp_host": "",
+        "sftp_port": "22",
+        "sftp_username": "",
+        "sftp_secret_name": "",
+        "sftp_base_path": "/"
+  },
+  "append_water_marks_columns":["insert_timestamp","LOADDATE","RECADDTS","STARTDATE"],
+  "merge_water_marks_columns":["UPDATEDATE","update_timestamp","REC_UPD_TS","REC CHG TS","it_update_date","order_date","load_dt","Load_dt","src_data_dt"],
+  "ingestion_storage_format":"parquet",
+  "replace_null_with_defaults": false,
+  "replace_files_to_archive_in_path": true,
+  "use_staging_schema_for_infoworks_managed_tables": true,
+  "max_modified_timestamp": "",
+  "natural_key_regex":".*_nm",
+  "source_extensions_to_add":["att_source_extensions"],
+  "ignore_columns_from_sf":["load_dt","updt_dt"],
+  "update_dt_columns": ["updt_dt","updt_dt_tm","Updt_dt","LST_UPDT_DT_TM","lst_updt_dt_tm"],
+  "load_dt_columns": ["load_dt","load_dt_tm","Load_dt","LOAD_DT_TM"],
+  "file_properties": {
+                    "column_enclosed_by": "\"",
+                    "column_separator": "|",
+                    "encoding": "UTF-8",
+                    "escape_character": "\\",
+                    "header_rows_count": 0
+                },
+  "sfDatabase": "",
+  "sfSchema": "PUBLIC",
+  "sfStageSchema":"PUBLIC",
+  "sfWarehouse": "DEMO_WH",
+  "table_groups":[{
+              "name":"TG_AZURE_CSV",
+              "environment_compute_name":"Default_Persistent_Compute_Template",
+              "max_parallel_tables":5,
+              "table_names":[]
+  }],
+  "run_workflow":true,
+  "poll_workflow":false
+  }

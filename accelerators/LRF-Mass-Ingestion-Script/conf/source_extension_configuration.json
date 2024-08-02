@@ -1,0 +1,29 @@
+{
+        "name": "att_source_extensions",
+        "extension_type": "Hive_UDF",
+        "ingestion_extension_type": "source_extension",
+        "registered_udf": true,
+        "transformations": [
+            {
+                "alias": "nvl",
+                "additional_params_count": 1,
+                "params_details": [
+                    {
+                        "value": "\"\""
+                    }
+                ]
+            },
+            {
+                "alias": "nvl2",
+                "additional_params_count": 2,
+                "params_details": [
+                    {
+                        "value": "\"\""
+                    },
+                    {
+                        "value": "\"\""
+                    }
+                ]
+            }
+        ]
+    }

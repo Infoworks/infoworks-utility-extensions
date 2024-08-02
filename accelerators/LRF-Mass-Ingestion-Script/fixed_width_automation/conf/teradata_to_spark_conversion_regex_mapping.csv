@@ -1,0 +1,6 @@
+td_regex_pattern,spark_mapping
+CURRENT_TIMESTAMP\(\d+\),CURRENT_TIMESTAMP()
+\(\s*CASE\s+WHEN\s+(.*)\s+END\s*\),CASE WHEN \1 END
+"\(\s*CASE\s+WHEN\s+(.*)\s+END\s*\(DATE\s*,\s*FORMAT\s*(\'.*\')\)\)","CASE WHEN \1 END,\2"
+"to_date\(\(\s*CASE\s+WHEN\s+(.*)\s+END\s*\,\s*(\'.*\')","to_date(CASE WHEN \1 END, \2"
+"(:[a-zA-Z_0-9]+)\s*\(TIMESTAMP\(6\)\)","nvl2(to_timestamp(\1,yyyy-MM-dd HH:mm:ss.SSS'Z'),NULL)"

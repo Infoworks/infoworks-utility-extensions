@@ -1,0 +1,23 @@
+{
+"yyyy-mm-dd":"yyyy-MM-dd",
+"mm/dd/yyyy":"MM/dd/yyyy",
+"hh:mi":"HH:mm",
+"yyyy/mm/ddbhh:mi:ss":"yyyy/MM/dd HH:mm:ss",
+"mm/dd/yyyybhh:mi:ss":"MM/dd/yyyy HH:mm:ss",
+"mmddyyyy":"MMddyyyy",
+"yyyy/mm/dd": "yyyy/MM/dd",
+"dd-mon-yy":"dd-MMM-yy",
+"e3bmmmbddbyybhh:mi:ss":"EEE MMM dd yyyy HH:mm:ss",
+  "yyyymmdd":"yyyyMMdd",
+  "dd-mmm-yy":"dd-MMM-yy",
+  "d/m/yyyy h:m:s":"d/M/yyyy H:m:s",
+  "d/m/yyyy h:m":"d/M/yyyy H:m",
+  "hh:mi:ss":"HH:mm:ss",
+  "yyyy-mm-ddbhh:mi:ss.s(6)": "yyyy-MM-dd HH:mm:ss.SSS'Z'",
+  "yyyy-mm-ddbhh:mi:ss.s(0)": "yyyy-MM-dd HH:mm:ss",
+  "yyyymm": "yyyyMM",
+  "yyyymmddhhmissds(6)": "yyyyMMddHHmmss.SSSSSS",
+  "dd-mmm-yyyy": "dd-MMM-yyyy"
+}
+
+

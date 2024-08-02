@@ -1,0 +1,3 @@
+pandas
+colorama
+infoworkssdk==4.0a8
