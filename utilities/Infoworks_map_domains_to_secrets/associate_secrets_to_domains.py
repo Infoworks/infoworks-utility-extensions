@@ -52,15 +52,18 @@ def associate_secrets_to_domains(iwx_client):
         sources = sources.get("result",{}).get("response",{}).get("result",[])
         domain_secrets = defaultdict(set)
         domain_secret_names={}
+        domain_envs=defaultdict(set)
         res = []
         for source in sources:
             #print(json.dumps(source,indent=4))
+            environment_id = source["environment_id"]
             source_connection = iwx_client.get_source_connection_details(source_id=source["id"])
             source_connection = source_connection.get("result",{}).get("response",{}).get("result",[])
             secret_id = find_secret_id_in_nested_dict(iwx_client=iwx_client,data=source_connection)
             if secret_id is not None:
                 for domain_id in source.get("associated_domains",[]):
                     domain_secrets[domain_id].add(secret_id)
+                    domain_envs[domain_id].add(environment_id)
             tables = iwx_client.list_tables_under_source(source_id=source["id"] ,params={"filter":{"export_configuration.sync_type":{ "$exists": True, "$ne": "DISABLED"},
                                                                                                    "export_configuration.connection.data_connection_id": {
                                                                                                        "$exists": False}
@@ -72,6 +75,16 @@ def associate_secrets_to_domains(iwx_client):
                 if secret_id is not None:
                     logging.info(f"secret_found:{secret_id}")
                     domain_secrets[domain_id].add(secret_id)
+        domains_list_response = iwx_client.list_domains_as_admin()
+        domains_list = domains_list_response.get("result",{}).get("response",{}).get("result",[])
+        for domain in domains_list:
+            domain_id = domain["id"]
+            if domain.get(domain["id"],""):
+                pipelines = iwx_client.list_pipelines(domain_id=domain_id)
+                pipelines = pipelines.get("result",{}).get("response",{}).get("result",[])
+                for pipeline in pipelines:
+                    domain_envs[domain_id].add(pipeline["environment_id"])
+
         for k,v in domain_secrets.items():
             domain_update_body={}
             domain_secrets[k]=list(v)
@@ -81,30 +94,32 @@ def associate_secrets_to_domains(iwx_client):
                 domain_name = domain_name.get("name",k)
                 secret_names = [get_secret_name(iwx_client=iwx_client,secret_id=secret_id) for secret_id in v]
                 domain_secret_names[domain_name] = secret_names
-                res.append({"domain_name":domain_name,"secrets":secret_names})
+                res.append({"domain_name":domain_name,"secrets":secret_names,"environments":domain_envs.get(k,[])})
                 domain_update_body["secrets"] = list(v)
-                update_response = iwx_client.update_domain(domain_id = k ,config_body=domain_update_body)
-                update_response = update_response.get("result",{}).get("response",{})
-                logging.info(f"update_response:{update_response}")
-                if update_response.get("iw_code")=="IW10025":
-                    logging.info("Trying to fix the error by adding missing secrets...")
-                    secret_names_string = update_response.get("details","")
-                    pattern = r"Cannot remove secrets in use from domains : ([\w\s,-]+)"
-                    # Find all matches
-                    import re
-                    matches = re.findall(pattern, secret_names_string)
-                    logging.info(f"matches:{matches}")
-                    extra_secrets = []
-                    if matches:
-                        extra_secrets = [secret.strip() for secret in re.split(r'[,]+', matches[0])]
-                        extra_secrets = [secret for secret in extra_secrets if secret]
-                        logging.info(f"extra_secrets:{extra_secrets}")
-                        domain_secret_names[domain_name].extend(extra_secrets)
-                    extra_secret_ids = [secret_name_id_mapping[secret_name] for secret_name in extra_secrets]
-                    domain_update_body["secrets"].extend(extra_secret_ids)
-                    domain_update_body["secrets"] = list(set(domain_update_body["secrets"]))
-                    new_update_response = iwx_client.update_domain(domain_id=k, config_body=domain_update_body)
-                    logging.info(f"new_update_response:{new_update_response}")
+                domain_update_body["environment_ids"] = list(domain_envs.get(k,[]))
+                if domain_update_body["secrets"] and domain_update_body["environment_ids"]:
+                    update_response = iwx_client.update_domain(domain_id = k ,config_body=domain_update_body)
+                    update_response = update_response.get("result",{}).get("response",{})
+                    logging.info(f"update_response:{update_response}")
+                    if update_response.get("iw_code")=="IW10025":
+                        logging.info("Trying to fix the error by adding missing secrets...")
+                        secret_names_string = update_response.get("details","")
+                        pattern = r"Cannot remove secrets in use from domains : ([\w\s,-]+)"
+                        # Find all matches
+                        import re
+                        matches = re.findall(pattern, secret_names_string)
+                        logging.info(f"matches:{matches}")
+                        extra_secrets = []
+                        if matches:
+                            extra_secrets = [secret.strip() for secret in re.split(r'[,]+', matches[0])]
+                            extra_secrets = [secret for secret in extra_secrets if secret]
+                            logging.info(f"extra_secrets:{extra_secrets}")
+                            domain_secret_names[domain_name].extend(extra_secrets)
+                        extra_secret_ids = [secret_name_id_mapping[secret_name] for secret_name in extra_secrets]
+                        domain_update_body["secrets"].extend(extra_secret_ids)
+                        domain_update_body["secrets"] = list(set(domain_update_body["secrets"]))
+                        new_update_response = iwx_client.update_domain(domain_id=k, config_body=domain_update_body)
+                        logging.info(f"new_update_response:{new_update_response}")
             except Exception as e:
                 logging.error(str(e))
                 errors.append(str(e))
@@ -114,7 +129,7 @@ def associate_secrets_to_domains(iwx_client):
         errors.append(str(e))
     #print(json.dumps(domain_secrets,indent=4))
     #print(json.dumps(domain_secret_names,indent=4))
-    df = pd.DataFrame(res,columns=["domain_name","secrets"])
+    df = pd.DataFrame(res,columns=["domain_name","secrets","environments"])
     #print(df)
     cwd = os.getcwd()
     logging.info(f"writing data to csv file : {cwd}/associate_screts_to_domains.csv")
