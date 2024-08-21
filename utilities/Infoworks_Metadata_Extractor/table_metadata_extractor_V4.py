@@ -33,11 +33,15 @@ class IwxException(Exception):
         return self.final_error
 
 
-def get_all_sources():
+def get_all_sources(iwx_source_ids):
     # Fetches all available sources in the environment
     try:
         logging.info("Initiating Request to get Sources ")
-        sources_response = iwx_client.get_list_of_sources(params={'limit': 50})
+        if iwx_source_ids:
+            sources_response = iwx_client.get_list_of_sources(params={'limit': 50,
+                                                                      'filter': {"_id": {"$in": iwx_source_ids}}})
+        else:
+            sources_response = iwx_client.get_list_of_sources(params={'limit': 50})
         logging.debug("get_list_of_sources() Response: {}".format(json.dumps(sources_response)))
 
         if sources_response['result']['status'] == 'success':
@@ -85,7 +89,7 @@ def get_data_environment_details(environment_id):
         environment_details_response = iwx_client.get_environment_details(environment_id=environment_id)
         logging.debug("environment_details_response() - Response: {}".format(json.dumps(environment_details_response)))
 
-        if environment_details_response['result']['status'] == 'success' and\
+        if environment_details_response['result']['status'] == 'success' and \
                 environment_details_response['result']['response'].get('result', []):
             return environment_details_response['result']['response'].get('result', {})[0]
         else:
@@ -93,6 +97,24 @@ def get_data_environment_details(environment_id):
     except Exception as data_environment_error:
         logging.error("Failed to retrieve data environment details \nError: {error}"
                       .format(error=data_environment_error))
+
+
+def get_domain_name_from_id(domain_id):
+    try:
+        domain_name_response = iwx_client.get_domain_details(domain_id)
+        logging.debug(f"get_domain_details() - Response: {json.dumps(domain_name_response)}")
+
+        if domain_name_response['result']['status'] == 'success':
+            domain_name = domain_name_response['result'].get('response', {}).get('result', {}).get('name')
+            if domain_name:
+                return domain_name
+            else:
+                raise Exception(f"Returned Domain Name is None")
+        else:
+            raise Exception(f"API Status Returned as Failed")
+    except Exception as domain_error:
+        # raise Exception(f"Failed to Fetch Domain Name with Domain ID {domain_id}")
+        logging.error(f"Failed to Fetch Domain Name with Domain ID {domain_id} : {domain_error}")
 
 
 def get_all_tables(source_id):
@@ -161,6 +183,7 @@ def extract_table_metadata(result):
     try:
         source_schema_name = result.get('schema_name_at_source')
         source_table_name = result.get('original_table_name')
+        table_description = result.get('description')
         if result['configuration'].get('include_filename_regex') is not None or \
                 result['configuration'].get('exclude_filename_regex') is not None:
             source_file_pattern = "Include Regex: {}, Exclude Regex: {}" \
@@ -194,6 +217,21 @@ def extract_table_metadata(result):
             target_schema_name = result['configuration'].get('target_schema_name')
             target_table_name = result['configuration'].get('target_table_name')
 
+        custom_tags_ids = result.get('configuration', {}).get('custom_tags', [])
+        custom_tags = []
+        if custom_tags_ids:
+            for tag_id in custom_tags_ids:
+                custom_tag_response = iwx_client.get_custom_tag(custom_tag_id=tag_id)
+                custom_tag_result = custom_tag_response.get('result', {}).get('response', {}).get('result', {})
+                if custom_tag_result:
+                    custom_tag_key = custom_tag_result.get('key')
+                    custom_tag_value = custom_tag_result.get('value')
+                    custom_tag = {custom_tag_key: custom_tag_value}
+                    custom_tags.append(custom_tag)
+                else:
+                    print(f"Unable to get custom tag info for custom tag id '{tag_id}': {custom_tag_response}")
+                # print(f"custom tag response: {custom_tag_response}")
+
         metadata = {
             'source_schema_name': source_schema_name,
             'source_table_name': source_table_name,
@@ -203,7 +241,9 @@ def extract_table_metadata(result):
             'target_columns_and_datatypes': json.dumps(target_columns_and_datatypes),
             'source_columns_and_datatypes': json.dumps(source_columns_and_datatypes),
             'target_type': target_type,
-            'source_file_pattern': source_file_pattern
+            'source_file_pattern': source_file_pattern,
+            'description': table_description,
+            'custom_tags': custom_tags
         }
 
         return 0, metadata, ''
@@ -216,7 +256,7 @@ def extract_table_metadata(result):
 
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==4.0a14'}
+    required = {'pandas', 'infoworkssdk==5.0.0'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
 
@@ -233,34 +273,42 @@ if __name__ == "__main__":
 
     try:
         parser = argparse.ArgumentParser(description='Extracts metadata of tables and columns created in Infoworks')
+        parser.add_argument('--source_ids', required=False, default=[],
+                            help='Fetches metadata of table and columns for the sources')
         parser.add_argument('--config_file', required=True, help='Fully qualified path of the configuration file')
         parser.add_argument('--output_dir', default=None)
         args = parser.parse_args()
         config_file_path = args.config_file
         if args.output_dir:
-            output_file = args.output_dir+"/TableMetadata.csv"
-            output_failed_file = args.output_dir+"/Failed_Tables.csv"
+            output_file = args.output_dir + "/TableMetadata.csv"
+            output_failed_file = args.output_dir + "/Failed_Tables.csv"
         else:
             current_directory = os.getcwd()
-            output_file = current_directory+"/TableMetadata.csv"
-            output_failed_file = current_directory+"/Failed_Tables.csv"
+            output_file = current_directory + "/TableMetadata.csv"
+            output_failed_file = current_directory + "/Failed_Tables.csv"
 
         if not os.path.exists(config_file_path):
             raise Exception(f"{config_file_path} not found")
         with open(config_file_path) as f:
             config = json.load(f)
+
+        if args.source_ids:
+            raw_source_ids = args.source_ids.split(',')
+            source_ids = [s.strip() for s in raw_source_ids]
+        else:
+            source_ids = []
         # Info works Client SDK Initialization
         infoworks.sdk.local_configurations.REQUEST_TIMEOUT_IN_SEC = 60
         infoworks.sdk.local_configurations.MAX_RETRIES = 3  # Retry configuration, in case of api failure.
         iwx_client = InfoworksClientSDK()
         iwx_client.initialize_client_with_defaults(config.get("protocol", "https"), config.get("host", None),
                                                    config.get("port", 443), config.get("refresh_token", None))
-
-        sources = get_all_sources()
+        sources = get_all_sources(source_ids)
         failed_data = []
         final_data = []
         data_environments = {}
         for source in sources:
+            # logging.info(f"Source Info : {json.dumps(source)}")
             source_name = source.get('name')
             source_type = source.get('type')
             source_sub_type = source.get('sub_type')
@@ -269,7 +317,19 @@ if __name__ == "__main__":
             source_connection_username = source_connection_details.get('username')
             snowflake_warehouse = source_connection_details.get('snowflake_warehouse')
             snowflake_env_profile = source_connection_details.get('snowflake_profile')
-
+            domain_ids = source.get('associated_domains', [])
+            # print(f"IWX Domain IDs: {domain_ids}")
+            # try:
+            iwx_domain_names = []
+            for iwx_domain_id in domain_ids:
+                iwx_domain_name = get_domain_name_from_id(iwx_domain_id)
+                if iwx_domain_name is not None:
+                    iwx_domain_names.append(iwx_domain_name)
+            # iwx_domain_names = [get_domain_name_from_id(iwx_domain_id) for iwx_domain_id in domain_ids]
+            # except Exception as error:
+            #    logging.error("Failed to get domain names for the source {iw}")
+            # print(f"IWX Domains: {iwx_domain_names}")
+            domain_names = ','.join(iwx_domain_names)
             data_env_id = source.get('environment_id')
             if data_env_id in data_environments.keys():
                 environment_details = data_environments[data_env_id]
@@ -284,7 +344,7 @@ if __name__ == "__main__":
                 else:
                     data_environment_type = environment_details.get('platform')
                 if data_environment_type.upper() == "SNOWFLAKE":
-                    snowflake_profiles = environment_details.get('data_warehouse_configuration', {}).\
+                    snowflake_profiles = environment_details.get('data_warehouse_configuration', {}). \
                         get('snowflake_profiles', [])
                     for profile in snowflake_profiles:
                         if profile['name'] == snowflake_env_profile:
@@ -298,7 +358,8 @@ if __name__ == "__main__":
 
             if tables:
                 for table in tables:
-                    table_info_row = {'source_name': '', 'source_type': '', 'source_sub_type': '',
+                    table_info_row = {'source_name': '', 'associated_domains': '', 'source_type': '',
+                                      'source_sub_type': '',
                                       'source_connection_url': '', 'snowflake_warehouse': '',
                                       'source_connection_username': '', 'data_environment_name': '',
                                       'data_environment_type': '', 'snowflake_profile': '',
@@ -310,17 +371,18 @@ if __name__ == "__main__":
                                       'target_type': ''}
 
                     # response = get_table_info(source['id'], table['id'])
-                    logging.debug("Table Info: {}".format(json.dumps(table)))
+                    # logging.debug("Table Info: {}".format(json.dumps(table)))
                     status, extracted_metadata, error_msg = extract_table_metadata(table)
-                    table_metadata = get_table_tags_and_description(source.get('id'), table['id'])
-                    if table_metadata:
-                        table_tags, table_description = table_metadata
-                        table_tags = ','.join(table_tags)
-                    else:
-                        table_tags = None
-                        table_description = None
+                    # table_metadata = get_table_tags_and_description(source.get('id'), table['id'])
+                    # if table_metadata:
+                    #    table_tags, table_description = table_metadata
+                    #    table_tags = ','.join(table_tags)
+                    # else:
+                    # table_tags = None
+                    # table_description = None
                     if status == 0:
                         table_info_row['source_name'] = source_name
+                        table_info_row['associated_domains'] = domain_names
                         table_info_row['source_type'] = source_type
                         table_info_row['source_sub_type'] = source_sub_type
                         table_info_row['source_connection_url'] = source_connection_url
@@ -337,8 +399,8 @@ if __name__ == "__main__":
                         table_info_row['target_database_name'] = extracted_metadata.get('target_database_name')
                         table_info_row['target_schema_name'] = extracted_metadata.get('target_schema_name')
                         table_info_row['target_table_name'] = extracted_metadata.get('target_table_name')
-                        table_info_row['description'] = table_description
-                        table_info_row['tags'] = table_tags
+                        table_info_row['description'] = extracted_metadata.get('description')
+                        table_info_row['custom_tags'] = extracted_metadata.get('custom_tags')
                         table_info_row['target_columns_and_datatypes'] = \
                             extracted_metadata.get('target_columns_and_datatypes')
                         table_info_row['target_type'] = extracted_metadata.get('target_type')
@@ -351,7 +413,8 @@ if __name__ == "__main__":
         if len(final_data) > 0:
             logging.info(f"Saving Output: {output_file}")
             pd.DataFrame(final_data).to_csv(output_file,
-                                            columns=['source_name', 'source_type', 'source_sub_type',
+                                            columns=['source_name', 'associated_domains', 'source_type',
+                                                     'source_sub_type',
                                                      'source_connection_url', 'snowflake_warehouse',
                                                      'source_connection_username',
                                                      'source_schema_name', 'source_table_name',
@@ -360,14 +423,14 @@ if __name__ == "__main__":
                                                      'snowflake_profile_username',
                                                      'target_type', 'target_database_name', 'target_schema_name',
                                                      'target_table_name',
-                                                     'description', 'target_columns_and_datatypes', 'tags',
+                                                     'description', 'target_columns_and_datatypes', 'custom_tags',
                                                      'source_file_name',
                                                      ],
                                             index=False)
         if len(failed_data) > 0:
             logging.info(f"Failed Tables Found, Please check {output_failed_file} for more information")
             pd.DataFrame(failed_data).to_csv(output_failed_file, columns=['source_name', 'table_name',
-                                                                           'error_message'],
+                                                                          'error_message'],
                                              index=False)
 
     except Exception as error:
