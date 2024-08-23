@@ -277,7 +277,7 @@ class DomainEntity(AdminEntity):
             existing_domain_response = existing_domain_response.get("result", {}).get("response", {}).get("result", {})
             existing_domain_secrets = {}
             if existing_domain_response:
-                existing_domain_secrets["secrets"] = existing_domain_secrets.get("secrets", [])
+                existing_domain_secrets["secrets"] = existing_domain_response.get("secrets", [])
                 configuration_body = self.merge_dicts(configuration_body, existing_domain_secrets)
             domain_updation_response = self.iwx_client.update_domain(domain_id=domain_id,config_body=configuration_body)
             already_existing_source_ids_response = self.iwx_client.get_sources_associated_with_domain(domain_id=domain_id)
@@ -316,7 +316,8 @@ class DomainEntity(AdminEntity):
                 environment_names = row.get("environment_names","").split(",")
                 environment_ids = [self.iwx_client.get_environment_id_from_name(environment_name).get("result",{}).get("response",{}).get("environment_id",None) for environment_name in environment_names]
                 environment_ids = [env_id for env_id in environment_ids if env_id is not None]
-                temp["environment_ids"]=environment_ids
+                temp["environment_ids"].extend(environment_ids)
+                temp["environment_ids"] = list(set(temp["environment_ids"]))
                 current_user_details = self.iwx_client.list_users(params={"filter":{"refreshToken":self.iwx_client.client_config.get("refresh_token","")}})
                 current_user_result = current_user_details.get("result",{}).get("response",{}).get("result",[])
                 if len(current_user_result)>0:
@@ -337,18 +338,20 @@ class DomainEntity(AdminEntity):
                 temp["users"] = list(set(temp["users"]))
                 # 6.0 specific changes support for assigning secrets at domain
                 secrets = row.get("secret_names", "").split(",")
-                secrets = [secret.strip() for secret in secrets]
+                secrets = [secret.strip() for secret in secrets if len(secret.strip()) > 0]
                 temp["secrets"] = []
                 for secret in secrets:
                     secret_details = self.iwx_client.list_secrets(
                         params={"filter": {"name": secret}})
                     secret_result = secret_details.get("result", {}).get("response", {}).get("result", [])
+                    if secret_result == []:
+                        raise Exception(f"Could not find the secret with the name {secret}. Please validate the same!")
                     for filtered_secret in secret_result:
                         filtered_secret_id = filtered_secret.get("id", "")
                         if filtered_secret_id:
                             temp["secrets"].append(filtered_secret_id)
                         else:
-                            print(f"Did not find secret {secret}. Ignoring the user")
+                            print(f"Did not find secret {secret}. Ignoring the secret")
                 temp["secrets"] = list(set(temp["secrets"]))
                 accessible_sources = row.get("accessible_sources", [])
                 accessible_sources=accessible_sources.split(",") if accessible_sources is not None else []

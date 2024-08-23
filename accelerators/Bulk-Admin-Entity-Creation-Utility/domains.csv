@@ -1,4 +1,4 @@
 name,description,environment_names,accessible_sources,users,secret_names
-test_domain_1,test_domain_1_description,"CE_denv-dit-dev-dw-dpg1-sf-sdr_procs,AZ_DB_600_12_ENV","ce_iwx_sdk_srcname_snowflake,CE_DEMO_CSV",,"db-password"
+test_domain_1,test_domain_1_description,"env_1","ce_iwx_sdk_srcname_snowflake,CE_DEMO_CSV",,"db-password"
 test_domain_2,test_domain_2_description,AZ_DB_600_12_ENV,CE_DEMO_CSV,,
 test_domain_3,test_domain_3_description,SF_AZ_ENV_600,CE_CSV_SOURCE,,
