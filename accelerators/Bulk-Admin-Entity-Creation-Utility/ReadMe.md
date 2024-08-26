@@ -1,7 +1,7 @@
 ## Bulk Admin Entity Creation Utility
 
 ### Problem description:
-Customer currently finds it difficult to create lot of admin artifacts like environment profiles,secrets,domains etc.
+Customer currently finds it difficult to create lot of admin artifacts like environment profiles,secrets,domains,environments,computes,storages etc.
 Expectation is to provide a script that creates the admin entities as per CSV file.
 
 ### Prerequisites:
@@ -21,6 +21,9 @@ profile3,false,"[{ ""name"": ""DEMO_WH"",""description"": """",""is_default_ware
 profile4,false,"[{ ""name"": ""DEMO_WH"",""description"": """",""is_default_warehouse"": false}]",ramesh,mongo-pg-pwd,"[{""is_active"": true,""is_encrypted"": false,""key"": ""CLIENT_SESSION_KEEP_ALIVE"",""value"": ""TRUE""}]","[{""is_active"": true,""is_encrypted"": false,""key"": ""JDBC_QUERY_RESULT_FORMAT"",""value"": ""JSON""}]"
 profile5,false,"[{ ""name"": ""DEMO_WH"",""description"": """",""is_default_warehouse"": false}]",ramesh,mongo-pg-pwd,"[{""is_active"": true,""is_encrypted"": false,""key"": ""CLIENT_SESSION_KEEP_ALIVE"",""value"": ""TRUE""}]","[{""is_active"": true,""is_encrypted"": false,""key"": ""JDBC_QUERY_RESULT_FORMAT"",""value"": ""JSON""}]"
 ```
+
+3)  Environment should be created prior to creation of compute templates and storage.
+   
 ### Infoworks Version support:
 5.5 +
 
@@ -38,7 +41,7 @@ tar -xvf create_admin_entities_in_bulk.tar.gz
 
 ```shell
 cd create_admin_entities_in_bulk;
-python create_admin_entities_in_bulk.py --protocol <http/https> --host <infoworks_hostname> --port <3000/443> --refresh_token <refresh_token> --metadata_csv_path <path to metadata csv file> --admin_entity_type <environment/secret/domain> --environment_id <optional and applicable only for environment entity type>
+python create_admin_entities_in_bulk.py --protocol <http/https> --host <infoworks_hostname> --port <3000/443> --refresh_token <refresh_token> --metadata_csv_path <path to metadata csv file> --admin_entity_type <profile/secret/domain/environment/compute/storage> --environment_id <optional and applicable only for environment entity type>
 ```
 
 Where,
@@ -47,11 +50,11 @@ Where,
 3) port : port where infoworks UI is hosted  <3000/443>
 4) refresh_token - Infoworks user refresh_token for API authentication
 5) metadata_csv_path - absolute path to the metadata csv file which contains information about profiles for environments / secrets for admin secrets (Schema for the csv can be found in samples provided in next section)
-6) admin_entity_type - can be either environment (if trying to configure profiles in bulk for a given environment) or secret( if trying to create admin secrets in bulk) or domain( if trying to create domains in bulk) 
-7) environment_id (**only for admin_entity_type environment**): pass the id of clone environment under which the profiles are to be created in bulk.
+6) admin_entity_type - can be either profile (if trying to configure profiles in bulk for a given environment) or secret( if trying to create admin secrets in bulk) or domain( if trying to create domains in bulk) or environment (if trying to create environments in bulk) or compute (if trying to create compute templates in bulk) or storage (if trying to create storage in bulk) 
+7) environment_id (**only for admin_entity_type profile**): pass the id of clone environment under which the profiles are to be created in bulk.
 
 
-#### Sample for metadata csv of environments:
+#### Sample for metadata csv of environment profiles:
 
 Expected schema for csv:
 ```csv
@@ -70,6 +73,27 @@ name,description,secret_store,secret_name
 Expected schema for csv:
 ```csv
 name,description,environment_names,accessible_sources,users
+```
+
+#### Sample for metadata csv for configuring environments in bulk
+
+Expected schema for csv:
+```csv
+name,data_env_type,type,workspace_url,region,databricks_authentication,metadata_configs,connection_url,account_name,snowflake_profiles
+```
+
+#### Sample for metadata csv for configuring computes in bulk
+
+Expected schema for csv:
+```csv
+name,environment_name,launch_strategy,is_default_cluster,is_interactive_cluster,runtime_version,metastore_version,max_allowed_workers,ml_workflow_supported,idle_termination_timeout,worker_node_type,driver_node_type,min_worker_nodes,num_worker_nodes,allow_zero_workers,enable_autoscale,advanced_configurations
+```
+
+#### Sample for metadata csv for configuring storages in bulk
+
+Expected schema for csv:
+```csv
+name,environment_name,storage_type,storage_info,is_default_storage
 ```
 
 ### Example:
@@ -101,4 +125,5 @@ python create_admin_entities_in_bulk/create_admin_entities_in_bulk.py --protocol
 
 ## Authors
 Nitin BS(nitin.bs@infoworks.io)
+Sanath Singavarapu(sanath.singavarapu@infoworks.io)
 
