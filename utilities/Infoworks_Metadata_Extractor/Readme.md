@@ -340,11 +340,11 @@ python3 adhoc_metrics_report_extractor.py --config_file ./config.json --output_d
 ```
 #### Input Arguments
 
-| **Parameter**      | **Description**                                                                                                                                                                                                                                                                       | Default                                                                                                                                                                         |
-|:-------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
- | `config_file` *    | Config JSON file path along with filename                                                                                                                                                                                                                                             |                                                                                                                                                                                 |
- | `output_directory` | Directory where the Output files should be stored.                                                                                                                                                                                                                                    | ./csv                                                                                                                                                                           |
- | `reports`          | Param to decide whether to generate all reports or individual reports passed to reports params.[{extract_generic_source_types_usage_report,extract_job_hook_usage,extract_infoworks_artifact_creator,extract_extension_report,extract_workflow_with_bash_node_with_last_runtime} ...] | extract_generic_source_types_usage_report,extract_job_hook_usage,extract_infoworks_artifact_creator,extract_extension_report,extract_workflow_with_bash_node_with_last_runtime  |
+| **Parameter**      | **Description**                                                                                                                                                                                                                                                                       | Default                                                                                                                                                                                            |
+|:-------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+ | `config_file` *    | Config JSON file path along with filename                                                                                                                                                                                                                                             |                                                                                                                                                                                                    |
+ | `output_directory` | Directory where the Output files should be stored.                                                                                                                                                                                                                                    | ./csv                                                                                                                                                                                              |
+ | `reports`          | Param to decide whether to generate all reports or individual reports passed to reports params.[{extract_generic_source_types_usage_report,extract_job_hook_usage,extract_infoworks_artifact_creator,extract_extension_report,extract_workflow_with_bash_node_with_last_runtime} ...] | extract_generic_source_types_usage_report,extract_job_hook_usage,extract_infoworks_artifact_creator,extract_extension_report,extract_workflow_with_bash_node_with_last_runtime,extract_saml_report |
 
 **All Parameters marked with * are Required**
 
@@ -471,6 +471,36 @@ This script extracts information about Infoworks schedules along with schedule u
 | parent_id         | Parent entity id (domain id for workflow-build, and source_id for table-group-cdc)    |
 | domain_name       | Name of the domain that scheduled workflow belongs to                                 |
 
+##### saml_auth_config.csv
+
+This metadata csv outlines the configuration details for SAML authentication configured within Infoworks.
+
+| **Attribute**                    | **Description**                                                |
+|:---------------------------------|:---------------------------------------------------------------|
+| **is_active**                    | Indicates whether the configuration is active (`false`).       |
+| **authentication_type**          | Specifies the type of authentication (`saml`).                 |
+| **created_at**                   | Timestamp when the configuration was created.                  |
+| **created_by**                   | Identifier for the user who created the configuration.         |
+| **modified_at**                  | Timestamp when the configuration was last modified.            |
+| **modified_by**                  | Identifier for the user who last modified the configuration.   |
+| **full_name_attribute**          | Attribute used for the full name in the SAML configuration.    |
+| **email_attribute**              | Attribute used for the email in the SAML configuration.        |
+| **role_attribute**               | Attribute used for roles in the SAML configuration.            |
+| **role_separator**               | Character used to separate roles (`;`).                        |
+| **system_admin_roles**           | Roles assigned to system administrators.                       |
+| **database_admin_roles**         | Roles assigned to database administrators.                     |
+| **data_analyst_roles**           | Roles assigned to data analysts.                               |
+| **data_modeller_roles**          | Roles assigned to data modelers.                               |
+| **operations_analyst_roles**     | Roles assigned to operations analysts.                         |
+| **read_only_roles**              | Roles assigned to read-only users.                             |
+| **saml_type**                    | Type of SAML provider                                          |
+| **acs_url**                      | Assertion Consumer Service (ACS) URL for SAML authentication.  |
+| **sp_entity_id**                 | Service Provider Entity ID for SAML authentication.            |
+| **upload_option**                | Option for uploading the configuration (`fileUpload`).         |
+| **file_details**                 | Details of the uploaded files, including name, size, and path. |
+| **is_controlled_domain_mapping** | Indicates whether domain mapping is controlled (`false`).      |
+| **domain_group_attribute**       | Attribute related to domain groups (`null`).                   |
+| **domain_group_separator**       | Separator for domain groups (`null`).                          |
 
                                 
 ## Authors
