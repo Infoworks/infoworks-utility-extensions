@@ -336,7 +336,7 @@ class AdhocMetricsReport:
                        config['authentication_type'] == 'saml']
         if len(saml_config) > 0:
             try:
-                csv_file = self.output_directory + "saml_auth_config.csv"
+                csv_file = self.output_directory + "extract_saml_report.csv"
                 header = saml_config[0].keys()
                 with open(csv_file, 'w', newline='') as file:
                     writer = csv.DictWriter(file, fieldnames=header)
