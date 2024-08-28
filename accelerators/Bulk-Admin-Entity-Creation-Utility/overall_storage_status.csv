@@ -1,0 +1,6 @@
+,storage_name,environment_name,status,create_update_response
+0,DBFS_Storage,Azure_Env_Internal,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Environment updated successfully'}}}"
+1,ADLS_Access_Storage,Azure_Env_Internal,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Environment updated successfully'}}}"
+2,ADLS_Gen2_Storage,Azure_Env_External,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Environment updated successfully'}}}"
+3,ADLS_Storage,API_Snowflake_Environment,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Environment updated successfully'}}}"
+4,ADLS_Gen2_Storage,Azure_Env_Unity,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Environment updated successfully'}}}"

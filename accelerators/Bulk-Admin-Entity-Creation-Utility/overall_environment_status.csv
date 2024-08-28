@@ -1,0 +1,5 @@
+,environment_name,status,create_update_response
+0,Azure_Env_Internal,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Successfully created a environment', 'result': {'id': '66cd72aaeed4673496ef27c7'}}}}"
+1,Azure_Env_External,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Successfully created a environment', 'result': {'id': '66cd72aceed4673496ef27c8'}}}}"
+2,Azure_Env_Unity,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Successfully created a environment', 'result': {'id': '66cd72aeeed4673496ef27c9'}}}}"
+3,API_Snowflake_Environment,success,"{'error': {'error_code': None, 'error_desc': None}, 'result': {'entity_id': None, 'job_id': None, 'status': 'success', 'response': {'message': 'Successfully created a environment', 'result': {'id': '66cd72b0eed4673496ef27ca'}}}}"
