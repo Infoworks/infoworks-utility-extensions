@@ -174,17 +174,17 @@ ADLS_Access_Storage,Azure_Env_Internal,adls_gen2,"{""access_scheme"":""abfss://"
 }",False
 ADLS_Gen2_Storage,Azure_Env_External,adls_gen2,"{""access_scheme"":""abfs://"",""authentication_mechanism"":""service_principal_with_service_credentials"",
   ""storage_account_name"": ""iwx_cicd"", ""container_name"": ""csv-test"",
-  ""application_id"": ""e1238680-a450-678d-910e-111135b7560f"", ""directory_id"": ""a598762c-9543-4210-a999-12682934205fe"", ""password_type"": ""external_secret_store"", 
+  ""application_id"": ""e1245680-a1230-623d-934e-111235b7560f"", ""directory_id"": ""a59234c-92313-4232-a32-1268343fe"", ""password_type"": ""external_secret_store"", 
   ""secret_name"": ""test_secret1""
 }",True
 ADLS_Storage,API_Snowflake_Environment,adls_gen2,"{""access_scheme"":""abfs://"",""authentication_mechanism"":""service_principal_with_service_credentials"",
   ""storage_account_name"": ""iwx_cicd"", ""container_name"": ""csv-test"",
-  ""application_id"": ""e1238680-a450-678d-910e-111135b7560f"", ""directory_id"": ""a598762c-9543-4210-a999-12682934205fe"", ""password_type"": ""external_secret_store"", 
+  ""application_id"": ""e1245680-a1230-623d-934e-111235b7560f"", ""directory_id"": ""a59234c-92313-4232-a32-1268343fe"", ""password_type"": ""external_secret_store"", 
   ""secret_name"": ""test_secret1""
 }",True
 ADLS_Gen2_Storage,Azure_Env_Unity,adls_gen2,"{""access_scheme"":""abfss://"",""authentication_mechanism"":""service_principal_with_service_credentials"",
   ""storage_account_name"": ""iwx_cicd"", ""container_name"": ""csv-test"",
-  ""application_id"": ""e1238680-a450-678d-910e-111135b7560f"", ""directory_id"": ""a598762c-9543-4210-a999-12682934205fe"", ""storage_credential_name"": ""abcd"",
+  ""application_id"": ""e1245680-a1230-623d-934e-111235b7560f"", ""directory_id"": ""a59234c-92313-4232-a32-1268343fe"", ""storage_credential_name"": ""abcd"",
   ""password_type"": ""external_secret_store"", ""secret_name"": ""test_secret1""
 }",False
 ```
