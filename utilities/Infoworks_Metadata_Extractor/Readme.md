@@ -471,7 +471,7 @@ This script extracts information about Infoworks schedules along with schedule u
 | parent_id         | Parent entity id (domain id for workflow-build, and source_id for table-group-cdc)    |
 | domain_name       | Name of the domain that scheduled workflow belongs to                                 |
 
-##### saml_auth_config.csv
+##### extract_saml_report.csv
 
 This metadata csv outlines the configuration details for SAML authentication configured within Infoworks.
 
