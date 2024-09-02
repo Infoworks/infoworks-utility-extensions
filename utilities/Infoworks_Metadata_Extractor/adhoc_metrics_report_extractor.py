@@ -167,6 +167,7 @@ class AdhocMetricsReport:
         extension_usage_list = []
         for domain in domains:
             pipeline_extensions = self.iwx_client.get_pipeline_extensions_associated_with_domain(domain_id=domain["id"])
+            print("pipeline_extensions:",pipeline_extensions)
             pipeline_extensions = pipeline_extensions.get("result", {}).get("response", {}).get("result", [])
             pipelines = self.iwx_client.list_pipelines(domain_id=domain["id"],
                                                        params={"filter": {"run_job_on_data_plane": True}})
@@ -213,6 +214,10 @@ class AdhocMetricsReport:
         extension_usage_df["sources_using_extension"] = extension_usage_df["sources_using_extension"].apply(
             lambda x: list(x))
         print(extension_usage_df)
+        print("extension_usage_df.columns")
+        print(extension_usage_df.columns)
+        print("extract_extensions_df.columns")
+        print(extract_extensions_df.columns)
         resultant_df = extract_extensions_df.merge(extension_usage_df, how="left", left_on="id",
                                                    right_on="extension_id")
         resultant_df["extension_name"] = resultant_df["pipeline_extension_name"].fillna(resultant_df["name"])
