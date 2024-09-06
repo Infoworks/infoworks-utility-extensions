@@ -128,7 +128,7 @@ class AdhocMetricsReport:
             temp["artifact_id"] = source["id"]
             temp["artifact_name"] = source["name"]
             temp["artifact_type"] = "source"
-            temp["creator_name"], temp["creator_email"] = users_lookup[source.get("created_by", "")]
+            temp["creator_name"], temp["creator_email"] = users_lookup.get(source.get("created_by", ""),("deleted_user","deleted_user"))
             artifact_creator_list.append(temp)
         response = self.iwx_client.list_domains()
         domains = response["result"]["response"]["result"]
@@ -141,7 +141,7 @@ class AdhocMetricsReport:
                 temp["artifact_name"] = pipeline["name"]
                 temp["artifact_type"] = "pipeline"
                 temp["domain_name"] = domain["name"]
-                temp["creator_name"], temp["creator_email"] = users_lookup[pipeline.get("created_by", "")]
+                temp["creator_name"], temp["creator_email"] = users_lookup.get(pipeline.get("created_by", ""),("deleted_user","deleted_user"))
                 artifact_creator_list.append(temp)
             workflows_under_domain = self.iwx_client.get_list_of_workflows(domain_id=domain["id"])
             workflows_under_domain = workflows_under_domain.get("result", {}).get("response", {}).get("result", [])
@@ -167,7 +167,6 @@ class AdhocMetricsReport:
         extension_usage_list = []
         for domain in domains:
             pipeline_extensions = self.iwx_client.get_pipeline_extensions_associated_with_domain(domain_id=domain["id"])
-            print("pipeline_extensions:",pipeline_extensions)
             pipeline_extensions = pipeline_extensions.get("result", {}).get("response", {}).get("result", [])
             pipelines = self.iwx_client.list_pipelines(domain_id=domain["id"],
                                                        params={"filter": {"run_job_on_data_plane": True}})
