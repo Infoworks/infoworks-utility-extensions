@@ -351,6 +351,86 @@ class AdhocMetricsReport:
             except Exception as e:
                 traceback.print_exc()
 
+    def extract_secrets_usage_report(self):
+        secret_name_id_mapping = {}
+        def prepare_secret_name_to_id_mapping(iwx_client):
+            secrets = iwx_client.list_secrets()
+            secrets = secrets.get("result", {}).get("response", {}).get("result", [])
+            for secret in secrets:
+                secret_name_id_mapping[secret["name"]] = secret["id"]
+
+        prepare_secret_name_to_id_mapping(self.iwx_client)
+
+        def find_secret_id_in_nested_dict(iwx_client, data):
+            for key, value in data.items():
+                if isinstance(value, dict):
+                    # If the value is a dictionary, recurse into it
+                    secret_id = find_secret_id_in_nested_dict(iwx_client, value)
+                    if secret_id:
+                        return secret_id
+                elif key == "secret_id":
+                    return value
+            return None
+        try:
+            errors = []
+            sources = self.iwx_client.get_list_of_sources()
+            sources = sources.get("result", {}).get("response", {}).get("result", [])
+            domain_secrets = defaultdict(set)
+            source_secrets = defaultdict(set)
+            domain_envs = defaultdict(set)
+            extract_secret_usage_report_list = []
+            for source in sources:
+                # print(json.dumps(source,indent=4))
+                environment_id = source["environment_id"]
+                source_connection = self.iwx_client.get_source_connection_details(source_id=source["id"])
+                source_connection = source_connection.get("result", {}).get("response", {}).get("result", [])
+                secret_id = find_secret_id_in_nested_dict(iwx_client=self.iwx_client, data=source_connection)
+                if secret_id is not None:
+                    for domain_id in source.get("associated_domains", []):
+                        domain_secrets[domain_id].add(secret_id)
+                        domain_envs[domain_id].add(environment_id)
+                    source_secrets[secret_id].add(source["name"])
+                tables = self.iwx_client.list_tables_under_source(source_id=source["id"], params={
+                    "filter": {"export_configuration.sync_type": {"$exists": True, "$ne": "DISABLED"},
+                               "export_configuration.connection.data_connection_id": {
+                                   "$exists": False}
+                               }})
+                tables = tables.get("result", {}).get("response", {}).get("result", [])
+                for table in tables:
+                    # print(table)
+                    secret_id = find_secret_id_in_nested_dict(iwx_client=self.iwx_client, data=table["export_configuration"])
+                    if secret_id is not None:
+                        for domain_id in source.get("associated_domains", []):
+                            logging.info(f"secret_found:{secret_id}")
+                            domain_secrets[domain_id].add(secret_id)
+                            source_secrets[secret_id].add(source["name"])
+            secrets = self.iwx_client.list_secrets()
+            secrets = secrets.get("result", {}).get("response", {}).get("result", [])
+            domains = self.iwx_client.list_domains_as_admin()
+            domains = domains.get("result", {}).get("response", {}).get("result", [])
+            domain_name_lookup = {}
+            for domain in domains:
+                domain_name_lookup[domain["id"]] =domain["name"]
+            for secret in secrets:
+                secret_details = self.iwx_client.get_secret_details(secret_id=secret["id"])
+                secret_details = secret_details.get("result", {}).get("response", {}).get("result", {})
+                secret["associated_domains"] = [domain_name_lookup[id] for id in secret_details["domains"]]
+                secret["sources_using_this_secret"] = list(source_secrets[secret["id"]])
+                secret_store_details = self.iwx_client.get_secret_store_details(secret_store_id=secret["secret_store"])
+                secret_store_details = secret_store_details.get("result", {}).get("response", {}).get("result", {})
+                secret["secret_store_details"] = secret_store_details
+                service_authentication = secret_store_details.get("service_authentication","")
+                if service_authentication:
+                    service_authentication_details = self.iwx_client.get_service_authentication_details(service_auth_id=service_authentication)
+                    service_authentication_details = service_authentication_details.get("result", {}).get("response", {}).get("result", {})
+                    secret["service_authentication_details"] = service_authentication_details
+                extract_secret_usage_report_list.append(secret)
+        except Exception as e:
+            logging.error(str(e))
+            errors.append(str(e))
+        finally:
+            extract_secret_usage_report_df = pd.DataFrame(extract_secret_usage_report_list)
+            self.dataframe_writer(extract_secret_usage_report_df, report_type=inspect.stack()[0][3])
 
 def get_all_report_methods() -> List[str]:
     method_list = [func for func in dir(AdhocMetricsReport) if
@@ -360,7 +440,7 @@ def get_all_report_methods() -> List[str]:
 
 
 def main():
-    required = {'pandas', 'infoworkssdk==5.0.4'}
+    required = {'pandas', 'infoworkssdk==5.0.5'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
     file_path = os.path.dirname(os.path.realpath(__file__))

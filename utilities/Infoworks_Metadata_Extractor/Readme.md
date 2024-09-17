@@ -502,7 +502,28 @@ This metadata csv outlines the configuration details for SAML authentication con
 | **domain_group_attribute**       | Attribute related to domain groups (`null`).                   |
 | **domain_group_separator**       | Separator for domain groups (`null`).                          |
 
-                                
+##### extract_secrets_usage_report.csv
+
+This metadata csv outlines the details of secrets configured within Infoworks along with its usage details.
+
+| **Attribute**                        | **Description**                                                                         |
+|:-------------------------------------|:----------------------------------------------------------------------------------------|
+| **id**                               | Id of the secret in Infoworks.                                                          |
+| **name**                             | Name of the Infoworks Secret.                                                           |
+| **secret_store**                     | Name of the Infoworks Secret store that the secret is associated with                   |
+| **secret_name**                      | Actual name of secret in Keyvault.                                                      |
+| **created_at**                       | Created time.                                                                           |
+| **created_by**                       | Created User.                                                                           |
+| **modified_at**                      | Modified time.                                                                          |
+| **modified_by**                      | Modified User.                                                                          |
+| **associated_domains**               | List of Domains associated with the secret.                                             |
+| **sources_using_this_secret**        | List of Sources using this secret.                                                      |
+| **secret_store_details**             | Details of secret store (Keyvault URI etc).JSON object with all the details.            |
+| **service_authentication_details**   | Details of service Authentication(Client ID used etc).JSON object with all the details. |
+| **description**                      | Description of secret if any.                                                           |
+
+
+
 ## Authors
 * Sanath Singavarapu
 * Abhishek R
