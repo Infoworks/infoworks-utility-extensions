@@ -8,7 +8,7 @@ import pkg_resources
 import urllib3
 urllib3.disable_warnings()
 #sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==5.0.2'}
+required = {'infoworkssdk==5.0.6'}
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
 if missing:

@@ -8,7 +8,7 @@ import os
 import argparse
 import pandas as pd
 #sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==5.0.2','tabulate==0.9.0'}
+required = {'infoworkssdk==5.0.6','tabulate==0.9.0'}
 import pkg_resources
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
