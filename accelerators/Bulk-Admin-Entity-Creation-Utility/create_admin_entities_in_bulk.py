@@ -444,6 +444,11 @@ class DomainEntity(AdminEntity):
                                 print(f"Source with the name {source_name} not found.Skipping..")
                     if len(accessible_source_ids) > 0:
                         temp["entity_ids"] = accessible_source_ids
+                    saml_details = self.iwx_client.list_auth_configs()
+                    saml_config = [config for config in saml_details["result"]["response"]["result"] if
+                                   config['authentication_type'] == 'saml' and config["is_active"]]
+                    if saml_config:
+                        del temp["users"]
                     domain_status, domain_response = self.create_entity(temp)
                     print(f"{row.get('name', '')} :", domain_response)
                 except Exception as error:
