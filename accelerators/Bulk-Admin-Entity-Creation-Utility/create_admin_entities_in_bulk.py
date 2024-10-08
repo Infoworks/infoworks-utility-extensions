@@ -274,7 +274,7 @@ class SecretEntity(AdminEntity):
                     print(f"{row.get('name', '')} :", secret_response)
                 except Exception as error:
                     print(f"Failed to create/update secret '{row['name']}' : {error}")
-                    secret_status = 'failed'
+                    secret_status = 'failed' # pragma: allowlist secret
                     secret_response = error
 
                 secret_status_row = pd.DataFrame(
@@ -367,6 +367,7 @@ class DomainEntity(AdminEntity):
                         "name": row.get("name", ""),
                         "description": row.get("description", "")
                     }
+                    temp["environment_ids"]=[]
                     # if updating the domain
                     existing_domain_id = self.get_existing_entity_id(entity_name=temp["name"])
                     if existing_domain_id:
@@ -404,7 +405,8 @@ class DomainEntity(AdminEntity):
                             else:
                                 filtered_user_email = filtered_user.get("profile", {}).get("email", "")
                                 print(f"Did not find user id {filtered_user_email}. Ignoring the user")
-                    temp["users"] = list(set(temp["users"]))
+                    if list(set(temp["users"])):
+                        temp["users"] = list(set(temp["users"]))
                     # 6.0 specific changes support for assigning secrets at domain
                     secrets = row.get("secret_names", "").split(",")
                     secrets = [secret.strip() for secret in secrets if len(secret.strip()) > 0]
@@ -551,8 +553,8 @@ class ComputeEntity(AdminEntity):
                         metastore_configuration = environment_id_response['result']['response']['result'][0].get(
                             'metastore', {})
                         metastore_type = metastore_configuration.get('configuration', {}).get('mode', '')
-                        if connection_configuration['token']['password_type'] == "infoworks_managed":
-                            connection_configuration['token'].pop('password')
+                        if connection_configuration['token']['password_type'] == "infoworks_managed": # pragma: allowlist secret
+                            connection_configuration['token'].pop('password')  # pragma: allowlist secret
                     else:
                         raise Exception(f"Unable to get environment_id for environment '{row['environment_name']}'")
                     compute_engine = "databricksInteractive" if row.get(
@@ -764,14 +766,14 @@ class StorageEntity(AdminEntity):
                                 raise Exception(f"Secret ID not found for name : {row.get('secret_name')}")
 
                             credentials_json = {
-                                "password_type": "secret_store",
+                                "password_type": "secret_store", # pragma: allowlist secret
                                 "secret_id": secret_id
                             }
                             print(json.dumps(storage_template))
                         elif storage_info.get('password_type') == "infoworks_managed":
                             password = storage_info.get('password', '')
                             credentials_json = {
-                                "password_type": "infoworks_managed",
+                                "password_type": "infoworks_managed", # pragma: allowlist secret
                                 "password": password
                             }
                         elif storage_info.get('password_type') == "service_authentication":
@@ -784,8 +786,8 @@ class StorageEntity(AdminEntity):
                             else:
                                 raise Exception(f"Authentication Service '{service_name}' not found")
                             credentials_json = {
-                                "password_type": "service_authentication",
-                                "service_auth_id": authentication_service_id
+                                "password_type": "service_authentication", # pragma: allowlist secret
+                                "service_auth_id": authentication_service_id # pragma: allowlist secret
                             }
                         else:
                             raise Exception(f"Password Type '{storage_info.get('password_type', '')}' is not supported")
@@ -911,11 +913,11 @@ class EnvironmentEntity(AdminEntity):
                                 }
                             }
                             password_type = metadata_configs.get('password', {}).get('password_type', '')
-                            if password_type == "infoworks_managed":
-                                metastore_json['configuration']['password']['password_type'] = "infoworks_managed"
+                            if password_type == "infoworks_managed": # pragma: allowlist secret
+                                metastore_json['configuration']['password']['password_type'] = "infoworks_managed" # pragma: allowlist secret
                                 metastore_json['configuration']['password']['password'] = metadata_configs['password']. \
-                                    get('password', '')
-                            elif password_type == "external_secret_store":
+                                    get('password', '') # pragma: allowlist secret
+                            elif password_type == "external_secret_store": # pragma: allowlist secret
                                 secret_name = metadata_configs.get('password', {}).get('secret_name', '')
                                 secret_res = self.iwx_client.list_secrets(params={"filter": {"name": secret_name}})
                                 secret_res = secret_res.get("result", {}).get("response", {}).get("result", [])
@@ -923,7 +925,7 @@ class EnvironmentEntity(AdminEntity):
                                     secret_id = secret_res[0]["id"]
                                 else:
                                     raise Exception(f"Secret '{secret_name}' not found")
-                                metastore_json['configuration']['password']['password_type'] = "secret_store"
+                                metastore_json['configuration']['password']['password_type'] = "secret_store" # pragma: allowlist secret
                                 metastore_json['configuration']['password']['secret_id'] = secret_id
                         elif storage_type.lower() == "databricks_unity_catalog":
                             metastore_json = {
@@ -964,7 +966,7 @@ class EnvironmentEntity(AdminEntity):
                                     "additional_params": record.get("additional_params", []),
                                     "session_params": record.get("session_params", [])
                                 }
-                                if profile['authentication_properties']['password']['password_type'] == "secret_store":
+                                if profile['authentication_properties']['password']['password_type'] == "secret_store": # pragma: allowlist secret
                                     secret_name = profile['authentication_properties']['password']['secret_name']
                                     secret_res = self.iwx_client.list_secrets(params={"filter": {"name": secret_name}})
                                     secret_res = secret_res.get("result", {}).get("response", {}).get("result", [])
@@ -987,8 +989,8 @@ class EnvironmentEntity(AdminEntity):
                     if databricks_authentication_type.lower() == "infoworks_managed":
                         databricks_token = databricks_authentication.get('token', '')
                         environment_template['connection_configuration']['token'] = {
-                            "password_type": "infoworks_managed",
-                            "password": databricks_token
+                            "password_type": "infoworks_managed", # pragma: allowlist secret
+                            "password": databricks_token # pragma: allowlist secret
                         }
                     elif databricks_authentication_type.lower() == "external_secret_store":
                         secret_name = databricks_authentication.get('secret_name', '')
@@ -1001,8 +1003,8 @@ class EnvironmentEntity(AdminEntity):
                             secret_id = None
                             raise Exception(f"Secret ID not found for name : {row.get('secret_name')}")
                         environment_template['connection_configuration']['token'] = {
-                            "password_type": "secret_store",
-                            "secret_id": secret_id
+                            "password_type": "secret_store", # pragma: allowlist secret
+                            "secret_id": secret_id # pragma: allowlist secret
                         }
                     elif databricks_authentication_type.lower() == "service_authentication":
                         service_name = databricks_authentication.get('authentication_service_name', '')
@@ -1014,7 +1016,7 @@ class EnvironmentEntity(AdminEntity):
                         else:
                             raise Exception(f"Authentication Service '{service_name}' not found")
                         environment_template['connection_configuration']['token'] = {
-                            "password_type": "service_authentication",
+                            "password_type": "service_authentication", # pragma: allowlist secret
                             "service_auth_id": authentication_service_id
                         }
                     else:
