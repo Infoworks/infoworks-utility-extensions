@@ -243,7 +243,11 @@ def extract_table_metadata(result):
             'target_type': target_type,
             'source_file_pattern': source_file_pattern,
             'description': table_description,
-            'custom_tags': custom_tags
+            'custom_tags': custom_tags,
+            "created_by": result.get('created_by'),
+            "created_at": result.get('created_at'),
+            "modified_by": result.get('modified_by'),
+            "modified_at":result.get('modified_at')
         }
 
         return 0, metadata, ''

@@ -47,7 +47,11 @@ class Environment_Metadata_Extractor():
                 "data_warehouse_configuration.account_name",
                 "data_warehouse_configuration.authentication_mechanism",
                 "data_warehouse_configuration.snowflake_profiles",
-                "platform"
+                "platform",
+                "created_by",
+                "created_at",
+                "modified_by",
+                "modified_at"
             ]
             for key in keys:
                 k, v = self.get_value(environment, key)
@@ -134,7 +138,11 @@ class Environment_Metadata_Extractor():
                     "compute_configuration.runtime_configuration.idle_termination_timeout",
                     "compute_configuration.runtime_configuration.allow_zero_workers",
                     "compute_configuration.runtime_configuration.enable_autoscale",
-                    "compute_configuration.runtime_configuration.advanced_configurations"
+                    "compute_configuration.runtime_configuration.advanced_configurations",
+                    "created_by",
+                    "created_at",
+                    "modified_by",
+                    "modified_at"
                     ]
             for compute in all_computes:
                 temp = {}
@@ -193,7 +201,11 @@ class Environment_Metadata_Extractor():
                 "storage_authentication.storage_account_name",
                 "storage_authentication.container_name",
                 "storage_authentication.account_key.secret_id",
-                "is_default_storage"
+                "is_default_storage",
+                "created_by",
+                "created_at",
+                "modified_by",
+                "modified_at"
                 ]
                 for key in keys:
                     k, v = self.get_value(storage, key)
