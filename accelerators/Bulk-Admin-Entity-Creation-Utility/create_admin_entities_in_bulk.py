@@ -315,6 +315,8 @@ class DomainEntity(AdminEntity):
     def create_entity(self, configuration_body):
         domain_name = configuration_body["name"]
         domain_id = self.get_existing_entity_id(entity_name=domain_name)
+        print("configuration_body:",configuration_body)
+        print("domain_id:",domain_id)
         if domain_id is None:
             create_domain_response = self.iwx_client.create_domain(config_body=configuration_body)
             print(create_domain_response)
@@ -362,6 +364,7 @@ class DomainEntity(AdminEntity):
         environments = environments.get("result", {}).get("response", {}).get("result", [])
         for environment in environments:
             environment_name_id_lookup[environment["name"].lower()]=environment["id"]
+        print("environment_name_id_lookup:", environment_name_id_lookup)
         with open(self.metadata_csv_path, "r") as csv_file:
             reader = csv.DictReader(csv_file)
             columns = ["domain_name", "status", "create_update_response"]
