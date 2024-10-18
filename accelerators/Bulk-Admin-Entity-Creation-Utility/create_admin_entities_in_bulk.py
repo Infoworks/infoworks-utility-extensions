@@ -305,7 +305,7 @@ class DomainEntity(AdminEntity):
             exit(-100)
 
     def get_existing_entity_id(self, entity_name):
-        domain_details = self.iwx_client.list_domains(params={"filter": {"name": entity_name}})
+        domain_details = self.iwx_client.list_domains_as_admin(params={"filter": {"name": entity_name}})
         domain_details = domain_details.get("result", {}).get("response", {}).get("result", [])
         domain_id = None
         if domain_details:
@@ -357,6 +357,11 @@ class DomainEntity(AdminEntity):
 
     def update_entity_body_as_per_csv(self):
         self.validate_csv_metadata_schema()
+        environment_name_id_lookup = {}
+        environments = self.iwx_client.get_environment_details(params={"fetch_all":True})
+        environments = environments.get("result", {}).get("response", {}).get("result", [])
+        for environment in environments:
+            environment_name_id_lookup[environment["name"].lower()]=environment["id"]
         with open(self.metadata_csv_path, "r") as csv_file:
             reader = csv.DictReader(csv_file)
             columns = ["domain_name", "status", "create_update_response"]
@@ -381,9 +386,7 @@ class DomainEntity(AdminEntity):
                             temp["users"] = existing_domain_details["users"]
                     environment_names = row.get("environment_names", "").split(",")
                     environment_ids = [
-                        self.iwx_client.get_environment_id_from_name(environment_name).get("result", {}).get("response",
-                                                                                                             {}).get(
-                            "environment_id", None) for environment_name in environment_names]
+                        environment_name_id_lookup.get(environment_name.lower(),None) for environment_name in environment_names]
                     environment_ids = [env_id for env_id in environment_ids if env_id is not None]
                     temp["environment_ids"].extend(environment_ids)
                     temp["environment_ids"] = list(set(temp["environment_ids"]))
