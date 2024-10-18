@@ -1,9 +1,9 @@
-name,environment_name,launch_strategy,is_default_cluster,is_interactive_cluster,runtime_version,metastore_version,max_allowed_workers,ml_workflow_supported,idle_termination_timeout,worker_node_type,driver_node_type,min_worker_nodes,num_worker_nodes,allow_zero_workers,enable_autoscale,advanced_configurations
-Default_Persistent_Compute_001,Azure_Env_Internal,persistent,False,False,12.2,,2,False,120,Standard_D4as_v5,Standard_D4as_v5,,2,,,"[{""key"": ""a"", ""value"": ""b""},
+name,description,environment_name,launch_strategy,is_default_cluster,is_interactive_cluster,runtime_version,metastore_version,max_allowed_workers,ml_workflow_supported,idle_termination_timeout,worker_node_type,driver_node_type,min_worker_nodes,num_worker_nodes,allow_zero_workers,enable_autoscale,advanced_configurations
+Default_Persistent_Compute_001,CE_Azure_Env_Internal_Persistent,CE_Azure_Env_Internal,persistent,False,False,12.2,,2,False,120,Standard_D4as_v5,Standard_D4as_v5,,2,,,"[{""key"": ""a"", ""value"": ""b""},
 {""key"": ""c"", ""value"": ""d""},
 {""key"": ""b"", ""value"": ""c""}]"
-Persistent_Compute_01,Azure_Env_External,persistent,False,True,12.2,2.3.9,2,False,180,Standard_D4as_v5,Standard_D4as_v5,,2,,,
-Ephemeral_Compute_04,Azure_Env_External,ephemeral,True,False,12.2,2.3.9,2,True,,Standard_D4as_v5,Standard_D4as_v5,,2,True,,
-Peristent_Compute,Azure_Env_Unity,persistent,True,True,14.3,,2,False,180,Standard_D4as_v5,Standard_D4as_v5,,2,,,
-Default_Persistent_Compute,API_Snowflake_Environment,persistent,False,True,11.3,,2,False,200,Standard_D4as_v5,Standard_D4as_v5,,2,,,
-Default_Ephemeral_Compute_New,API_Snowflake_Environment,ephemeral,True,False,11.3,,2,True,,Standard_D8as_v5,Standard_D8as_v5,1,2,,True,
+Persistent_Compute_01,CE_Azure_Env_External_Persistent,CE_Azure_Env_External,persistent,False,True,12.2,2.3.9,2,False,180,Standard_D4as_v5,Standard_D4as_v5,,2,,,
+Ephemeral_Compute_04,CE_Azure_Env_External_Ephemeral,CE_Azure_Env_External,ephemeral,True,False,12.2,2.3.9,2,True,,Standard_D4as_v5,Standard_D4as_v5,,2,True,,
+Peristent_Compute,CE_Azure_Env_Unity,CE_Azure_Env_Unity,persistent,True,True,14.3,,2,False,180,Standard_D4as_v5,Standard_D4as_v5,,2,,,
+Default_Persistent_Compute,CE_Snowflake_Persistent,CE_API_Snowflake_Environment,persistent,False,True,11.3,,2,False,200,Standard_D4as_v5,Standard_D4as_v5,,2,,,
+Default_Ephemeral_Compute_New,CE_Snowflake_Ephemeral,CE_API_Snowflake_Environment,ephemeral,True,False,11.3,,2,True,,Standard_D8as_v5,Standard_D8as_v5,1,2,,True,

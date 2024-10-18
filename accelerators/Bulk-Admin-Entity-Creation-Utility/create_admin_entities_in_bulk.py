@@ -589,6 +589,7 @@ class ComputeEntity(AdminEntity):
 
                     compute_template = {
                         "name": row.get("name", ""),
+                        "description": row.get("description", ""),
                         "compute_engine": compute_engine,
                         "launch_strategy": row.get("launch_strategy"),
                         "compute_configuration": {
@@ -889,6 +890,7 @@ class EnvironmentEntity(AdminEntity):
                     if data_env_type.lower() == "azure":
                         environment_template = {
                             "name": row.get('name'),
+                            "description": row.get('description', ''),
                             "compute_engine": "databricks",
                             "connection_configuration": {
                                 "region": row.get('region'),
@@ -945,6 +947,7 @@ class EnvironmentEntity(AdminEntity):
                     elif data_env_type.lower() == "snowflake":
                         environment_template = {
                             "name": row.get('name', ''),
+                            "description": row.get('description', ''),
                             "platform": 'azure',
                             "compute_engine": "databricks",
                             "support_gov_cloud": False,
