@@ -16,7 +16,7 @@ import pkg_resources
 cwd = os.path.dirname(os.path.realpath(__file__))
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-required = {'infoworkssdk==5.0.5'}
+required = {'infoworkssdk==5.0.6'}
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
 if missing:
@@ -81,7 +81,7 @@ class ProfileEntity(AdminEntity):
         # et_environment_details = self.iwx_client.get_environment_id_from_name(environment_name=entity_name)
         # environment_id = get_environment_details.get("result", {}).get("response", {}).get("environment_id", None)
         environment_id_response = self.iwx_client.get_environment_details(
-            params={"filter": {"name": entity_name}, "limit": 500, "fetch_all": True})
+            params={"filter": {"name": entity_name}, "limit": 2000, "fetch_all": "true"},pagination=False)
         if environment_id_response.get('result', {}).get('response', {}).get('result', []):
             environment_id = environment_id_response.get('result', {}).get('response', {}).get('result', [])[0]['id']
         else:
@@ -198,7 +198,7 @@ class SecretEntity(AdminEntity):
             exit(-100)
 
     def get_existing_entity_id(self, entity_name):
-        get_secret_details = self.iwx_client.list_secrets(params={"filter": {"name": entity_name}, "fetch_all": "true"})
+        get_secret_details = self.iwx_client.list_secrets(params={"filter": {"name": entity_name}, "fetch_all": "true","limit":1000},pagination=False)
         get_secret_details = get_secret_details.get("result", {}).get("response", {}).get("result", [])
         secret_id = None
         if get_secret_details:
@@ -360,7 +360,7 @@ class DomainEntity(AdminEntity):
     def update_entity_body_as_per_csv(self):
         self.validate_csv_metadata_schema()
         environment_name_id_lookup = {}
-        environments = self.iwx_client.get_environment_details(params={"fetch_all":True})
+        environments = self.iwx_client.get_environment_details(params={"fetch_all":"true","limit":2000},pagination=False)
         environments = environments.get("result", {}).get("response", {}).get("result", [])
         for environment in environments:
             environment_name_id_lookup[environment["name"].lower()]=environment["id"]
@@ -553,7 +553,7 @@ class ComputeEntity(AdminEntity):
             for row in reader:
                 try:
                     environment_id_response = self.iwx_client.get_environment_details(
-                        params={"filter": {"name": row['environment_name']}, "limit": 500, "fetch_all": True})
+                        params={"filter": {"name": row['environment_name']}, "limit": 500, "fetch_all": "true"})
                     print(json.dumps(environment_id_response))
                     if environment_id_response.get('result', {}).get('response', {}).get('result', []):
                         environment_id = \
@@ -729,7 +729,7 @@ class StorageEntity(AdminEntity):
                 try:
                     storage_type = row.get('storage_type', '')
                     environment_id_response = self.iwx_client.get_environment_details(
-                        params={"filter": {"name": row['environment_name']}, "limit": 500, "fetch_all": True})
+                        params={"filter": {"name": row['environment_name']}, "limit": 500, "fetch_all": "true"})
 
                     if environment_id_response.get('result', {}).get('response', {}).get('result', []):
                         environment_id = \
@@ -846,7 +846,7 @@ class EnvironmentEntity(AdminEntity):
         # environment_id_response = self.iwx_client.get_environment_id_from_name(environment_name=entity_name)
         # environment_id = environment_id_response.get('result', {}).get('response', {}).get('environment_id')
         environment_id_response = self.iwx_client.get_environment_details(
-            params={"filter": {"name": entity_name}, "limit": 500, "fetch_all": True})
+            params={"filter": {"name": entity_name}, "limit": 2000, "fetch_all": "true"},pagination=False)
         if environment_id_response.get('result', {}).get('response', {}).get('result', []):
             environment_id = environment_id_response.get('result', {}).get('response', {}).get('result', [])[0]['id']
         else:
