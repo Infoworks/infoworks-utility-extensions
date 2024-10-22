@@ -180,6 +180,7 @@ def get_table_tags_and_description(source_id, table_id):
 def extract_table_metadata(result):
     # Converts Tables Response into required format
     table_name = result.get('name')
+    print(result)
     try:
         source_schema_name = result.get('schema_name_at_source')
         source_table_name = result.get('original_table_name')
@@ -244,7 +245,6 @@ def extract_table_metadata(result):
             'source_file_pattern': source_file_pattern,
             'description': table_description,
             'custom_tags': custom_tags,
-            "created_by": result.get('created_by'),
             "created_at": result.get('created_at'),
             "modified_by": result.get('modified_by'),
             "modified_at":result.get('modified_at')
@@ -372,7 +372,8 @@ if __name__ == "__main__":
                                       'description': '', 'target_columns_and_datatypes': '', 'tags': '',
                                       'source_file_name': '', 'source_schema_name': '',
                                       'source_table_name': '', 'source_columns_and_datatypes': '',
-                                      'target_type': ''}
+                                      'target_type': '','created_at':'',
+                                      'modified_at':'','modified_by':''}
 
                     # response = get_table_info(source['id'], table['id'])
                     # logging.debug("Table Info: {}".format(json.dumps(table)))
@@ -409,11 +410,15 @@ if __name__ == "__main__":
                             extracted_metadata.get('target_columns_and_datatypes')
                         table_info_row['target_type'] = extracted_metadata.get('target_type')
                         table_info_row['source_file_name'] = extracted_metadata.get('source_file_pattern')
+                        table_info_row['created_at'] = extracted_metadata.get('created_at')
+                        table_info_row['modified_at'] = extracted_metadata.get('modified_at')
+                        table_info_row['modified_by'] = extracted_metadata.get('modified_by')
 
                         final_data.append(table_info_row)
                     else:
                         failed_data.append({'source_name': source_name, 'table_name': table['name'],
                                             'error_message': error_msg})
+        #print("final_data:",final_data)
         if len(final_data) > 0:
             logging.info(f"Saving Output: {output_file}")
             pd.DataFrame(final_data).to_csv(output_file,
@@ -429,6 +434,10 @@ if __name__ == "__main__":
                                                      'target_table_name',
                                                      'description', 'target_columns_and_datatypes', 'custom_tags',
                                                      'source_file_name',
+                                                     'created_at',
+                                                     'modified_at',
+                                                     'modified_by'
+
                                                      ],
                                             index=False)
         if len(failed_data) > 0:
