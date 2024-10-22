@@ -180,7 +180,6 @@ def get_table_tags_and_description(source_id, table_id):
 def extract_table_metadata(result):
     # Converts Tables Response into required format
     table_name = result.get('name')
-    print(result)
     try:
         source_schema_name = result.get('schema_name_at_source')
         source_table_name = result.get('original_table_name')
