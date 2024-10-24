@@ -27,12 +27,28 @@ class Environment_Metadata_Extractor():
         self.environment_storage_list=[]
         self.output_directory = output_directory
         self.iwx_client = iwx_client
+        self.env_lookup = {}
+        self.secrets_lookup = {}
+        self.service_auth_lookup = {}
+
     def extract_environment_details(self):
         response = self.iwx_client.get_environment_details()
         result = response["result"]["response"]["result"]
         # print(json.dumps(result,indent=4))
         environment_ids = [env["id"] for env in result]
         self.environment_ids=environment_ids
+        env_details = self.iwx_client.get_environment_details(params={"fetch_all":"true","limit":10000},pagination=False)
+        env_details = env_details.get("result",{}).get("response",{}).get("result",[])
+        secret_details = self.iwx_client.list_secrets(params={"fetch_all":"true","limit":10000},pagination=False)
+        secret_details = secret_details.get("result",{}).get("response",{}).get("result",[])
+        service_auth_details = self.iwx_client.list_service_authentication(params={"fetch_all":"true","limit":10000},pagination=False)
+        service_auth_details = service_auth_details["result"]["response"]["result"]
+        for env in env_details:
+            self.env_lookup[env["id"]]=env["name"]
+        for secret in secret_details:
+            self.secrets_lookup[secret["id"]]=secret["name"]
+        for service_auth in service_auth_details:
+            self.service_auth_lookup[service_auth["id"]]=service_auth["name"]
         for environment in result:
             temp = {}
             keys = [
@@ -57,16 +73,18 @@ class Environment_Metadata_Extractor():
                 k, v = self.get_value(environment, key)
                 if k == "id":
                     k = "environment_name"
-                    env_details = self.iwx_client.get_environment_details(environment_id=v)
-                    env_details = env_details["result"]["response"]["result"][0]
-                    temp[k] = env_details["name"]
+                    # env_details = self.iwx_client.get_environment_details(environment_id=v)
+                    # env_details = env_details["result"]["response"]["result"][0]
+                    # temp[k] = env_details["name"]
+                    temp[k] = self.env_lookup.get(v)
                 elif k == "secret_id":
                     k = "secret_name"
                     try:
-                        secret_details = self.iwx_client.get_secret_details(secret_id=v)
-                        secret_details = secret_details["result"]["response"]["result"]
-                        # print("secret_details",secret_details)
-                        temp[k] = secret_details[0]["name"]
+                        # secret_details = self.iwx_client.get_secret_details(secret_id=v)
+                        # secret_details = secret_details["result"]["response"]["result"]
+                        # # print("secret_details",secret_details)
+                        # temp[k] = secret_details[0]["name"]
+                        temp[k] = self.secrets_lookup.get(v)
                     except (KeyError, IndexError) as e:
                         temp[k] = ""
                 elif v =="":
@@ -77,9 +95,10 @@ class Environment_Metadata_Extractor():
                         profile_temp=copy.deepcopy(snowflake_profile)
                         secret_id = profile_temp.get("authentication_properties",{}).get("password",{}).get("secret_id","")
                         if secret_id !="":
-                            secret_details = self.iwx_client.get_secret_details(secret_id=secret_id)
-                            secret_details = secret_details["result"]["response"]["result"]
-                            secret_name = secret_details["name"]
+                            # secret_details = self.iwx_client.get_secret_details(secret_id=secret_id)
+                            # secret_details = secret_details["result"]["response"]["result"]
+                            # secret_name = secret_details["name"]
+                            secret_name = self.secrets_lookup.get(secret_id)
                             profile_temp["authentication_properties"]["password"]["secret_name"] = secret_name
                         snowflake_profiles_updated.append(profile_temp)
                     temp[k] = json.dumps(snowflake_profiles_updated)
@@ -149,27 +168,31 @@ class Environment_Metadata_Extractor():
                 for key in keys:
                     k,v = self.get_value(compute, key)
                     if k=="environment_id":
+                        temp[k] = environment_id
                         k="environment_name"
-                        env_details = self.iwx_client.get_environment_details(environment_id=environment_id)
-                        env_details=env_details["result"]["response"]["result"][0]
-                        #print("env_details:",env_details["name"])
-                        temp[k] = env_details["name"]
+                        # env_details = self.iwx_client.get_environment_details(environment_id=environment_id)
+                        # env_details=env_details["result"]["response"]["result"][0]
+                        # #print("env_details:",env_details["name"])
+                        # temp[k] = env_details["name"]
+                        temp[k] = self.env_lookup.get(v)
                     elif k == "secret_id":
                         k="secret_name"
                         try:
-                            secret_details = self.iwx_client.get_secret_details(secret_id=v)
-                            secret_details = secret_details["result"]["response"]["result"]
-                            #print("secret_details",secret_details)
-                            temp[k] = secret_details[0]["name"]
+                            # secret_details = self.iwx_client.get_secret_details(secret_id=v)
+                            # secret_details = secret_details["result"]["response"]["result"]
+                            # #print("secret_details",secret_details)
+                            # temp[k] = secret_details[0]["name"]
+                            temp[k] = self.secrets_lookup.get(v)
                         except (KeyError,IndexError) as e:
                             temp[k]=""
                     elif k == "service_auth_id":
                         k="service_auth_name"
                         try:
-                            service_auth_details = iwx_client.get_service_authentication_details(service_auth_id=v)
-                            service_auth_details = service_auth_details["result"]["response"]["result"]
-                            #print("secret_details",secret_details)
-                            temp[k] = service_auth_details[0]["name"]
+                            # service_auth_details = iwx_client.get_service_authentication_details(service_auth_id=v)
+                            # service_auth_details = service_auth_details["result"]["response"]["result"]
+                            # #print("secret_details",secret_details)
+                            # temp[k] = service_auth_details[0]["name"]
+                            temp[k] = self.service_auth_lookup.get(v)
                         except (KeyError,IndexError) as e:
                             temp[k]=""
                     else:
@@ -198,9 +221,13 @@ class Environment_Metadata_Extractor():
                 "environment_id",
                 "storage_type",
                 "storage_authentication.scheme",
+                "storage_authentication.file_system",
                 "storage_authentication.storage_account_name",
+                "storage_authentication.directory_id",
+                "storage_authentication.application_id",
                 "storage_authentication.container_name",
                 "storage_authentication.account_key.secret_id",
+                "storage_authentication.service_credential.secret_id",
                 "is_default_storage",
                 "created_by",
                 "created_at",
@@ -211,16 +238,16 @@ class Environment_Metadata_Extractor():
                     k, v = self.get_value(storage, key)
                     if k == "environment_id":
                         k = "environment_name"
-                        env_details = self.iwx_client.get_environment_details(environment_id=v)
-                        env_details = env_details["result"]["response"]["result"][0]
-                        temp[k] = env_details["name"]
+                        # env_details = self.iwx_client.get_environment_details(environment_id=v)
+                        # env_details = env_details["result"]["response"]["result"][0]
+                        temp[k] = self.env_lookup.get(v)
                     elif k == "secret_id":
                         k="secret_name"
                         try:
-                            secret_details = self.iwx_client.get_secret_details(secret_id=v)
-                            secret_details = secret_details["result"]["response"]["result"]
+                            # secret_details = self.iwx_client.get_secret_details(secret_id=v)
+                            # secret_details = secret_details["result"]["response"]["result"]
                             #print("secret_details",secret_details)
-                            temp[k] = secret_details[0]["name"]
+                            temp[k] = self.secrets_lookup.get(v)
                         except (KeyError,IndexError) as e:
                             temp[k]=""
                     elif v =="":
@@ -238,7 +265,7 @@ def get_all_report_methods() -> List[str]:
     return method_list
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==4.0'}
+    required = {'pandas', 'infoworkssdk==5.0.6'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
     file_path = os.path.dirname(os.path.realpath(__file__))
