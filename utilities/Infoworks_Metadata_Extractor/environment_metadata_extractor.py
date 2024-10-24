@@ -72,6 +72,7 @@ class Environment_Metadata_Extractor():
             for key in keys:
                 k, v = self.get_value(environment, key)
                 if k == "id":
+                    temp[k] = v
                     k = "environment_name"
                     # env_details = self.iwx_client.get_environment_details(environment_id=v)
                     # env_details = env_details["result"]["response"]["result"][0]
