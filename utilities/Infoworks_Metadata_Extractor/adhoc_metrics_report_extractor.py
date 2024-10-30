@@ -56,6 +56,10 @@ class AdhocMetricsReport:
                         temp["domain_name"] = domain.get("name", "")
                         temp["workflow_id"] = workflow.get("id", "")
                         temp["workflow_name"] = workflow.get("name", "")
+                        temp["created_at"] = workflow.get("created_at", "")
+                        temp["created_by"] = workflow.get("created_by", "")
+                        temp["modified_at"] = workflow.get("modified_at", "")
+                        temp["modified_by"] = workflow.get("modified_by", "")
                         temp["bash_node"] = task
                         temp["custom_image_url"] = task.get("task_properties", {}).get("advanced_configurations",
                                                                                        {}).get("k8_image_url", "")

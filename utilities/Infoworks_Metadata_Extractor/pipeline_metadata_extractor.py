@@ -42,7 +42,9 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                 pipeline_info_row = {'domain_name': '', 'pipeline_name': '', 'number_of_versions': '',
                                      'active_version': '', 'batch_engine': '',
                                      'created_at': '',
+                                     'created_by': '',
                                      'modified_at': '',
+                                     'modified_by': '',
                                      'description': '', 'environment_name': '', 'storage_name': '', 'compute_name': '',
                                      'tags': '',
                                      'src_tables': '', 'target_schema_name': '',
@@ -60,9 +62,11 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                 pipeline_info_row["pipeline_name"] = pipeline_name
                 pipeline_info_row["domain_name"] = domain_mapping[domain_id]
                 pipeline_info_row["batch_engine"] = pipeline["batch_engine"]
-                pipeline_info_row["created_at"] = pipeline["created_at"]
+                pipeline_info_row["created_at"] = pipeline.get("created_at","")
+                pipeline_info_row["created_by"] = pipeline.get("created_by","")
                 # pipeline_info_row["created_by"] = user_mapping.get(pipeline["created_by"], "")
-                pipeline_info_row["modified_at"] = pipeline["modified_at"]
+                pipeline_info_row["modified_at"] = pipeline.get("modified_at","")
+                pipeline_info_row["modified_by"] = pipeline.get("modified_by","")
                 # pipeline_info_row["modified_by"] = user_mapping.get(pipeline["modified_by"], "")
 
                 pl_details_response = iwx_client.get_pipeline(pipeline_id, domain_id)
@@ -106,8 +110,10 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                     pipeline_info_row["src_tables"] = ",".join(src_tables)
 
                     target_details = []
-                    for node in pipeline_config["configuration"].get("pipeline_configs")["model"].get("nodes", []):
-                        req_dict = pipeline_config["configuration"].get("pipeline_configs")["model"]["nodes"][node]
+                    for node in pipeline_config["configuration"].get("pipeline_configs").get("model",{}).get("nodes", []):
+                        req_dict = pipeline_config["configuration"].get("pipeline_configs").get("model",{}).get("nodes",[])
+                        if req_dict:
+                            req_dict = req_dict[node]
                         if req_dict['type'].upper() in ["TARGET", "BIGQUERY_TARGET", "SNOWFLAKE_TARGET"]:
                             target_type = req_dict['type'].upper()
                             props = req_dict["properties"]
@@ -208,7 +214,7 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
 
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==4.0a8'}
+    required = {'pandas', 'infoworkssdk==5.0.6'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
 
@@ -274,8 +280,9 @@ if __name__ == "__main__":
             logging.info("Saving Output as PipelineMetadata.csv ")
             pd.DataFrame(output).to_csv("PipelineMetadata.csv",
                                         columns=['domain_name', 'pipeline_name', 'number_of_versions', 'active_version',
-                                                 'batch_engine', 'created_at',
+                                                 'batch_engine', 'created_at','created_by',
                                                  'modified_at',
+                                                 'modified_by',
                                                  'description', 'environment_name', 'storage_name', 'compute_name',
                                                  'tags',
                                                  'src_tables', 'target_schema_name', 'target_database_name',
