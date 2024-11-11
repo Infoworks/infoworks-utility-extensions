@@ -1,0 +1,10 @@
+{
+  "domain_name": "",
+  "input_directory" : "",
+  "output_directory":"",
+  "environment_name":"",
+  "warehouse":"",
+  "snowflake_profile":"",
+  "batch_engine":"",
+  "user_email":""
+}

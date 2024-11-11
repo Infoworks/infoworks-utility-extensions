@@ -231,5 +231,63 @@ chmod +x main.py;
 python3 main.py --config_ini_file <path to config.ini file>
 ```
 
+## Additional Utilities for automation
+### sql_files_to_json_converter.py
+This utility is responsible for taking an input directory of sql files, and converting them to Infoworks compatible SQL pipelines JSON equivalents and finally write them to the output directory.
+Usually the output directory will be the configurations/pipelines directory under ETL_Workload_Migration script.
+
+#### Usage:
+1) Utilities directory is available in the same package as Infoworks_ETL_Workload_Migration
+2) change to utilities directory
+```bash 
+cd utilities
+```
+3) Edit config.json file.
+```json
+{
+  "domain_name": "",
+  "input_directory" : "",
+  "output_directory":"",
+  "environment_name":"",
+  "warehouse":"",
+  "snowflake_profile":"",
+  "batch_engine":"",
+  "user_email":""
+}
+```
+| **Parameter**        | **Description**                                                             |
+|:---------------------|:----------------------------------------------------------------------------|
+| `domain_name`*       | Name of the domain under which pipelines are to be created                  |
+| `input_directory`*   | The input directory where the SQL files are placed                          |
+| `output_directory`*  | The output directory where the Infoworks SQL pipelines JSONs will be placed |
+ | `environment_name`*  | Name of the Infoworks Environment that will be used for pipeline            |
+| `warehouse`*         | Name of the snowflake warehouse that will be attached to pipeline           |
+| `snowflake_profile`* | Name of the snowflake profile that will be attached to pipeline             |
+| `batch_engine`*      | SNOWFLAKE as the batch engine type                                          |
+ | `user_email`*        | Email of current infoworks user                                             |
+
+
+4) Run the sql_files_to_json_converter.py
+```bash
+python sql_files_to_json_converter.py --config_json ./utilities/config.json
+```
+
+5) Validate the output directory for the JSON files generated.
+![img.png](img/sql_pipelines_json_dir_structure.png)
+
+**Note** : The script also updates the modified_files/pipeline.csv and modified_files/pipeline_group.csv so that in next run of main.py these files gets picked up.
+![img.png](img/modified_files_csv.png)
+
+6) Run the main.py file like any other ETL workload migration process by passing necessary config.ini file.
+
+```bash
+chmod +x main.py; 
+python3 main.py --config_ini_file <path to config.ini file>
+```
+
+### delete_pipeline.py
+This utility is responsible for taking an input directory of sql files, and converting them to Infoworks compatible SQL pipelines JSON equivalents and finally write them to the output directory.
+Usually the output directory will be the configurations/pipelines directory under ETL_Workload_Migration script.
+
 # Authors
 Nitin BS - nitin.bs@infoworks.io

@@ -7,7 +7,7 @@ import sys
 import os
 import argparse
 #sys.path.insert(0,"/Users/nitin.bs/PycharmProjects/infoworks-python-sdk/")
-required = {'infoworkssdk==4.0a14'}
+required = {'infoworkssdk==5.0.6'}
 import pkg_resources
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
@@ -66,7 +66,7 @@ iwx_client_prd.get_mappings_from_config_file(ini_config_file_path=initfile)
 import networkx as nx
 
 global_lock = threading.Lock()
-num_fetch_threads = 1
+num_fetch_threads = 10
 job_queue = queue.Queue(maxsize=100)
 
 
