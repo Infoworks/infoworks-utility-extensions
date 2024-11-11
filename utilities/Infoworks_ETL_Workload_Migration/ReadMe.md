@@ -273,9 +273,11 @@ python sql_files_to_json_converter.py --config_json ./utilities/config.json
 ```
 
 5) Validate the output directory for the JSON files generated.
+
 ![img.png](img/sql_pipelines_json_dir_structure.png)
 
 **Note** : The script also updates the modified_files/pipeline.csv and modified_files/pipeline_group.csv so that in next run of main.py these files gets picked up.
+
 ![img.png](img/modified_files_csv.png)
 
 6) Run the main.py file like any other ETL workload migration process by passing necessary config.ini file.
