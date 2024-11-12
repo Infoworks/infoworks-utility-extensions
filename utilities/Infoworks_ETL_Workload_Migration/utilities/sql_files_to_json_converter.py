@@ -12,7 +12,7 @@ import hashlib
 import datetime
 import threading
 import pandas as pd
-include_pattern = "^CREATE\s*(?:OR\s*REPLACE\s*)?(?:TEMPORARY\s*)?TABLE|^INSERT\s*INTO|^UPDATE|^DELETE\s*FROM|^DROP|^MERGE"
+include_pattern = "^CREATE\s*(?:OR\s*REPLACE\s*)?(?:TEMPORARY\s*)?TABLE|^INSERT\s*INTO|^UPDATE|^DELETE\s*FROM|^DROP|^MERGE|^SET\s+([A-Z_]+)\s*=\s*\((SELECT.*)\)"
 script_start_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
 num_fetch_threads = 10
@@ -98,7 +98,7 @@ def extract_session_parameters_with_values(file_path):
     for param, value in matches:
         parameters_with_values.append({"key":param,"value": value})
     print("extract_session_parameters_with_values:",parameters_with_values)
-    return parameters_with_values
+    return parameters_with_values,matches
 
 def extract_pre_exec_queries(file_path):
     #return []
