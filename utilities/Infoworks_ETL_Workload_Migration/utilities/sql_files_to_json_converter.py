@@ -342,7 +342,7 @@ def main():
             pipelines=[]
 
             if file_path.endswith('.sql'):
-                session_parameters = extract_session_parameters_with_values(file_path)
+                session_parameters,matches = extract_session_parameters_with_values(file_path)
                 pre_exec_queries = extract_pre_exec_queries(file_path)
                 sql_statements = parse_sql_file(file_path)
                 os.makedirs(pipeline_modified_csv_directory, exist_ok=True)
