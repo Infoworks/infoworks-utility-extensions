@@ -92,8 +92,11 @@ class Environment_Metadata_Extractor():
                     pass
                 elif k == "snowflake_profiles":
                     snowflake_profiles_updated=[]
+                    user_names = []
                     for snowflake_profile in v:
                         profile_temp=copy.deepcopy(snowflake_profile)
+                        user_name = profile_temp.get("authentication_properties",{}).get("username","")
+                        user_names.append(user_name)
                         secret_id = profile_temp.get("authentication_properties",{}).get("password",{}).get("secret_id","")
                         if secret_id !="":
                             # secret_details = self.iwx_client.get_secret_details(secret_id=secret_id)
@@ -103,6 +106,7 @@ class Environment_Metadata_Extractor():
                             profile_temp["authentication_properties"]["password"]["secret_name"] = secret_name
                         snowflake_profiles_updated.append(profile_temp)
                     temp[k] = json.dumps(snowflake_profiles_updated)
+                    temp["usernames"] = list(set(user_names))
                 else:
                     temp[k] = v
             self.environment_list.append(temp)
@@ -162,7 +166,8 @@ class Environment_Metadata_Extractor():
                     "created_by",
                     "created_at",
                     "modified_by",
-                    "modified_at"
+                    "modified_at",
+                    "usernames"
                     ]
             for compute in all_computes:
                 temp = {}
