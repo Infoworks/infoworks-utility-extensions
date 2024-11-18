@@ -436,6 +436,29 @@ class AdhocMetricsReport:
             extract_secret_usage_report_df = pd.DataFrame(extract_secret_usage_report_list)
             self.dataframe_writer(extract_secret_usage_report_df, report_type=inspect.stack()[0][3])
 
+    def extract_domains_report(self):
+
+        try:
+            errors = []
+            env_id_lookup={}
+            environments = self.iwx_client.get_environment_details()
+            environments =environments.get("result",{}).get("response",{}).get("result",[])
+            for env in environments:
+                env_id_lookup[env["id"]]=env["name"]
+            domains = self.iwx_client.list_domains_as_admin()
+            domains = domains.get("result",{}).get("response",{}).get("result",[])
+            extract_domains_report_list = []
+            for domain in domains:
+                domain["environment_names"] = [env_id_lookup[env] for env in domain["environment_ids"] if env_id_lookup.get(env) is not None]
+                extract_domains_report_list.append(domain)
+        except Exception as e:
+            logging.error(str(e))
+            errors.append(str(e))
+        finally:
+            extract_domains_report_df = pd.DataFrame(extract_domains_report_list)
+            self.dataframe_writer(extract_domains_report_df, report_type=inspect.stack()[0][3])
+            print("errors:",errors)
+
 def get_all_report_methods() -> List[str]:
     method_list = [func for func in dir(AdhocMetricsReport) if
                    callable(getattr(AdhocMetricsReport, func)) and not func.startswith("__") and func.startswith(

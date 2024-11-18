@@ -260,7 +260,7 @@ python3 pipeline_metadata_extractor.py --config_file config.json --domain_names 
 This script is responsible for extracting the Infoworks environments,computes and storage details and export them to CSV file for further analysis.
 
 ```shell
-python3 environment_metadata_extractor.py --config_file ./config.json --output_directory ./csv/
+python3 environment_metadata_extractor.py --config_file ./test_config.json --output_directory ./csv/
 ```
 #### Input Arguments
 
@@ -336,7 +336,7 @@ python3 environment_metadata_extractor.py --config_file ./config.json --output_d
 This script will extract some adhoc reports from Infoworks metadata.
 
 ```shell
-python3 adhoc_metrics_report_extractor.py --config_file ./config.json --output_directory ./csv/
+python3 adhoc_metrics_report_extractor.py --config_file ./test_config.json --output_directory ./csv/
 ```
 #### Input Arguments
 
@@ -522,6 +522,26 @@ This metadata csv outlines the details of secrets configured within Infoworks al
 | **service_authentication_details**   | Details of service Authentication(Client ID used etc).JSON object with all the details. |
 | **description**                      | Description of secret if any.                                                           |
 
+##### extract_domains_report.csv
+
+This metadata csv outlines the details of domains within Infoworks.
+
+| **Attribute**                         | **Description**                                                       |
+|:--------------------------------------|:----------------------------------------------------------------------|
+| **id**                                | Id of the secret in Infoworks.                                        |
+| **name**                              | Name of the Infoworks Secret.                                         |
+| **description**                       | Description of Domain if any                                          |
+| **environment_ids**                   | Ids of environments associated with domain.                           |
+| **environment_names**                 | Names of environments associated with domain.                         |
+| **created_at**                        | Created time.                                                         |
+| **created_by**                        | Created User.                                                         |
+| **modified_at**                       | Modified time.                                                        |
+| **modified_by**                       | Modified User.                                                        |
+| **accessible_domains**                | List of Domains accessible by current Domain.                         |
+| **secrets**                           | List of secret accessible to domain.                                  |
+| **accessible_pipeline_extensions**    | Ids of pipeline extensions accessible by domain.                      |
+| **recently_used**                     | Details of artifacts that recently used this domain. Eg: pipeline etc |
+| **comments**                          | Comments associated with Domain if any.                               |
 
 
 ## Authors
