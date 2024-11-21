@@ -19,19 +19,26 @@ logging.basicConfig(level=logging.INFO,
 
 def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipelines: list, get_all_pipelines=False, should_fetch_column_lineage=False):
     domain_mapping = {}
+    errors =[]
     if len(domain_ids) > 0:
         for domain_id in domain_ids:
-            domain_response = iwx_client.get_domain_details(domain_id)
-            if domain_response.get("result").get("status") == "success":
-                result = domain_response.get("result").get("response", {}).get("result", {})
-                domain_name = result["name"]
-                domain_mapping[domain_id] = domain_name
+            try:
+                domain_response = iwx_client.get_domain_details(domain_id)
+                if domain_response.get("result").get("status") == "success":
+                    result = domain_response.get("result").get("response", {}).get("result", {})
+                    domain_name = result["name"]
+                    domain_mapping[domain_id] = domain_name
+            except Exception as e:
+                errors.append(str(e))
     elif len(domain_names) > 0:
         for domain in domain_names:
-            domain_id_response = iwx_client.get_domain_id(domain)
-            if domain_id_response.get("result").get("status") == "success":
-                domain_id = domain_id_response.get("result").get("response", {}).get("domain_id",None)
-                domain_mapping[domain_id] = domain
+            try:
+                domain_id_response = iwx_client.get_domain_id(domain)
+                if domain_id_response.get("result").get("status") == "success":
+                    domain_id = domain_id_response.get("result").get("response", {}).get("domain_id",None)
+                    domain_mapping[domain_id] = domain
+            except Exception as e:
+                errors.append(str(e))
 
     logging.info("Domains of interest: " + str(domain_mapping))
     output = []
@@ -210,11 +217,12 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                         # print(pipeline_info_row)
                         output.append(pipeline_info_row.copy())
 
+    print("errors:",errors)
     return output
 
 
 if __name__ == "__main__":
-    required = {'pandas', 'infoworkssdk==5.0.6'}
+    required = {'jwt','pandas', 'infoworkssdk==5.0.6'}
     installed = {pkg.key for pkg in pkg_resources.working_set}
     missing = required - installed
 
@@ -225,7 +233,6 @@ if __name__ == "__main__":
 
     import pandas as pd
     import warnings
-
     warnings.filterwarnings('ignore', '.*Unverified HTTPS request.*', )
     from infoworks.sdk.client import InfoworksClientSDK
     import infoworks.sdk.local_configurations
@@ -254,8 +261,6 @@ if __name__ == "__main__":
             domain_names = args.domain_names.split(",")
         if args.domain_ids is not None:
             domain_ids = args.domain_ids.split(",")
-        if not (len(domain_names) > 0 or len(domain_ids) > 0):
-            raise Exception("Please pass either domain_names or domain_ids")
         if args.pipelines is not None:
             pipelines = args.pipelines.split(",")
         if args.should_fetch_column_lineage in ["false", "False", "FALSE", "f", "F", "n", "N"]:
@@ -270,11 +275,15 @@ if __name__ == "__main__":
         iwx_client = InfoworksClientSDK()
         iwx_client.initialize_client_with_defaults(config.get("protocol", "https"), config.get("host", None),
                                                    config.get("port", 443), config.get("refresh_token", None))
-
+        if not (len(domain_names) > 0 or len(domain_ids) > 0):
+            domains = iwx_client.list_domains()
+            domains = domains.get("result",{}).get("response",{}).get("result",[])
+            domain_ids = [domain["id"] for domain in domains]
         if len(pipelines) > 0:
             get_all_pipelines = False
         else:
             get_all_pipelines = True
+
         output = get_pipeline_metadata(iwx_client, domain_names=domain_names, domain_ids=domain_ids, pipelines=pipelines, get_all_pipelines=get_all_pipelines, should_fetch_column_lineage=should_fetch_column_lineage)
         if len(output) > 0:
             logging.info("Saving Output as PipelineMetadata.csv ")
