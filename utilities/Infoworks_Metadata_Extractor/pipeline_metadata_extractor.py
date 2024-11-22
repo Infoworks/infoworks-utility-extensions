@@ -44,9 +44,10 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
     output = []
     for domain_id in domain_mapping:
         pipeline_response = iwx_client.list_pipelines(domain_id=domain_id)
+        pipelines_list = pipeline_response.get("result").get("response", {}).get("result", [])
         if pipeline_response.get("result").get("status") == "success":
-            for pipeline in pipeline_response.get("result").get("response", {}).get("result", []):
-                pipeline_info_row = {'domain_name': '', 'pipeline_name': '', 'number_of_versions': '',
+            for pipeline in pipelines_list:
+                pipeline_info_row = {'domain_name': '', 'pipeline_name': '','pipeline_type':'visual', 'number_of_versions': '',
                                      'active_version': '', 'batch_engine': '',
                                      'created_at': '',
                                      'created_by': '',
@@ -91,7 +92,6 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
 
                 if pipeline_config_response.get("result").get("status") == "success":
                     pipeline_config = pipeline_config_response.get("result").get("response", {}).get("result", {})
-
                     iw_mappings = pipeline_config["configuration"].get("iw_mappings", [])
                     src_tables = []
                     for item in iw_mappings:
@@ -111,17 +111,22 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                     environmentName = pipeline_config["configuration"].get("entity").get('environmentName', '')
                     storageName = pipeline_config["configuration"].get("entity").get('storageName', '')
                     computeName = pipeline_config["configuration"].get("entity").get('computeName', '')
+                    pipeline_info_row["pipeline_type"] = pipeline_config["configuration"].get("pipeline_configs", {}).get("type", "visual")
                     pipeline_info_row["environment_name"] = environmentName
                     pipeline_info_row["storage_name"] = storageName
                     pipeline_info_row["compute_name"] = computeName
                     pipeline_info_row["src_tables"] = ",".join(src_tables)
-
+                    if pipeline_config["configuration"].get("pipeline_configs").get("model",{}).get("nodes", {})=={}:
+                        output.append(pipeline_info_row.copy())
+                        continue
                     target_details = []
                     for node in pipeline_config["configuration"].get("pipeline_configs").get("model",{}).get("nodes", []):
                         req_dict = pipeline_config["configuration"].get("pipeline_configs").get("model",{}).get("nodes",[])
                         if req_dict:
                             req_dict = req_dict[node]
-                        if req_dict['type'].upper() in ["TARGET", "BIGQUERY_TARGET", "SNOWFLAKE_TARGET"]:
+                        else:
+                            output.append(pipeline_info_row.copy())
+                        if req_dict['type'].upper() in ["TARGET", "BIGQUERY_TARGET", "SNOWFLAKE_TARGET","CUSTOM_TARGET"]:
                             target_type = req_dict['type'].upper()
                             props = req_dict["properties"]
                             target_schema_name = props.get("schema_name", "") if props.get("target_schema_name",
@@ -206,6 +211,7 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                                  "derived_expr_if_any": derived_expr_list,
                                  "storage_format": storage_format})
 
+
                     for target in target_details:
                         for key in ["target_type", "target_schema_name", "target_database_name", "target_table_name",
                                     "target_base_path",
@@ -288,7 +294,7 @@ if __name__ == "__main__":
         if len(output) > 0:
             logging.info("Saving Output as PipelineMetadata.csv ")
             pd.DataFrame(output).to_csv("PipelineMetadata.csv",
-                                        columns=['domain_name', 'pipeline_name', 'number_of_versions', 'active_version',
+                                        columns=['domain_name', 'pipeline_name','pipeline_type', 'number_of_versions', 'active_version',
                                                  'batch_engine', 'created_at','created_by',
                                                  'modified_at',
                                                  'modified_by',
