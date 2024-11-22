@@ -108,9 +108,9 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                                 source_name = ""
                             source_table_name = item["recommendation"]["table_name"]
                             src_tables.append(f"{source_name}:{source_table_name}")
-                    environmentName = pipeline_config["configuration"].get("entity").get('environmentName', '')
-                    storageName = pipeline_config["configuration"].get("entity").get('storageName', '')
-                    computeName = pipeline_config["configuration"].get("entity").get('computeName', '')
+                    environmentName = pipeline_config["configuration"].get("entity").get('environment_name', '')
+                    storageName = pipeline_config["configuration"].get("entity").get('storage_name', '')
+                    computeName = pipeline_config["configuration"].get("entity").get('compute_name', '')
                     pipeline_info_row["pipeline_type"] = pipeline_config["configuration"].get("pipeline_configs", {}).get("type", "visual")
                     pipeline_info_row["environment_name"] = environmentName
                     pipeline_info_row["storage_name"] = storageName
@@ -211,7 +211,6 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                                  "derived_expr_if_any": derived_expr_list,
                                  "storage_format": storage_format})
 
-
                     for target in target_details:
                         for key in ["target_type", "target_schema_name", "target_database_name", "target_table_name",
                                     "target_base_path",
@@ -222,8 +221,8 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                             pipeline_info_row[key] = target[key]
                         # print(pipeline_info_row)
                         output.append(pipeline_info_row.copy())
-
-    print("errors:",errors)
+    if errors:
+        print("Errors:", errors)
     return output
 
 
