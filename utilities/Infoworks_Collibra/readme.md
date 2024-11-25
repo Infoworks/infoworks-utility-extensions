@@ -5,7 +5,7 @@ Infoworks' customer can use and/or modify the script to fit their needs.
 
 # Data Flow:
 The following is diagram depicting the data lineage flow:
-![Infoworks - Collibra Integration](/IWXCollibraDataFlow.png?raw=true)
+![Infoworks - Collibra Integration](/IWXCollibraDataFlow.png?raw=true).
 
 # Pre-requisites:
 
