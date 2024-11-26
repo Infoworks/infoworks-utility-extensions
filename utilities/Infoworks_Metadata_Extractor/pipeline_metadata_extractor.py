@@ -109,9 +109,9 @@ def get_pipeline_metadata(iwx_client, domain_names: list, domain_ids: list, pipe
                                     source_name = ""
                                 source_table_name = item["recommendation"]["table_name"]
                                 src_tables.append(f"{source_name}:{source_table_name}")
-                        environmentName = pipeline_config.get("configuration",{}).get("entity").get('environmentName', '')
-                        storageName = pipeline_config.get("configuration",{}).get("entity").get('storageName', '')
-                        computeName = pipeline_config.get("configuration",{}).get("entity").get('computeName', '')
+                        environmentName = pipeline_config.get("configuration",{}).get("entity").get('environment_name', '')
+                        storageName = pipeline_config.get("configuration",{}).get("entity").get('storage_name', '')
+                        computeName = pipeline_config.get("configuration",{}).get("entity").get('compute_name', '')
                         pipeline_info_row["pipeline_type"] = pipeline_config.get("configuration",{}).get("pipeline_configs", {}).get("type", "visual")
                         pipeline_info_row["environment_name"] = environmentName
                         pipeline_info_row["storage_name"] = storageName
