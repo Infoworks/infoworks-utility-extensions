@@ -348,7 +348,7 @@ def main():
                 os.makedirs(pipeline_modified_csv_directory, exist_ok=True)
                 for index,sql_statement in enumerate(sql_statements):
                     #print(sql_statement)
-                    file_name_without_extension = file_path.split("/")[-1].split(".")[0]
+                    file_name_without_extension = file_path.split(os.sep)[-1].split(".")[0]
                     pipeline_id = bson.objectid.ObjectId()
                     pipeline_name = file_name_without_extension + "_" + str(index)
                     pipeline_template = Template(pipeline_json_template)
