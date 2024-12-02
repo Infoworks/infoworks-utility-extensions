@@ -334,8 +334,8 @@ def main():
     pipeline_grp_json_directory = os.path.join(output_directory, "pipeline_group")
     pipeline_grp_modified_csv_directory = os.path.join(output_directory, "modified_files")
     domain_name = config_json.get("domain_name")
-    with open(os.path.join(pipeline_modified_csv_directory, "pipeline.csv"), "w") as pipeline_csv_file,\
-        open(os.path.join(pipeline_grp_modified_csv_directory, "pipeline_group.csv"), "w") as pipeline_grp_csv_file:
+    with open(os.path.join(pipeline_modified_csv_directory, "pipeline.csv"), "w", newline='') as pipeline_csv_file,\
+        open(os.path.join(pipeline_grp_modified_csv_directory, "pipeline_group.csv"), "w", newline='') as pipeline_grp_csv_file:
         pipeline_csv_writer = csv.writer(pipeline_csv_file)
         pipeline_grp_csv_writer = csv.writer(pipeline_grp_csv_file)
         for file_path in [os.path.join(input_directory, file) for file in os.listdir(input_directory)]:
