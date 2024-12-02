@@ -129,10 +129,10 @@ if __name__ == '__main__':
         worker.setDaemon(True)
         worker.start()
 
-    with open(os.path.join("configurations/modified_files", "source.csv"), "r") as src_files_fp:
+    with open(os.path.join("configurations","modified_files", "source.csv"), "r") as src_files_fp:
         for src_file in src_files_fp.readlines():
             src_args = {"entity_type": "source",
-                        "source_config_path": os.path.join("configurations/source", src_file.strip())}
+                        "source_config_path": os.path.join("configurations","source", src_file.strip())}
             job_queue.put(src_args)
             print(src_args)
     print('*** Main thread waiting to complete all source configuration requests ***')
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     print('*** Done with Source Configurations ***')
 
     if maintain_lineage == 'true':
-        graph = nx.read_gexf("configurations/modified_files/pipeline.gexf")
+        graph = nx.read_gexf(os.path.join("configurations","modified_files","pipeline.gexf"))
         for item in topological_sort_grouping(graph):
             for i in item:
                 if i is not "root":
@@ -151,14 +151,14 @@ if __name__ == '__main__':
                         if domain_name.lower() in domain_mappings.keys():
                             domain_name = domain_mappings.get(domain_name.lower(), domain_name)
                     pipeline_args = {"entity_type": "pipeline",
-                                     "pipeline_config_path": os.path.join("configurations/pipeline", pipeline_file),
+                                     "pipeline_config_path": os.path.join("configurations","pipeline", pipeline_file),
                                      "domain_name": domain_name}
                     job_queue.put(pipeline_args)
             print('*** Main thread waiting to complete all pending pipeline creation/configuration requests ***')
             job_queue.join()
             print('*** Done with All Tasks ***')
     else:
-        with open(os.path.join("configurations/modified_files", "pipeline.csv"), "r") as pipeline_files_fp:
+        with open(os.path.join("configurations","modified_files", "pipeline.csv"), "r") as pipeline_files_fp:
             overall_pipelines_report_list=[]
             for pipeline_file in pipeline_files_fp.readlines():
                 pl_name = pipeline_file.strip()
@@ -168,7 +168,7 @@ if __name__ == '__main__':
                     if domain_name.lower() in domain_mappings.keys():
                         domain_name = domain_mappings.get(domain_name.lower(), domain_name)
                 pipeline_args = {"entity_type": "pipeline",
-                                 "pipeline_config_path": os.path.join("configurations/pipeline", pl_name),
+                                 "pipeline_config_path": os.path.join("configurations","pipeline", pl_name),
                                  "domain_name": domain_name}
                 job_queue.put(pipeline_args)
 
@@ -176,7 +176,7 @@ if __name__ == '__main__':
         job_queue.join()
         print('*** Done with Pipeline Configurations ***')
 
-    with open(os.path.join("configurations/modified_files", "pipeline_group.csv"), "r") as pipeline_grp_file_fp:
+    with open(os.path.join("configurations","modified_files", "pipeline_group.csv"), "r") as pipeline_grp_file_fp:
         for pipeline_grp_file in pipeline_grp_file_fp.readlines():
             pipeline_grp_name = pipeline_grp_file.strip()
             domain_name = pipeline_grp_name.split("#")[0]
@@ -185,7 +185,7 @@ if __name__ == '__main__':
                 if domain_name.lower() in domain_mappings.keys():
                     domain_name = domain_mappings.get(domain_name.lower(), domain_name)
             pipeline_grp_args = {"entity_type": "pipeline_group",
-                        "pipeline_group_config_path": os.path.join("configurations/pipeline_group", pipeline_grp_file.strip()),
+                        "pipeline_group_config_path": os.path.join("configurations","pipeline_group", pipeline_grp_file.strip()),
                                  "domain_name": domain_name}
             job_queue.put(pipeline_grp_args)
             print(pipeline_grp_args)
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     print('*** Done with pipeline group Configurations ***')
 
     if maintain_lineage == 'true':
-        graph = nx.read_gexf("configurations/modified_files/workflow.gexf")
+        graph = nx.read_gexf("configurations","modified_files","workflow.gexf")
         for item in topological_sort_grouping(graph):
             for i in item:
                 if i is not "root":
@@ -205,14 +205,14 @@ if __name__ == '__main__':
                         if domain_name.lower() in domain_mappings.keys():
                             domain_name = domain_mappings.get(domain_name.lower(), domain_name)
                     wf_args = {"entity_type": "workflow",
-                               "workflow_config_path": os.path.join("configurations/workflow", wf_name),
+                               "workflow_config_path": os.path.join("configurations","workflow", wf_name),
                                "domain_name": domain_name}
                     job_queue.put(wf_args)
             print('*** Main thread waiting to complete all pending pipeline creation/configuration requests ***')
             job_queue.join()
             print('*** Done with All Tasks ***')
     else:
-        with open(os.path.join("configurations/modified_files", "workflow.csv"), "r") as workflow_file_fp:
+        with open(os.path.join("configurations","modified_files", "workflow.csv"), "r") as workflow_file_fp:
             for workflow_file in workflow_file_fp.readlines():
                 wf_name = workflow_file.strip()
                 domain_name = wf_name.split("#")[0]
@@ -221,7 +221,7 @@ if __name__ == '__main__':
                     if domain_name.lower() in domain_mappings.keys():
                         domain_name = domain_mappings.get(domain_name.lower(), domain_name)
                 wf_args = {"entity_type": "workflow",
-                           "workflow_config_path": os.path.join("configurations/workflow", wf_name),
+                           "workflow_config_path": os.path.join("configurations","workflow", wf_name),
                            "domain_name": domain_name}
                 job_queue.put(wf_args)
 
