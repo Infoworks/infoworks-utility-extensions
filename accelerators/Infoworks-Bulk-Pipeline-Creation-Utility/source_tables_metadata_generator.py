@@ -97,9 +97,9 @@ class SourceTablesMetadata():
             temp["compute_template_name"] = self.configuration_json.get("compute_template_name","")
             temp["ml_engine"] = "SparkML"
             temp["source_table_name"] = f"{table['name']}"
-            temp["source_table_schema"] = f"{table['schema_name_at_source']}"
-            temp["catalog_name"] = f"{table['catalog_name']}"
-            temp["catalog_is_database"] = f"{table['catalog_is_database']}"
+            temp["source_table_schema"] = f"{table.get('schema_name_at_source','')}"
+            temp["catalog_name"] = f"{table.get('catalog_name','')}"
+            temp["catalog_is_database"] = f"{table.get('catalog_is_database',False)}"
             natural_keys = table.get("configuration",{}).get("natural_keys",[])
             if natural_keys is None or natural_keys==[]:
                 temp["natural_keys"] = ""
