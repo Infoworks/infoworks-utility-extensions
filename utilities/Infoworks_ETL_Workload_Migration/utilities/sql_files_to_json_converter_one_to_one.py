@@ -1,5 +1,4 @@
 import logging
-import traceback
 import json
 import os
 import csv
@@ -7,13 +6,10 @@ import argparse
 from jinja2 import Template
 import bson
 import base64
-import re
 import hashlib
 import datetime
 import threading
-import pandas as pd
 
-include_pattern = "^CREATE\s*(?:OR\s*REPLACE\s*)?(?:TEMPORARY\s*)?TABLE|^INSERT\s*INTO|^UPDATE|^DELETE\s*FROM|^DROP|^MERGE|^SET\s+([A-Z_]+)\s*=\s*\((SELECT.*)\)"
 script_start_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
 num_fetch_threads = 10
