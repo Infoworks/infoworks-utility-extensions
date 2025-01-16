@@ -221,14 +221,17 @@ class AdhocMetricsReport:
         print(extension_usage_df.columns)
         print("extract_extensions_df.columns")
         print(extract_extensions_df.columns)
-        resultant_df = extract_extensions_df.merge(extension_usage_df, how="left", left_on="id",
-                                                   right_on="extension_id")
-        resultant_df["extension_name"] = resultant_df["pipeline_extension_name"].fillna(resultant_df["name"])
-        resultant_df.drop(columns=['pipeline_extension_name', 'name'], inplace=True)
-        extension_name_column = resultant_df.pop("extension_name")
-        # Insert the column at the desired position
-        resultant_df.insert(1, "extension_name", extension_name_column)
-        self.dataframe_writer(resultant_df, report_type=inspect.stack()[0][3])
+        if not extract_extensions_df.empty:
+            resultant_df = extract_extensions_df.merge(extension_usage_df, how="left", left_on="id",
+                                                       right_on="extension_id")
+            resultant_df["extension_name"] = resultant_df["pipeline_extension_name"].fillna(resultant_df["name"])
+            resultant_df.drop(columns=['pipeline_extension_name', 'name'], inplace=True)
+            extension_name_column = resultant_df.pop("extension_name")
+            # Insert the column at the desired position
+            resultant_df.insert(1, "extension_name", extension_name_column)
+            self.dataframe_writer(resultant_df, report_type=inspect.stack()[0][3])
+        else:
+            print("No Extensions Found!")
 
     def extract_target_data_connections_report(self):
         pipeline_parsed_count = 0
@@ -423,7 +426,8 @@ class AdhocMetricsReport:
                 secret_store_details = self.iwx_client.get_secret_store_details(secret_store_id=secret["secret_store"])
                 secret_store_details = secret_store_details.get("result", {}).get("response", {}).get("result", {})
                 secret["secret_store_details"] = secret_store_details
-                service_authentication = secret_store_details.get("service_authentication","")
+                secret["secret_store_name"] = secret_store_details.get("name", "")
+                service_authentication = secret_store_details.get("service_authentication", "")
                 if service_authentication:
                     service_authentication_details = self.iwx_client.get_service_authentication_details(service_auth_id=service_authentication)
                     service_authentication_details = service_authentication_details.get("result", {}).get("response", {}).get("result", {})
