@@ -17,8 +17,9 @@ import logging
 from infoworks.sdk.utils import IWUtils
 from infoworks.sdk.client import InfoworksClientSDK
 import infoworks.sdk.local_configurations
-
+import warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+warnings.filterwarnings("ignore")
 
 
 def configure_logger(folder, filename):
@@ -564,7 +565,7 @@ def get_table_id(tables, table_name):
 def configure_table_group(table_group_object, source_id):
     try:
         logger.info("Configuring table group with below configurations")
-        logger.info(table_group_object)
+        logger.info(json.dumps(table_group_object))
         temp = []
         already_added_tables = []
         for table in table_group_object["tables"]:
@@ -1245,9 +1246,10 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
         # Table Group Configurations
         if configure_table_group_bool:
             tg_defaults = configuration_json["table_groups"]
-            table_group_object = {}
+            # table_group_object = {}
 
             for table_group in tg_defaults:
+                table_group_object = {}
                 tables_from_config = []
                 if tg_default_dict[table_group['name']]:
                     config_connection_quota = 100 // len(tg_default_dict[table_group['name']])
@@ -1308,7 +1310,7 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                 table_group_object["name"] = table_group["name"]
                 table_group_object["max_connections"] = table_group.get('max_connections_to_source', 1)
                 table_group_object["max_parallel_entities"] = table_group.get('max_parallel_tables', len(tables))
-                if table_group.get("combined_schedule",""):
+                if table_group.get("combined_schedule", ""):
                     table_group_object["combined_schedule"]=table_group.get("combined_schedule",{})
                 if table_group.get("has_schedule_changed", ""):
                     table_group_object["has_schedule_changed"] = table_group.get("has_schedule_changed", True)
@@ -1318,6 +1320,32 @@ def tables_configure(source_id, configure_table_group_bool, source_type):
                     table_group_object["scheduler_username"] = table_group.get("scheduler_username", "")
                 if table_group.get("scheduler_username", ""):
                     table_group_object["scheduler_auth_token"] = table_group.get("scheduler_auth_token", "")
+                if table_group.get("sla_config", ""):
+                    table_group_object["sla_config"] = table_group.get("sla_config", {})
+                    if table_group["sla_config"].get("user_recipients", []) or \
+                            table_group.get("subscriber_recipients", []):
+                        users_result = iwx_client.list_users_as_non_admin()
+                        users = users_result.get('result', {}).get('response', {}).get('result', [])
+                        users_dict = {}
+                        for user in users:
+                            email = user.get('email', '')
+                            users_dict[email] = user
+                        if table_group["sla_config"].get("user_recipients", []):
+                            user_recipients = []
+                            for user_email in table_group["sla_config"].get("user_recipients", []):
+                                if user_email in users_dict:
+                                    user_recipients.append(users_dict[user_email]['id'])
+                                else:
+                                    print(f"User Email '{user_email}' not found")
+                            table_group_object['sla_config']['user_recipients'] = user_recipients
+                        if table_group["sla_config"].get("subscriber_recipients", []):
+                            subscriber_recipients = []
+                            for subscriber_email in table_group["sla_config"].get("subscriber_recipients", []):
+                                if subscriber_email in users_dict:
+                                    subscriber_recipients.append(users_dict[subscriber_email]['id'])
+                                else:
+                                    print(f"Subscriber Email '{subscriber_email}' not found")
+                            table_group_object['sla_config']['subscriber_recipients'] = subscriber_recipients
                 if tables_should_be_picked_from_config:
                     table_group_object["tables"] = tables_from_config
                 else:
