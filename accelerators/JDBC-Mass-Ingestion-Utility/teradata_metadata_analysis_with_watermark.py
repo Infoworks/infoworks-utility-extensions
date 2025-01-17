@@ -107,7 +107,7 @@ split_by_keys=f"""SELECT  DataBaseName as DATABASENAME,
         TableName as TABLENAME,
         TRIM(TRAILING ',' FROM XMLAGG(ColumnName || ',')(varchar(10000))) AS SPLIT_BY_KEY_CANDIDATES
 FROM    DBC.ColumnsV
-WHERE   ColumnType in ('DA', 'AT', 'TS', 'TZ', 'SZ', 'YR', 'YM', 'MO',
+WHERE   ColumnType in ('I1','I2','I8','I','DA', 'AT', 'TS', 'TZ', 'SZ', 'YR', 'YM', 'MO',
         'DY', 'DH', 'DM', 'DS', 'HR', 'HM', 'HS', 'MI', 'MS', 'SC')
         AND DataBaseName NOT IN ('All', 'Crashdumps', 'DBC', 'dbcmngr',
         'Default', 'External_AP', 'EXTUSER', 'LockLogShredder', 'PUBLIC',
