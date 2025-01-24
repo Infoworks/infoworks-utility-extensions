@@ -1,7 +1,8 @@
 import argparse
 import sys
 import json
-
+import warnings
+import logging
 from infoworks.sdk.client import InfoworksClientSDK
 from configparser import ConfigParser
 
@@ -10,18 +11,32 @@ output = {
     "tree": [],
     "lineages": []
 }
-config = ConfigParser()
-config.optionxform = str
-config.read('config.ini')
+
 
 from collections import defaultdict
+
+# Initiate logging
+warnings.filterwarnings('ignore', '.*Unverified HTTPS request.*', )
+warnings.filterwarnings("ignore")
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s — [ %(levelname)s ] — %(message)s",
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    filename='iwx.log'
+                    )
+logging.getLogger().addHandler(logging.StreamHandler())
 
 
 def def_value():
     return {}
 
+# Get Infoworks server information from config file
+def get_client_config(config_file):
+    
+    logging.info(f"config file is: {config_file}")
+    config = ConfigParser()
+    config.optionxform = str
+    config.read(config_file)
 
-def get_client_config():
     hostname = config.get("api_mappings", "ip")
     port = config.get("api_mappings", "port")
     protocol = config.get("api_mappings", "protocol")
@@ -164,7 +179,9 @@ def source_lineage(iwx_client_prd: InfoworksClientSDK, source_id, table_ids=None
 
 def pipeline_lineage(iwx_client_prd: InfoworksClientSDK, pipeline_id, domain_id, master_pipeline_ids,
                      master_sourcetable_ids):
+    logging.info("Get pipeline lineage")
     result = iwx_client_prd.get_pipeline(pipeline_id, domain_id)
+    logging.info(f"{result}")
     lineages = []
     system_dict = {}
     if result.get("result").get("status") == "success":
@@ -244,17 +261,21 @@ def pipeline_lineage(iwx_client_prd: InfoworksClientSDK, pipeline_id, domain_id,
 
 
 if __name__ == '__main__':
+    
     parser = argparse.ArgumentParser('Pipeline Lineage Dump to Collibra')
-    parser.add_argument('--domain_id', required=False, help='Pass the domain id here')
+    parser.add_argument('--config_file', required=True, help='Fully qualified path of the configuration file')
+    parser.add_argument('--domain_id', required=True, help='Pass the domain id here')
     parser.add_argument('--pipeline_id', required=False, default=None, help='Pass the pipeline id here')
     parser.add_argument('--source_id', required=False, default=None, help='Pass the source id here')
     parser.add_argument('--source_table_ids', required=False, default=None,
                         help='Pass the comma seperated source_id:table_id combination here. Example: 324516t6:123434')
     args = vars(parser.parse_args())
+    config_file = args["config_file"]
     domain_id = args["domain_id"]
     pipeline_id = args["pipeline_id"]
     source_id = args["source_id"]
-    protocol, hostname, port, refresh_token = get_client_config()
+    protocol, hostname, port, refresh_token = get_client_config(config_file)
+    logging.info("complete reading the file")
     iwx_client_prd = InfoworksClientSDK()
     iwx_client_prd.initialize_client_with_defaults(protocol, hostname, port, refresh_token)
 
