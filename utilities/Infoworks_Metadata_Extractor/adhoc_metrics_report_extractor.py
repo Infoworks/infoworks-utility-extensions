@@ -117,6 +117,61 @@ class AdhocMetricsReport:
         job_hook_dependencies_df = pd.DataFrame(job_hook_dependencies_list)
         self.dataframe_writer(job_hook_dependencies_df, report_type=inspect.stack()[0][3])
 
+    def extract_domain_info(self):
+        domains_response = self.iwx_client.list_domains()
+        domains = domains_response.get('result', {}).get('response', {}).get('result', [])
+        parsed_domain_data = []
+        user_data = {}
+        for domain in domains:
+            user_id = domain.get('created_by')
+            if user_id:
+                if user_id in user_data:
+                    user_name = user_data[user_id]
+                else:
+                    user_details_response = self.iwx_client.get_user_details(user_id=user_id)
+                    user_result = user_details_response.get('result', {}).get('response', {}).get('result', [])
+                    if isinstance(user_result[0], dict):
+                        user_name = user_result[0]['profile']['name']
+                    else:
+                        logging.info(f"User Details not found for id '{user_id}' - Response : {user_details_response}")
+                        user_name = ''
+                    user_data[user_id] = user_name
+            else:
+                user_name = ''
+            domain_row = {
+                "domain_id": domain['id'],
+                "domain_name": domain['name'],
+                "description": domain.get('description'),
+                "created_by": user_name
+            }
+            parsed_domain_data.append(domain_row)
+        domains_df = pd.DataFrame(parsed_domain_data)
+        self.dataframe_writer(domains_df, report_type=inspect.stack()[0][3])
+
+    def extract_user_info(self):
+        try:
+            user_data=[]
+            domains_response = self.iwx_client.list_domains()
+            domains = domains_response.get('result', {}).get('response', {}).get('result', [])
+            domains_dict = {domain['id']: domain['name'] for domain in domains}
+
+            users_response = self.iwx_client.list_users()
+            users = users_response.get('result', {}).get('response', {}).get('result', [])
+            for user in users:
+                accessible_domains = user.get('accessible_domains', [])
+                domain_names_list = [domains_dict.get(domain_id, '') for domain_id in accessible_domains if
+                                     domains_dict.get(domain_id)]
+                accessible_domains_names = ', '.join(domain_names_list)
+                user_row = {"id": user['id'], "profile.name": user['profile'].get('name'),
+                            "profile.email": user['profile'].get('email'), "roles": user.get('roles'),
+                            "accessible_domains": accessible_domains_names, "created_at": user.get('created_at'),
+                            "status.last_login_details": user.get('status', {}).get('last_login_details')}
+                user_data.append(user_row)
+            users_df = pd.DataFrame(user_data)
+            self.dataframe_writer(users_df, report_type=inspect.stack()[0][3])
+        except Exception as error:
+            raise Exception(f"Failed to get users info: {error}")
+
     def extract_infoworks_artifact_creator(self):
         response = self.iwx_client.get_list_of_sources()
         sources = response["result"]["response"]["result"]
@@ -133,6 +188,10 @@ class AdhocMetricsReport:
             temp["artifact_name"] = source["name"]
             temp["artifact_type"] = "source"
             temp["creator_name"], temp["creator_email"] = users_lookup.get(source.get("created_by", ""),("deleted_user","deleted_user"))
+            temp["created_at"] = source.get("created_at")
+            temp["created_by"] = source.get("created_by")
+            temp["modified_at"] = source.get("modified_at")
+            temp["modified_by"] = source.get("modified_by")
             artifact_creator_list.append(temp)
         response = self.iwx_client.list_domains()
         domains = response["result"]["response"]["result"]
@@ -146,6 +205,10 @@ class AdhocMetricsReport:
                 temp["artifact_type"] = "pipeline"
                 temp["domain_name"] = domain["name"]
                 temp["creator_name"], temp["creator_email"] = users_lookup.get(pipeline.get("created_by", ""),("deleted_user","deleted_user"))
+                temp["created_at"] = pipeline.get("created_at")
+                temp["created_by"] = pipeline.get("created_by")
+                temp["modified_at"] = pipeline.get("modified_at")
+                temp["modified_by"] = pipeline.get("modified_by")
                 artifact_creator_list.append(temp)
             workflows_under_domain = self.iwx_client.get_list_of_workflows(domain_id=domain["id"])
             workflows_under_domain = workflows_under_domain.get("result", {}).get("response", {}).get("result", [])
@@ -155,6 +218,10 @@ class AdhocMetricsReport:
                 temp["artifact_type"] = "workflow"
                 temp["creator_name"], temp["creator_email"] = users_lookup.get(
                     workflow.get("created_by", ("deleted_user", "deleted_user")), ("deleted_user", "deleted_user"))
+                temp["created_at"] = workflow.get("created_at")
+                temp["created_by"] = workflow.get("created_by")
+                temp["modified_at"] = workflow.get("modified_at")
+                temp["modified_by"] = workflow.get("modified_by")
                 artifact_creator_list.append(temp)
 
         extract_infoworks_artifact_creator_df = pd.DataFrame(artifact_creator_list)
@@ -231,7 +298,7 @@ class AdhocMetricsReport:
             resultant_df.insert(1, "extension_name", extension_name_column)
             self.dataframe_writer(resultant_df, report_type=inspect.stack()[0][3])
         else:
-            print("No Extensions Found!")
+            print("No Extensions Usage Found!")
 
     def extract_target_data_connections_report(self):
         pipeline_parsed_count = 0
@@ -272,6 +339,9 @@ class AdhocMetricsReport:
                 'pipelines_using_data_connection', 'domain_name']].agg(set)
             pipelines_using_extension_df["domain_name"] = pipelines_using_extension_df["domain_name"].apply(
                 lambda x: list(x))
+        else:
+            pipelines_using_extension_df = pd.DataFrame(columns=['data_connection_id',
+                                                                 'pipelines_using_data_connection', 'domain_name'])
         sources = self.iwx_client.get_list_of_sources(
             params={"filter": {"environment_id": {"$in": databricks_envs_ids}}})
         sources = sources.get("result", {}).get("response", {}).get("result", [])
@@ -293,7 +363,11 @@ class AdhocMetricsReport:
                     "source_tables_using_extension": (source["name"], tables_using_dataconnections_under_this_source),
                     "data_connection_id": data_connection_id
                 })
-        sources_using_target_connection_df = pd.DataFrame(sources_using_target_connection)
+        if sources_using_target_connection:
+            sources_using_target_connection_df = pd.DataFrame(sources_using_target_connection)
+        else:
+            sources_using_target_connection_df = pd.DataFrame(columns=['data_connection_id',
+                                                                       'source_tables_using_extension'])
         resultant_df = target_data_connections_df.merge(pipelines_using_extension_df, how="left", left_on="id",
                                                         right_on="data_connection_id")
         resultant_df = resultant_df.merge(sources_using_target_connection_df, how="left", left_on="id",
@@ -316,6 +390,10 @@ class AdhocMetricsReport:
             temp["name"] = generic_source["name"]
             temp["id"] = generic_source["id"]
             temp["dependent_sources"] = sources_dependencies
+            temp["created_at"] = generic_source.get("created_at")
+            temp["created_by"] = generic_source.get("created_by")
+            temp["modified_at"] = generic_source.get("modified_at")
+            temp["modified_by"] = generic_source.get("modified_by")
             generic_source_types_dependencies_list.append(temp)
         extract_generic_source_types_dependencies_df = pd.DataFrame(generic_source_types_dependencies_list)
         self.dataframe_writer(extract_generic_source_types_dependencies_df, report_type=inspect.stack()[0][3])
@@ -439,29 +517,6 @@ class AdhocMetricsReport:
         finally:
             extract_secret_usage_report_df = pd.DataFrame(extract_secret_usage_report_list)
             self.dataframe_writer(extract_secret_usage_report_df, report_type=inspect.stack()[0][3])
-
-    def extract_domains_report(self):
-
-        try:
-            errors = []
-            env_id_lookup={}
-            environments = self.iwx_client.get_environment_details()
-            environments =environments.get("result",{}).get("response",{}).get("result",[])
-            for env in environments:
-                env_id_lookup[env["id"]]=env["name"]
-            domains = self.iwx_client.list_domains_as_admin()
-            domains = domains.get("result",{}).get("response",{}).get("result",[])
-            extract_domains_report_list = []
-            for domain in domains:
-                domain["environment_names"] = [env_id_lookup[env] for env in domain["environment_ids"] if env_id_lookup.get(env) is not None]
-                extract_domains_report_list.append(domain)
-        except Exception as e:
-            logging.error(str(e))
-            errors.append(str(e))
-        finally:
-            extract_domains_report_df = pd.DataFrame(extract_domains_report_list)
-            self.dataframe_writer(extract_domains_report_df, report_type=inspect.stack()[0][3])
-            print("errors:",errors)
 
 def get_all_report_methods() -> List[str]:
     method_list = [func for func in dir(AdhocMetricsReport) if
