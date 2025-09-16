@@ -1,10 +1,22 @@
 #!/bin/bash
-if [ ! -d "~/actions-runner/deployment_env/" ]; then
-  python3 -m venv ~/actions-runner/deployment_env/
-fi
-source ~/actions-runner/deployment_env/bin/activate
-pip list | grep infoworkssdk
+
+# Exit immediately if any command fails
+set -e
+
+echo "Installing required Python packages: infoworkssdk==5.10 and tabulate==0.9.0"
+python -m pip install infoworkssdk==5.10 tabulate==0.9.0
+
 if [ $? -ne 0 ]; then
-  pip install infoworkssdk==3.0a3
+    echo "Failed to install required Python packages."
+    exit 1
 fi
-python main.py
+
+echo "Running main.py with config file..."
+python main.py --config_ini_file ./config.ini
+
+if [ $? -ne 0 ]; then
+    echo "Execution of main.py failed."
+    exit 1
+fi
+
+echo "Deployment completed successfully."
