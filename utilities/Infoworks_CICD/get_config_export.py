@@ -7,7 +7,7 @@ import traceback
 import pkg_resources
 import urllib3
 urllib3.disable_warnings()
-required = {'infoworkssdk==5.0.9'}
+required = {'infoworkssdk==5.1.0'}
 installed = {pkg.key for pkg in pkg_resources.working_set}
 missing = required - installed
 if missing:
@@ -19,6 +19,8 @@ if missing:
 print(sys.path)
 from infoworks.sdk.client import InfoworksClientSDK
 from infoworks.sdk.cicd.download_configurations.utils import Utils
+import infoworks.sdk.cicd.download_configurations.get_workflow_configuration as dw
+print("Using DownloadWorkflow from:", dw.__file__)
 
 def main():
     parser = argparse.ArgumentParser(description='Download Infoworks Artifacts')
@@ -40,6 +42,17 @@ def main():
     parser.add_argument("--custom_tag", type=str, required=False, default="{}", help="Custom tag as JSON string")
     parser.add_argument("--entity_type", type=str, required=False, default="all", help="entity type(source,pipeline,workflow)")
     args = parser.parse_args()
+    workflow_version_map = {}
+    if args.workflow_name_regex:
+        name_regex_items = args.workflow_name_regex.split(",")
+        name_regex_list = []
+        for item in name_regex_items:
+            if ":" in item:
+                name, version = item.split(":")
+                name_regex_list.append(name.strip())
+                workflow_version_map[name.strip()] = version.strip()
+            else:
+                name_regex_list.append(item.strip())
     # Connect to Dev environment and get the source export
     refresh_token = args.refresh_token
     iwx_client_dev = InfoworksClientSDK()
@@ -168,8 +181,23 @@ def main():
 
     try:
         if args.workflow_ids is not None:
-            iwx_client_dev.cicd_get_workflowconfig_export(workflow_ids=args.workflow_ids.split(","),
-                                                     config_file_export_path=os.path.join(base_path, "configurations"))
+            raw_workflow_ids = args.workflow_ids.split(",")
+            workflow_ids = []
+            resolved_version_map = {}
+
+            for item in raw_workflow_ids:
+                if ":" in item:
+                    workflow_id, version_id = item.strip().split(":")
+                    workflow_ids.append(workflow_id)
+                    resolved_version_map[workflow_id] = version_id
+                else:
+                    workflow_ids.append(item.strip())
+                    # No version provided, will use default
+            iwx_client_dev.cicd_get_workflowconfig_export(
+                workflow_ids=workflow_ids,
+                config_file_export_path=os.path.join(base_path, "configurations"),
+                workflow_version_map=resolved_version_map
+            )
         elif args.workflow_name_regex is not None:
             if args.domain_name is None:
                 print("Domain name cannot be None for workflow regex match")
@@ -178,12 +206,26 @@ def main():
                 domain_response = iwx_client_dev.get_domain_id(args.domain_name)
                 domain_id = domain_response["result"]["response"]["domain_id"]
                 workflows_response = iwx_client_dev.get_list_of_workflows(domain_id=domain_id, params={
-                    "filter": {"name": {"$regex": args.workflow_name_regex}}})
+                    "filter": {"$or": [{"name": {"$regex": name}} for name in name_regex_list]}})
                 workflows = workflows_response["result"]["response"]["result"]
-                workflow_ids = [workflow["id"] for workflow in workflows]
-                iwx_client_dev.cicd_get_workflowconfig_export(workflow_ids=workflow_ids,
-                                                              config_file_export_path=os.path.join(base_path,
-                                                                                                   "configurations"))
+                workflow_ids = []
+                resolved_version_map = {}
+
+                for workflow in workflows:
+                    workflow_id = workflow["id"]
+                    workflow_name = workflow["name"]
+                    workflow_ids.append(workflow_id)
+
+                    # Map version from name (if provided)
+                    if workflow_name in workflow_version_map:
+                        resolved_version_map[workflow_id] = workflow_version_map[workflow_name]
+
+                iwx_client_dev.cicd_get_workflowconfig_export(
+                    workflow_ids=workflow_ids,
+                    config_file_export_path=os.path.join(base_path, "configurations"),
+                    workflow_version_map=resolved_version_map
+                )
+
 
         elif custom_tag_id is not None and (args.entity_type == "workflow" or args.entity_type == "all"):
             if args.domain_name is None:
@@ -195,10 +237,24 @@ def main():
                 workflows_response = iwx_client_dev.get_list_of_workflows(domain_id=domain_id, params={
                     "filter": {"custom_tags": {"$in": [custom_tag_id]}}})
                 workflows = workflows_response["result"]["response"]["result"]
-                workflow_ids = [workflow["id"] for workflow in workflows]
-                iwx_client_dev.cicd_get_workflowconfig_export(workflow_ids=workflow_ids,
-                                                              config_file_export_path=os.path.join(base_path,
-                                                                                                   "configurations"))
+                workflow_ids = []
+                resolved_version_map = {}
+
+                for workflow in workflows:
+                    workflow_id = workflow["id"]
+                    workflow_name = workflow["name"]
+                    workflow_ids.append(workflow_id)
+
+                    # Map version from name (if provided)
+                    if workflow_name in workflow_version_map:
+                        resolved_version_map[workflow_id] = workflow_version_map[workflow_name]
+
+                iwx_client_dev.cicd_get_workflowconfig_export(
+                    workflow_ids=workflow_ids,
+                    config_file_export_path=os.path.join(base_path, "configurations"),
+                    workflow_version_map=resolved_version_map
+                )
+
         else:
             file_to_truncate = open(os.path.join(base_path, "configurations","modified_files","workflow.csv"), 'w')
             file_to_truncate.close()
